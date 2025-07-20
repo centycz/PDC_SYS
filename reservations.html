@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezervace stolů - Restaurace</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #2d3748;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            padding: 10px 20px;
+            background: #5a67d8;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            background: #4c51bf;
+            transform: translateY(-2px);
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1.5px solid #e2e8f0;
+        }
+        
+        .card h2 {
+            color: #ee5a24;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5em;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #4a5568;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ee5a24;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: #ee5a24;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #d73502;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .reservation-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .reservation-filters input,
+        .reservation-filters select {
+            padding: 8px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+        }
+        
+        .reservations-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .reservations-table th,
+        .reservations-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .reservations-table th {
+            background: #f8fafc;
+            font-weight: bold;
+            color: #4a5568;
+        }
+        
+        .reservations-table tr:hover {
+            background: #f8fafc;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            background: #ffd700;
+            color: #8b6914;
+        }
+        
+        .status-confirmed {
+            background: #28a745;
+            color: white;
+        }
+        
+        .status-cancelled {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .table-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .table-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .table-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .table-card.has-reservation {
+            border-color: #ee5a24;
+            background: #fff5f0;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .table-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ee5a24;
+        }
+        
+        .table-code {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        
+        .reservation-time {
+            font-size: 14px;
+            color: #4a5568;
+            margin-bottom: 5px;
+        }
+        
+        .reservation-customer {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+        
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+        }
+        
+        .close:hover {
+            color: #000;
+        }
+        
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .reservation-filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .table-overview {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Rezervace stolů</h1>
+            <div class="nav-links">
+                <a href="index.html">🏠 Obsluha</a>
+                <a href="admin.html">⚙️ Admin</a>
+                <a href="kitchen.html">👨‍🍳 Kuchyň</a>
+                <a href="bar.html">🍺 Bar</a>
+                <a href="historie.html">📋 Historie</a>
+            </div>
+        </div>
+        
+        <div id="alert" class="alert" style="display: none;"></div>
+        
+        <div class="main-grid">
+            <!-- Reservation Form -->
+            <div class="card">
+                <h2>Nová rezervace</h2>
+                <form id="reservationForm">
+                    <div class="form-group">
+                        <label for="customerName">Jméno zákazníka *</label>
+                        <input type="text" id="customerName" name="customer_name" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Telefon *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="partySize">Počet osob *</label>
+                            <select id="partySize" name="party_size" required>
+                                <option value="">Vyberte...</option>
+                                <option value="1">1 osoba</option>
+                                <option value="2">2 osoby</option>
+                                <option value="3">3 osoby</option>
+                                <option value="4">4 osoby</option>
+                                <option value="5">5 osob</option>
+                                <option value="6">6 osob</option>
+                                <option value="7">7 osob</option>
+                                <option value="8">8 osob</option>
+                                <option value="9">9 osob</option>
+                                <option value="10">10 osob</option>
+                                <option value="11">11 osob</option>
+                                <option value="12">12 osob</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tableNumber">Stůl</label>
+                            <select id="tableNumber" name="table_number">
+                                <option value="">Automatické přiřazení</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="reservationDate">Datum *</label>
+                            <input type="date" id="reservationDate" name="reservation_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reservationTime">Čas *</label>
+                            <select id="reservationTime" name="reservation_time" required>
+                                <option value="">Vyberte čas...</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notes">Poznámka</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="Speciální požadavky, alergie, apod."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        Vytvořit rezervaci
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Reservations List -->
+            <div class="card">
+                <h2>Seznam rezervací</h2>
+                <div class="reservation-filters">
+                    <input type="date" id="filterDate" value="">
+                    <select id="filterStatus">
+                        <option value="">Všechny stavy</option>
+                        <option value="pending">Čekající</option>
+                        <option value="confirmed">Potvrzené</option>
+                        <option value="cancelled">Zrušené</option>
+                    </select>
+                    <button onclick="loadReservations()" class="btn btn-secondary btn-small">Obnovit</button>
+                </div>
+                
+                <table class="reservations-table">
+                    <thead>
+                        <tr>
+                            <th>Čas</th>
+                            <th>Zákazník</th>
+                            <th>Telefon</th>
+                            <th>Osob</th>
+                            <th>Stůl</th>
+                            <th>Stav</th>
+                            <th>Akce</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reservationsTableBody">
+                        <!-- Reservations will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Table Overview -->
+        <div class="card">
+            <h2>Přehled stolů s rezervacemi</h2>
+            <div id="tableOverview" class="table-overview">
+                <!-- Tables will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Reservation Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2>Upravit rezervaci</h2>
+            <form id="editReservationForm">
+                <input type="hidden" id="editReservationId">
+                
+                <div class="form-group">
+                    <label for="editCustomerName">Jméno zákazníka *</label>
+                    <input type="text" id="editCustomerName" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editPhone">Telefon *</label>
+                        <input type="tel" id="editPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEmail">Email</label>
+                        <input type="email" id="editEmail">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editPartySize">Počet osob *</label>
+                        <select id="editPartySize" required>
+                            <option value="1">1 osoba</option>
+                            <option value="2">2 osoby</option>
+                            <option value="3">3 osoby</option>
+                            <option value="4">4 osoby</option>
+                            <option value="5">5 osob</option>
+                            <option value="6">6 osob</option>
+                            <option value="7">7 osob</option>
+                            <option value="8">8 osob</option>
+                            <option value="9">9 osob</option>
+                            <option value="10">10 osob</option>
+                            <option value="11">11 osob</option>
+                            <option value="12">12 osob</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTableNumber">Stůl</label>
+                        <select id="editTableNumber">
+                            <option value="">Automatické přiřazení</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editReservationDate">Datum *</label>
+                        <input type="date" id="editReservationDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editReservationTime">Čas *</label>
+                        <select id="editReservationTime" required>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editStatus">Stav</label>
+                    <select id="editStatus">
+                        <option value="pending">Čekající</option>
+                        <option value="confirmed">Potvrzená</option>
+                        <option value="cancelled">Zrušená</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editNotes">Poznámka</label>
+                    <textarea id="editNotes" rows="3"></textarea>
+                </div>
+                
+                <div style="text-align: right; margin-top: 20px;">
+                    <button type="button" onclick="closeEditModal()" class="btn btn-secondary" style="margin-right: 10px;">Zrušit</button>
+                    <button type="submit" class="btn btn-primary">Uložit změny</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let tables = [];
+        let currentReservations = [];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePage();
+        });
+        
+        function initializePage() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('reservationDate').value = today;
+            document.getElementById('filterDate').value = today;
+            
+            generateTimeSlots();
+            loadTables();
+            loadReservations();
+            
+            // Set up form handlers
+            document.getElementById('reservationForm').addEventListener('submit', handleReservationSubmit);
+            document.getElementById('editReservationForm').addEventListener('submit', handleEditReservationSubmit);
+        }
+        
+        function generateTimeSlots() {
+            const timeSelects = ['reservationTime', 'editReservationTime'];
+            
+            timeSelects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                select.innerHTML = '<option value="">Vyberte čas...</option>';
+                
+                // Generate time slots from 10:00 to 22:00 in 15-minute intervals
+                for (let hour = 10; hour <= 22; hour++) {
+                    for (let minute = 0; minute < 60; minute += 15) {
+                        if (hour === 22 && minute > 0) break; // Last slot is 22:00
+                        
+                        const timeStr = String(hour).padStart(2, '0') + ':' + String(minute).padStart(2, '0');
+                        const option = document.createElement('option');
+                        option.value = timeStr + ':00';
+                        option.textContent = timeStr;
+                        select.appendChild(option);
+                    }
+                }
+            });
+        }
+        
+        async function loadTables() {
+            try {
+                const response = await fetch('api/restaurant-api.php?action=tables');
+                const data = await response.json();
+                
+                if (data.success) {
+                    tables = data.data.tables;
+                    populateTableSelects();
+                    updateTableOverview();
+                } else {
+                    showAlert('Chyba při načítání stolů: ' + data.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error loading tables:', error);
+                showAlert('Chyba při načítání stolů', 'error');
+            }
+        }
+        
+        function populateTableSelects() {
+            const selects = ['tableNumber', 'editTableNumber'];
+            
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                // Keep the "Automatické přiřazení" option
+                const firstOption = select.querySelector('option[value=""]');
+                select.innerHTML = '';
+                if (firstOption) select.appendChild(firstOption);
+                
+                tables.forEach(table => {
+                    const option = document.createElement('option');
+                    option.value = table.table_number;
+                    option.textContent = `Stůl ${table.table_number} (${table.table_code || 'N/A'})`;
+                    select.appendChild(option);
+                });
+            });
+        }
+        
+        async function loadReservations() {
+            const date = document.getElementById('filterDate').value || new Date().toISOString().split('T')[0];
+            const status = document.getElementById('filterStatus').value;
+            
+            try {
+                let url = `api/restaurant-api.php?action=get-reservations&date=${date}`;
+                if (status) url += `&status=${status}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentReservations = data.data.reservations;
+                    updateReservationsTable();
+                    updateTableOverview();
+                } else {
+                    showAlert('Chyba při načítání rezervací: ' + data.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error loading reservations:', error);
+                showAlert('Chyba při načítání rezervací', 'error');
+            }
+        }
+        
+        function updateReservationsTable() {
+            const tbody = document.getElementById('reservationsTableBody');
+            tbody.innerHTML = '';
+            
+            if (currentReservations.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #6c757d;">Žádné rezervace pro vybrané datum</td></tr>';
+                return;
+            }
+            
+            currentReservations.forEach(reservation => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${reservation.reservation_time.substring(0, 5)}</td>
+                    <td>${reservation.customer_name}</td>
+                    <td>${reservation.phone}</td>
+                    <td>${reservation.party_size}</td>
+                    <td>${reservation.table_number ? `Stůl ${reservation.table_number}` : 'Nepřiřazen'}</td>
+                    <td><span class="status-badge status-${reservation.status}">${getStatusText(reservation.status)}</span></td>
+                    <td>
+                        <button onclick="editReservation(${reservation.id})" class="btn btn-secondary btn-small">Upravit</button>
+                        ${reservation.status !== 'cancelled' ? 
+                            `<button onclick="cancelReservation(${reservation.id})" class="btn btn-danger btn-small">Zrušit</button>` : 
+                            ''
+                        }
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function updateTableOverview() {
+            const container = document.getElementById('tableOverview');
+            container.innerHTML = '';
+            
+            const selectedDate = document.getElementById('filterDate').value || new Date().toISOString().split('T')[0];
+            
+            tables.forEach(table => {
+                const tableReservations = currentReservations.filter(r => 
+                    r.table_number === table.table_number && 
+                    r.status !== 'cancelled'
+                );
+                
+                const tableCard = document.createElement('div');
+                tableCard.className = `table-card ${tableReservations.length > 0 ? 'has-reservation' : ''}`;
+                
+                let reservationInfo = '';
+                if (tableReservations.length > 0) {
+                    reservationInfo = tableReservations.map(r => `
+                        <div class="reservation-time">${r.reservation_time.substring(0, 5)} - ${r.party_size} osob</div>
+                        <div class="reservation-customer">${r.customer_name}</div>
+                    `).join('');
+                } else {
+                    reservationInfo = '<div class="reservation-time">Volný</div>';
+                }
+                
+                tableCard.innerHTML = `
+                    <div class="table-header">
+                        <div class="table-number">Stůl ${table.table_number}</div>
+                        <div class="table-code">${table.table_code || 'N/A'}</div>
+                    </div>
+                    ${reservationInfo}
+                `;
+                
+                container.appendChild(tableCard);
+            });
+        }
+        
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'Čekající',
+                'confirmed': 'Potvrzená',
+                'cancelled': 'Zrušená'
+            };
+            return statusMap[status] || status;
+        }
+        
+        async function handleReservationSubmit(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                const response = await fetch('api/restaurant-api.php?action=add-reservation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('Rezervace byla úspěšně vytvořena!', 'success');
+                    e.target.reset();
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('reservationDate').value = today;
+                    loadReservations();
+                } else {
+                    showAlert('Chyba: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error creating reservation:', error);
+                showAlert('Chyba při vytváření rezervace', 'error');
+            }
+        }
+        
+        function editReservation(id) {
+            const reservation = currentReservations.find(r => r.id === id);
+            if (!reservation) return;
+            
+            document.getElementById('editReservationId').value = reservation.id;
+            document.getElementById('editCustomerName').value = reservation.customer_name;
+            document.getElementById('editPhone').value = reservation.phone;
+            document.getElementById('editEmail').value = reservation.email || '';
+            document.getElementById('editPartySize').value = reservation.party_size;
+            document.getElementById('editTableNumber').value = reservation.table_number || '';
+            document.getElementById('editReservationDate').value = reservation.reservation_date;
+            document.getElementById('editReservationTime').value = reservation.reservation_time;
+            document.getElementById('editStatus').value = reservation.status;
+            document.getElementById('editNotes').value = reservation.notes || '';
+            
+            document.getElementById('editModal').style.display = 'block';
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+        
+        async function handleEditReservationSubmit(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById('editReservationId').value;
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                const response = await fetch(`api/restaurant-api.php?action=update-reservation&id=${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('Rezervace byla úspěšně aktualizována!', 'success');
+                    closeEditModal();
+                    loadReservations();
+                } else {
+                    showAlert('Chyba: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error updating reservation:', error);
+                showAlert('Chyba při aktualizaci rezervace', 'error');
+            }
+        }
+        
+        async function cancelReservation(id) {
+            if (!confirm('Opravdu chcete zrušit tuto rezervaci?')) return;
+            
+            try {
+                const response = await fetch(`api/restaurant-api.php?action=cancel-reservation&id=${id}`, {
+                    method: 'POST'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('Rezervace byla zrušena', 'success');
+                    loadReservations();
+                } else {
+                    showAlert('Chyba: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error cancelling reservation:', error);
+                showAlert('Chyba při rušení rezervace', 'error');
+            }
+        }
+        
+        function showAlert(message, type) {
+            const alert = document.getElementById('alert');
+            alert.className = `alert alert-${type === 'error' ? 'danger' : 'success'}`;
+            alert.textContent = message;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Event listeners for filters
+        document.getElementById('filterDate').addEventListener('change', loadReservations);
+        document.getElementById('filterStatus').addEventListener('change', loadReservations);
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        });
+    </script>
+</body>
+</html>

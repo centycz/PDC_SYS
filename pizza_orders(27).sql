@@ -3490,6 +3490,30 @@ ALTER TABLE `restaurant_tables`
 --
 ALTER TABLE `table_sessions`
   ADD CONSTRAINT `table_sessions_ibfk_1` FOREIGN KEY (`table_number`) REFERENCES `restaurant_tables` (`table_number`) ON DELETE CASCADE;
+--
+-- Table structure for table `reservations`
+--
+
+CREATE TABLE `reservations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_name` varchar(100) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `party_size` int(11) NOT NULL,
+  `reservation_date` date NOT NULL,
+  `reservation_time` time NOT NULL,
+  `notes` text DEFAULT NULL,
+  `table_number` int(11) DEFAULT NULL,
+  `status` enum('pending','confirmed','cancelled') DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_reservation_date_time` (`reservation_date`, `reservation_time`),
+  KEY `idx_table_number` (`table_number`),
+  KEY `idx_status` (`status`),
+  CONSTRAINT `fk_reservations_table` FOREIGN KEY (`table_number`) REFERENCES `restaurant_tables` (`table_number`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

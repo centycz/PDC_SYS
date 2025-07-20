@@ -2040,6 +2040,225 @@ if ($action === 'test-curl') {
             jsend(false, null, $e->getMessage());
         }
     }
+    // RESERVATION MANAGEMENT
+    if ($action === 'add-reservation') {
+        $body = getJsonBody();
+        $customer_name = $body['customer_name'] ?? '';
+        $phone = $body['phone'] ?? '';
+        $email = $body['email'] ?? null;
+        $party_size = intval($body['party_size'] ?? 0);
+        $reservation_date = $body['reservation_date'] ?? '';
+        $reservation_time = $body['reservation_time'] ?? '';
+        $notes = $body['notes'] ?? null;
+        $table_number = isset($body['table_number']) ? intval($body['table_number']) : null;
+        
+        if (!$customer_name || !$phone || !$party_size || !$reservation_date || !$reservation_time) {
+            jsend(false, null, 'Chybí povinné údaje pro rezervaci!');
+            exit;
+        }
+        
+        if ($party_size < 1 || $party_size > 12) {
+            jsend(false, null, 'Počet osob musí být mezi 1-12!');
+            exit;
+        }
+        
+        try {
+            $pdo->beginTransaction();
+            
+            // Check for conflicts if table is specified
+            if ($table_number) {
+                $stmt = $pdo->prepare("
+                    SELECT COUNT(*) FROM reservations 
+                    WHERE table_number = ? 
+                    AND reservation_date = ? 
+                    AND reservation_time = ? 
+                    AND status != 'cancelled'
+                ");
+                $stmt->execute([$table_number, $reservation_date, $reservation_time]);
+                
+                if ($stmt->fetchColumn() > 0) {
+                    $pdo->rollBack();
+                    jsend(false, null, 'Stůl je již rezervován na tento čas!');
+                    exit;
+                }
+            }
+            
+            $stmt = $pdo->prepare("
+                INSERT INTO reservations (customer_name, phone, email, party_size, reservation_date, reservation_time, notes, table_number) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ");
+            $stmt->execute([$customer_name, $phone, $email, $party_size, $reservation_date, $reservation_time, $notes, $table_number]);
+            
+            $reservation_id = $pdo->lastInsertId();
+            $pdo->commit();
+            
+            jsend(true, ['reservation_id' => $reservation_id, 'message' => 'Rezervace byla úspěšně vytvořena']);
+            
+        } catch (Exception $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            jsend(false, null, 'Chyba při vytváření rezervace: ' . $e->getMessage());
+        }
+    }
+
+    if ($action === 'get-reservations') {
+        $date = $_GET['date'] ?? date('Y-m-d');
+        $status = $_GET['status'] ?? null;
+        
+        try {
+            $sql = "
+                SELECT r.*, rt.table_code 
+                FROM reservations r
+                LEFT JOIN restaurant_tables rt ON r.table_number = rt.table_number
+                WHERE r.reservation_date = ?
+            ";
+            $params = [$date];
+            
+            if ($status) {
+                $sql .= " AND r.status = ?";
+                $params[] = $status;
+            }
+            
+            $sql .= " ORDER BY r.reservation_time ASC";
+            
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($params);
+            $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            jsend(true, ['reservations' => $reservations]);
+            
+        } catch (Exception $e) {
+            jsend(false, null, 'Chyba při načítání rezervací: ' . $e->getMessage());
+        }
+    }
+
+    if ($action === 'update-reservation') {
+        $reservation_id = intval($_GET['id'] ?? 0);
+        $body = getJsonBody();
+        
+        if (!$reservation_id) {
+            jsend(false, null, 'Chybí ID rezervace!');
+            exit;
+        }
+        
+        try {
+            $pdo->beginTransaction();
+            
+            // Get current reservation
+            $stmt = $pdo->prepare("SELECT * FROM reservations WHERE id = ?");
+            $stmt->execute([$reservation_id]);
+            $current = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$current) {
+                $pdo->rollBack();
+                jsend(false, null, 'Rezervace nenalezena!');
+                exit;
+            }
+            
+            $customer_name = $body['customer_name'] ?? $current['customer_name'];
+            $phone = $body['phone'] ?? $current['phone'];
+            $email = $body['email'] ?? $current['email'];
+            $party_size = isset($body['party_size']) ? intval($body['party_size']) : $current['party_size'];
+            $reservation_date = $body['reservation_date'] ?? $current['reservation_date'];
+            $reservation_time = $body['reservation_time'] ?? $current['reservation_time'];
+            $notes = $body['notes'] ?? $current['notes'];
+            $table_number = isset($body['table_number']) ? intval($body['table_number']) : $current['table_number'];
+            $status = $body['status'] ?? $current['status'];
+            
+            // Check for conflicts if time/date/table changed
+            if ($table_number && ($table_number != $current['table_number'] || 
+                $reservation_date != $current['reservation_date'] || 
+                $reservation_time != $current['reservation_time'])) {
+                
+                $stmt = $pdo->prepare("
+                    SELECT COUNT(*) FROM reservations 
+                    WHERE table_number = ? 
+                    AND reservation_date = ? 
+                    AND reservation_time = ? 
+                    AND status != 'cancelled'
+                    AND id != ?
+                ");
+                $stmt->execute([$table_number, $reservation_date, $reservation_time, $reservation_id]);
+                
+                if ($stmt->fetchColumn() > 0) {
+                    $pdo->rollBack();
+                    jsend(false, null, 'Stůl je již rezervován na tento čas!');
+                    exit;
+                }
+            }
+            
+            $stmt = $pdo->prepare("
+                UPDATE reservations 
+                SET customer_name = ?, phone = ?, email = ?, party_size = ?, 
+                    reservation_date = ?, reservation_time = ?, notes = ?, 
+                    table_number = ?, status = ?
+                WHERE id = ?
+            ");
+            $stmt->execute([$customer_name, $phone, $email, $party_size, $reservation_date, 
+                          $reservation_time, $notes, $table_number, $status, $reservation_id]);
+            
+            $pdo->commit();
+            jsend(true, ['message' => 'Rezervace byla úspěšně aktualizována']);
+            
+        } catch (Exception $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            jsend(false, null, 'Chyba při aktualizaci rezervace: ' . $e->getMessage());
+        }
+    }
+
+    if ($action === 'cancel-reservation') {
+        $reservation_id = intval($_GET['id'] ?? 0);
+        
+        if (!$reservation_id) {
+            jsend(false, null, 'Chybí ID rezervace!');
+            exit;
+        }
+        
+        try {
+            $stmt = $pdo->prepare("UPDATE reservations SET status = 'cancelled' WHERE id = ?");
+            $stmt->execute([$reservation_id]);
+            
+            if ($stmt->rowCount() > 0) {
+                jsend(true, ['message' => 'Rezervace byla zrušena']);
+            } else {
+                jsend(false, null, 'Rezervace nenalezena!');
+            }
+            
+        } catch (Exception $e) {
+            jsend(false, null, 'Chyba při rušení rezervace: ' . $e->getMessage());
+        }
+    }
+
+    if ($action === 'get-table-reservations') {
+        $table_number = intval($_GET['table_number'] ?? 0);
+        $date = $_GET['date'] ?? date('Y-m-d');
+        
+        if (!$table_number) {
+            jsend(false, null, 'Chybí číslo stolu!');
+            exit;
+        }
+        
+        try {
+            $stmt = $pdo->prepare("
+                SELECT * FROM reservations 
+                WHERE table_number = ? 
+                AND reservation_date = ? 
+                AND status != 'cancelled'
+                ORDER BY reservation_time ASC
+            ");
+            $stmt->execute([$table_number, $date]);
+            $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            jsend(true, ['reservations' => $reservations]);
+            
+        } catch (Exception $e) {
+            jsend(false, null, 'Chyba při načítání rezervací stolu: ' . $e->getMessage());
+        }
+    }
+
     // DEFAULT CASE
     jsend(false, null, 'Neznámá akce: ' . $action);
 

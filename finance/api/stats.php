@@ -26,16 +26,16 @@ try {
     $totalExpenses = isset($totals['expense']) ? $totals['expense'] : 0;
     $balance = $totalIncome - $totalExpenses;
     
-    // Monthly statistics for current year
+    // Monthly statistics for current year - OPRAVENO pro MySQL
     $currentYear = date('Y');
     $stmt = $db->prepare("
         SELECT 
-            strftime('%m', date) as month,
+            MONTH(date) as month,
             type,
             SUM(amount) as total
         FROM transactions 
-        WHERE strftime('%Y', date) = ?
-        GROUP BY strftime('%m', date), type
+        WHERE YEAR(date) = ?
+        GROUP BY MONTH(date), type
         ORDER BY month
     ");
     $stmt->execute([$currentYear]);
@@ -44,9 +44,8 @@ try {
     // Process monthly data
     $monthlyStats = [];
     for ($i = 1; $i <= 12; $i++) {
-        $month = sprintf('%02d', $i);
-        $monthlyStats[$month] = [
-            'month' => $month,
+        $monthlyStats[$i] = [
+            'month' => sprintf('%02d', $i),
             'monthName' => date('F', mktime(0, 0, 0, $i, 1)),
             'income' => 0,
             'expenses' => 0,
@@ -55,7 +54,7 @@ try {
     }
     
     foreach ($monthlyData as $row) {
-        $month = $row['month'];
+        $month = (int)$row['month'];
         if ($row['type'] === 'income') {
             $monthlyStats[$month]['income'] = $row['total'];
         } else {
@@ -92,11 +91,11 @@ try {
         ];
     }
     
-    // Recent transactions summary
+    // Recent transactions summary - OPRAVENO pro MySQL
     $stmt = $db->prepare("
         SELECT COUNT(*) as count
         FROM transactions 
-        WHERE date >= date('now', '-30 days')
+        WHERE date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
     ");
     $stmt->execute();
     $recentTransactions = $stmt->fetchColumn();

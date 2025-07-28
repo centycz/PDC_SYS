@@ -21,22 +21,23 @@ function getFinanceDb() {
     if ($pdo) return $pdo;
     
     try {
-        $dbPath = __DIR__ . '/../db/finance.db';
-        $pdo = new PDO('sqlite:' . $dbPath);
+        // Opravené pøipojení k MySQL databázi pizza_orders
+        $pdo = new PDO('mysql:host=127.0.0.1;dbname=pizza_orders;charset=utf8mb4', 'pizza_user', 'pizza');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        $pdo->exec("SET NAMES utf8mb4");
+        $pdo->exec("SET CHARACTER SET utf8mb4");
         
-        // Create table if it doesn't exist
+        // Vytvoøení tabulky transactions pro finanèní sledování (MySQL syntaxe)
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS transactions (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                type TEXT NOT NULL CHECK(type IN ('income', 'expense')),
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                type ENUM('income', 'expense') NOT NULL,
                 amount DECIMAL(10,2) NOT NULL,
                 description TEXT NOT NULL,
-                category TEXT NOT NULL,
+                category VARCHAR(255) NOT NULL,
                 date DATE NOT NULL,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            )
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         ");
         
         return $pdo;

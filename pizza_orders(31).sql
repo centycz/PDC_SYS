@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 15, 2025 at 03:02 PM
--- Server version: 10.11.11-MariaDB-0+deb12u1
--- PHP Version: 8.2.28
+-- Generation Time: Jul 28, 2025 at 01:56 PM
+-- Server version: 10.11.3-MariaDB-1+rpi1
+-- PHP Version: 8.2.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -106,6 +106,19 @@ CREATE TABLE `bar_order_items` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `burned_items_log`
+--
+
+CREATE TABLE `burned_items_log` (
+  `id` int(11) NOT NULL,
+  `order_item_id` int(11) NOT NULL,
+  `burned_at` timestamp NULL DEFAULT current_timestamp(),
+  `reason` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `burnt_pizzas_log`
 --
 
@@ -180,7 +193,44 @@ INSERT INTO `daily_stats` (`id`, `date`, `total_orders`, `total_pizzas`, `total_
 (31, '2025-07-12', 186, 52, 0, 27530.00, 0, 1, '2025-07-12 07:23:36', '2025-07-12 11:44:03', 0, 0),
 (32, '2025-07-13', 173, 0, 0, 0.00, 0, 0, '2025-07-13 10:59:00', '2025-07-13 19:29:41', 0, 0),
 (33, '2025-07-14', 8, 0, 0, 0.00, 0, 0, '2025-07-14 10:32:45', '2025-07-14 21:57:07', 0, 0),
-(34, '2025-07-15', 0, 0, 0, 0.00, 0, 0, '2025-07-15 00:59:52', '2025-07-15 00:59:52', 0, 0);
+(34, '2025-07-15', 0, 0, 0, 0.00, 0, 0, '2025-07-15 00:59:52', '2025-07-15 00:59:52', 0, 0),
+(35, '2025-07-16', 26, 0, 0, 0.00, 0, 0, '2025-07-16 14:43:21', '2025-07-16 19:22:19', 0, 0),
+(38, '2025-07-17', 0, 0, 0, 0.00, 0, 0, '2025-07-17 04:50:38', '2025-07-17 04:50:38', 0, 0),
+(39, '2025-07-18', 167, 0, 0, 0.00, 0, 0, '2025-07-18 10:00:28', '2025-07-18 20:36:33', 0, 0),
+(41, '2025-07-19', 93, 0, 0, 0.00, 0, 0, '2025-07-19 13:23:50', '2025-07-19 21:46:45', 0, 0),
+(43, '2025-07-20', 134, 0, 0, 0.00, 0, 0, '2025-07-20 09:16:57', '2025-07-20 18:52:38', 0, 0),
+(45, '2025-07-21', 4, 0, 0, 0.00, 0, 0, '2025-07-21 16:44:02', '2025-07-21 18:18:18', 0, 0),
+(46, '2025-07-22', 21, 0, 0, 0.00, 0, 8, '2025-07-22 05:25:38', '2025-07-22 14:33:41', 0, 0),
+(47, '2025-07-23', 33, 0, 0, 0.00, 0, 0, '2025-07-23 06:16:17', '2025-07-23 19:51:44', 0, 0),
+(49, '2025-07-24', 0, 0, 0, 0.00, 0, 0, '2025-07-24 03:26:44', '2025-07-24 03:26:44', 0, 0),
+(50, '2025-07-25', 0, 0, 0, 0.00, 0, 0, '2025-07-25 18:08:45', '2025-07-25 18:08:45', 0, 0),
+(51, '2025-07-28', 0, 0, 0, 0.00, 0, 0, '2025-07-28 06:54:43', '2025-07-28 06:54:43', 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `daily_supplies`
+--
+
+CREATE TABLE `daily_supplies` (
+  `id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `pizza_total` int(11) NOT NULL DEFAULT 120,
+  `burrata_total` int(11) NOT NULL DEFAULT 15,
+  `pizza_used` int(11) NOT NULL DEFAULT 0,
+  `burrata_used` int(11) NOT NULL DEFAULT 0,
+  `updated_by` varchar(50) DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `daily_supplies`
+--
+
+INSERT INTO `daily_supplies` (`id`, `date`, `pizza_total`, `burrata_total`, `pizza_used`, `burrata_used`, `updated_by`, `updated_at`) VALUES
+(1, '2025-07-22', 120, 15, 0, 0, 'centycz', '2025-07-22 16:07:34'),
+(80, '2025-07-23', 120, 15, 0, 0, 'AUTO-RESET', '2025-07-23 06:18:04'),
+(81, '2025-07-25', 120, 15, 0, 0, 'AUTO-RESET', '2025-07-25 18:09:19');
 
 -- --------------------------------------------------------
 
@@ -239,11 +289,15 @@ INSERT INTO `drink_types` (`id`, `type`, `name`, `price`, `description`, `is_act
 (34, 'coca_cola', 'Coca-Cola', 50.00, '0,3l', 1, '2025-07-05 11:29:31', '2025-07-07 14:11:41', 'nealko', 11, 0.00),
 (344, 'vino2dcl', 'Víno 2 dcl', 100.00, 'sklenka vina 2dcl', 1, '2025-07-05 11:26:16', '2025-07-07 16:24:22', 'vino', 9, 0.00),
 (345, 'vino1dcl', 'Víno 1 dcl', 50.00, 'sklenka vina 1dcl', 1, '2025-07-05 11:26:16', '2025-07-07 16:24:22', 'vino', 9, 0.00),
-(346, 'sektpastorek', 'Sekt Pastorek', 390.00, '18 měsíců zrál v lahvi', 1, '2025-07-11 12:06:00', '2025-07-11 12:06:00', 'vino', NULL, 0.00),
+(346, 'sektpastorek', 'Sekt Pastorek', 490.00, '18 měsíců zrál v lahvi', 1, '2025-07-11 12:06:00', '2025-07-16 14:45:54', 'vino', NULL, 250.00),
 (347, 'redvelvet', 'Red Velvet gin Garage 22 a tonic', 170.00, '', 1, '2025-07-11 12:06:34', '2025-07-11 12:06:34', 'koktejl', NULL, 0.00),
 (348, 'bluegin', 'Blue gin Garage22 a tonic', 150.00, '', 1, '2025-07-11 12:06:53', '2025-07-11 12:06:53', 'koktejl', NULL, 0.00),
 (349, 'bellini', 'Bellini', 130.00, 'Prosseco a broskvove pyre', 1, '2025-07-11 12:11:37', '2025-07-11 12:11:37', 'koktejl', NULL, 0.00),
-(350, 'rossini', 'Rossini', 130.00, 'Prosseco a jahodove pyre', 1, '2025-07-11 12:11:56', '2025-07-11 12:11:56', 'koktejl', NULL, 0.00);
+(350, 'rossini', 'Rossini', 130.00, 'Prosseco a jahodove pyre', 1, '2025-07-11 12:11:56', '2025-07-11 12:11:56', 'koktejl', NULL, 0.00),
+(351, 'trisekt', 'Trisekt', 550.00, '', 1, '2025-07-16 14:45:25', '2025-07-16 14:45:25', 'vino', NULL, 0.00),
+(352, 'kyselac', 'Kyseláč 0,5l', 70.00, '', 1, '2025-07-16 14:46:29', '2025-07-16 14:46:29', 'pivo', NULL, 0.00),
+(353, 'kyselacmaly', 'Kyseláč 0,3l', 60.00, '0,3l', 1, '2025-07-16 14:47:12', '2025-07-16 14:47:12', 'pivo', NULL, 0.00),
+(354, 'crodino', 'Crodino', 95.00, 'Nealko červená nebo zluta', 1, '2025-07-18 16:26:38', '2025-07-18 16:26:38', 'spritz', NULL, 0.00);
 
 -- --------------------------------------------------------
 
@@ -255,6 +309,48 @@ CREATE TABLE `employees` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `finance_categories`
+--
+
+CREATE TABLE `finance_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `type` enum('income','expense') NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `finance_categories`
+--
+
+INSERT INTO `finance_categories` (`id`, `name`, `type`, `created_at`) VALUES
+(1, 'Příjmy z prodeje', 'income', '2025-07-28 13:37:09'),
+(2, 'Ostatní příjmy', 'income', '2025-07-28 13:37:09'),
+(3, 'Potraviny/Ingredience', 'expense', '2025-07-28 13:37:09'),
+(4, 'Nájem', 'expense', '2025-07-28 13:37:09'),
+(5, 'Energie', 'expense', '2025-07-28 13:37:09'),
+(6, 'Marketing', 'expense', '2025-07-28 13:37:09'),
+(7, 'Ostatní výdaje', 'expense', '2025-07-28 13:37:09');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `finance_transactions`
+--
+
+CREATE TABLE `finance_transactions` (
+  `id` int(11) NOT NULL,
+  `type` enum('income','expense') NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `description` text NOT NULL,
+  `category` varchar(50) DEFAULT NULL,
+  `date` date NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -465,14 +561,14 @@ INSERT INTO `orders` (`id`, `table_session_id`, `created_at`, `status`, `order_t
 (394, 301, '2025-07-05 20:38:47', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (395, 299, '2025-07-05 20:46:58', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (416, 311, '2025-07-06 13:00:42', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
-(417, 312, '2025-07-06 13:15:45', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
+(417, 312, '2025-07-06 13:15:45', 'delivered', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (418, 313, '2025-07-06 13:22:42', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (419, 313, '2025-07-06 13:38:15', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (420, 313, '2025-07-06 13:47:33', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (421, 314, '2025-07-06 14:00:09', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (422, 315, '2025-07-06 14:16:54', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
-(423, 312, '2025-07-06 14:19:22', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
-(424, 312, '2025-07-06 14:35:42', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
+(423, 312, '2025-07-06 14:19:22', 'delivered', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
+(424, 312, '2025-07-06 14:35:42', 'delivered', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (425, 316, '2025-07-06 14:38:57', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (426, 316, '2025-07-06 14:42:28', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (427, 315, '2025-07-06 14:42:49', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
@@ -490,7 +586,7 @@ INSERT INTO `orders` (`id`, `table_session_id`, `created_at`, `status`, `order_t
 (439, 321, '2025-07-06 15:28:26', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (440, 317, '2025-07-06 15:29:03', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (441, 322, '2025-07-06 15:32:02', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
-(442, 312, '2025-07-06 15:33:05', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
+(442, 312, '2025-07-06 15:33:05', 'delivered', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (443, 323, '2025-07-06 15:34:30', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (444, 317, '2025-07-06 15:35:11', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
 (445, 316, '2025-07-06 15:37:30', 'pending', 'other', NULL, NULL, NULL, NULL, NULL, NULL),
@@ -622,7 +718,7 @@ INSERT INTO `orders` (`id`, `table_session_id`, `created_at`, `status`, `order_t
 (746, 531, '2025-07-11 18:18:20', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (747, 532, '2025-07-11 18:20:08', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (748, 529, '2025-07-11 18:42:05', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
-(779, 558, '2025-07-12 01:55:18', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
+(779, 558, '2025-07-12 01:55:18', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (780, 544, '2025-07-12 02:00:20', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (784, 560, '2025-07-12 02:10:07', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
 (785, 561, '2025-07-12 02:14:16', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
@@ -685,7 +781,7 @@ INSERT INTO `orders` (`id`, `table_session_id`, `created_at`, `status`, `order_t
 (843, 551, '2025-07-12 04:08:58', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
 (844, 551, '2025-07-12 04:10:00', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
 (845, 556, '2025-07-12 04:12:33', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
-(846, 574, '2025-07-12 04:16:04', 'pending', 'other', NULL, NULL, NULL, NULL, 'U sudu', 'Pavla'),
+(846, 574, '2025-07-12 04:16:04', 'delivered', 'other', NULL, NULL, NULL, NULL, 'U sudu', 'Pavla'),
 (847, 572, '2025-07-12 04:18:19', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (848, 546, '2025-07-12 04:21:09', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (849, 556, '2025-07-12 04:24:22', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
@@ -817,7 +913,7 @@ INSERT INTO `orders` (`id`, `table_session_id`, `created_at`, `status`, `order_t
 (1026, 638, '2025-07-13 15:52:46', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1027, 647, '2025-07-13 15:53:24', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1028, 632, '2025-07-13 15:54:35', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
-(1029, 648, '2025-07-13 15:54:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
+(1029, 648, '2025-07-13 15:54:37', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (1030, 649, '2025-07-13 15:55:28', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1031, 632, '2025-07-13 15:56:48', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1032, 646, '2025-07-13 15:57:39', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
@@ -848,7 +944,7 @@ INSERT INTO `orders` (`id`, `table_session_id`, `created_at`, `status`, `order_t
 (1057, 645, '2025-07-13 16:33:56', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1058, 639, '2025-07-13 16:34:19', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1059, 656, '2025-07-13 16:35:24', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
-(1060, 648, '2025-07-13 16:35:48', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
+(1060, 648, '2025-07-13 16:35:48', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (1061, 652, '2025-07-13 16:36:07', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1062, 647, '2025-07-13 16:37:43', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1063, 645, '2025-07-13 16:39:47', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
@@ -870,17 +966,17 @@ INSERT INTO `orders` (`id`, `table_session_id`, `created_at`, `status`, `order_t
 (1078, 661, '2025-07-13 17:06:14', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (1079, 657, '2025-07-13 17:08:28', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (1080, 662, '2025-07-13 17:08:47', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
-(1081, 648, '2025-07-13 17:08:50', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
+(1081, 648, '2025-07-13 17:08:50', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (1082, 665, '2025-07-13 17:11:46', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (1083, 632, '2025-07-13 17:14:18', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1084, 649, '2025-07-13 17:17:17', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
-(1085, 648, '2025-07-13 17:19:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
+(1085, 648, '2025-07-13 17:19:37', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (1086, 632, '2025-07-13 17:25:51', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1087, 665, '2025-07-13 17:26:31', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1088, 652, '2025-07-13 17:31:46', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (1089, 665, '2025-07-13 17:34:45', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (1090, 661, '2025-07-13 17:38:06', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
-(1091, 648, '2025-07-13 17:39:36', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
+(1091, 648, '2025-07-13 17:39:36', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Pavla'),
 (1092, 663, '2025-07-13 17:54:13', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1093, 649, '2025-07-13 18:00:13', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1094, 632, '2025-07-13 18:00:36', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
@@ -896,14 +992,471 @@ INSERT INTO `orders` (`id`, `table_session_id`, `created_at`, `status`, `order_t
 (1105, 666, '2025-07-13 19:10:40', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1106, 664, '2025-07-13 19:12:44', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
 (1107, 665, '2025-07-13 19:29:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
-(1108, 667, '2025-07-14 21:36:12', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'assa'),
-(1109, 667, '2025-07-14 21:39:02', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'assa'),
-(1110, 668, '2025-07-14 21:39:52', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'assa'),
-(1111, 669, '2025-07-14 21:41:59', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'assa'),
-(1112, 670, '2025-07-14 21:46:13', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'assa'),
-(1113, 671, '2025-07-14 21:54:30', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'iPhone web'),
-(1114, 672, '2025-07-14 21:54:54', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'assa'),
-(1115, 673, '2025-07-14 21:57:07', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'assa');
+(1120, 677, '2025-07-16 15:36:28', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1121, 678, '2025-07-16 16:05:36', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1122, 677, '2025-07-16 16:08:47', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1123, 677, '2025-07-16 16:25:55', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1124, 679, '2025-07-16 16:28:40', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1125, 678, '2025-07-16 16:28:55', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1126, 679, '2025-07-16 16:30:20', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1127, 680, '2025-07-16 16:47:55', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1128, 681, '2025-07-16 16:57:29', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1129, 679, '2025-07-16 17:03:50', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1130, 678, '2025-07-16 17:12:12', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1131, 681, '2025-07-16 17:15:58', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1132, 678, '2025-07-16 17:27:42', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1133, 681, '2025-07-16 17:31:13', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1134, 682, '2025-07-16 17:39:32', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1135, 683, '2025-07-16 17:48:21', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1136, 684, '2025-07-16 17:51:27', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1137, 684, '2025-07-16 18:07:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1138, 684, '2025-07-16 18:28:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1139, 684, '2025-07-16 18:41:46', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1140, 684, '2025-07-16 19:14:43', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1141, 684, '2025-07-16 19:22:19', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Barca'),
+(1142, 685, '2025-07-18 14:55:09', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1143, 686, '2025-07-18 14:57:47', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1144, 686, '2025-07-18 15:02:17', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1145, 687, '2025-07-18 15:04:20', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1146, 688, '2025-07-18 15:04:47', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1147, 689, '2025-07-18 15:07:42', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1148, 686, '2025-07-18 15:08:22', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1149, 685, '2025-07-18 15:09:35', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1150, 685, '2025-07-18 15:11:47', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1151, 689, '2025-07-18 15:12:48', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1152, 688, '2025-07-18 15:17:45', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1153, 687, '2025-07-18 15:18:20', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1154, 694, '2025-07-18 15:23:18', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1155, 692, '2025-07-18 15:25:54', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1156, 694, '2025-07-18 15:26:43', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1157, 692, '2025-07-18 15:30:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1158, 686, '2025-07-18 15:34:23', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1159, 688, '2025-07-18 15:34:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1160, 686, '2025-07-18 15:37:17', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1161, 687, '2025-07-18 15:40:08', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Mirek'),
+(1162, 693, '2025-07-18 15:42:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1163, 689, '2025-07-18 15:43:04', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1164, 694, '2025-07-18 15:43:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1165, 695, '2025-07-18 15:49:38', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1166, 688, '2025-07-18 15:51:14', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1167, 696, '2025-07-18 15:56:40', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1168, 696, '2025-07-18 15:57:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1169, 686, '2025-07-18 16:02:23', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1170, 689, '2025-07-18 16:03:16', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1171, 694, '2025-07-18 16:03:32', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1172, 697, '2025-07-18 16:05:06', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1173, 698, '2025-07-18 16:09:43', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1174, 695, '2025-07-18 16:09:54', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1175, 699, '2025-07-18 16:11:53', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1176, 694, '2025-07-18 16:12:22', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1177, 700, '2025-07-18 16:13:38', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1178, 701, '2025-07-18 16:15:20', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1179, 702, '2025-07-18 16:15:59', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1180, 703, '2025-07-18 16:16:42', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1181, 688, '2025-07-18 16:17:14', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1182, 704, '2025-07-18 16:17:35', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1183, 705, '2025-07-18 16:19:39', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1184, 706, '2025-07-18 16:20:59', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1185, 707, '2025-07-18 16:22:23', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1186, 700, '2025-07-18 16:22:32', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1187, 708, '2025-07-18 16:25:15', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1188, 703, '2025-07-18 16:27:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1189, 709, '2025-07-18 16:29:23', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1190, 695, '2025-07-18 16:30:26', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1191, 688, '2025-07-18 16:30:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1192, 694, '2025-07-18 16:31:06', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1193, 699, '2025-07-18 16:31:11', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1194, 710, '2025-07-18 16:32:27', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1195, 694, '2025-07-18 16:33:51', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1196, 697, '2025-07-18 16:34:07', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1197, 711, '2025-07-18 16:34:33', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1198, 712, '2025-07-18 16:39:29', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1199, 695, '2025-07-18 16:41:10', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1200, 689, '2025-07-18 16:44:44', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1201, 703, '2025-07-18 16:48:24', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1202, 706, '2025-07-18 16:49:22', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1203, 713, '2025-07-18 16:52:19', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1204, 714, '2025-07-18 16:54:07', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1205, 714, '2025-07-18 16:55:02', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1206, 715, '2025-07-18 16:55:05', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1207, 701, '2025-07-18 16:56:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1208, 704, '2025-07-18 16:57:22', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1209, 716, '2025-07-18 16:58:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1210, 717, '2025-07-18 16:59:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1211, 706, '2025-07-18 17:02:47', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1212, 720, '2025-07-18 17:04:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1213, 706, '2025-07-18 17:05:00', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1214, 709, '2025-07-18 17:05:53', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1215, 697, '2025-07-18 17:05:55', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1216, 689, '2025-07-18 17:06:49', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1217, 702, '2025-07-18 17:08:28', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1218, 702, '2025-07-18 17:08:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1219, 719, '2025-07-18 17:10:02', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1220, 713, '2025-07-18 17:11:07', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1221, 689, '2025-07-18 17:12:04', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1222, 703, '2025-07-18 17:14:18', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1223, 698, '2025-07-18 17:16:22', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1224, 721, '2025-07-18 17:16:43', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1225, 715, '2025-07-18 17:18:48', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1226, 687, '2025-07-18 17:19:49', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1227, 713, '2025-07-18 17:23:27', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1228, 721, '2025-07-18 17:23:43', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1229, 703, '2025-07-18 17:24:49', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1230, 722, '2025-07-18 17:27:04', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1231, 714, '2025-07-18 17:30:46', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1232, 711, '2025-07-18 17:31:31', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1233, 701, '2025-07-18 17:31:35', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1234, 706, '2025-07-18 17:34:16', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1235, 689, '2025-07-18 17:35:00', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1236, 713, '2025-07-18 17:35:19', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1237, 697, '2025-07-18 17:35:45', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1238, 687, '2025-07-18 17:36:26', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1239, 720, '2025-07-18 17:45:30', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1240, 703, '2025-07-18 17:45:52', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1241, 710, '2025-07-18 17:48:30', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1242, 714, '2025-07-18 17:49:40', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1243, 715, '2025-07-18 17:50:16', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1244, 687, '2025-07-18 17:51:32', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1245, 703, '2025-07-18 17:51:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1246, 713, '2025-07-18 17:54:28', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1247, 726, '2025-07-18 17:54:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1248, 719, '2025-07-18 17:56:25', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1249, 724, '2025-07-18 17:57:10', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1250, 703, '2025-07-18 17:57:30', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Kerol'),
+(1251, 689, '2025-07-18 17:57:33', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1252, 722, '2025-07-18 17:58:27', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1253, 713, '2025-07-18 18:02:53', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1254, 720, '2025-07-18 18:04:46', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1255, 689, '2025-07-18 18:06:52', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1256, 714, '2025-07-18 18:07:27', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1257, 713, '2025-07-18 18:08:25', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1258, 716, '2025-07-18 18:08:36', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1259, 716, '2025-07-18 18:11:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1260, 713, '2025-07-18 18:12:13', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1261, 715, '2025-07-18 18:13:18', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1262, 721, '2025-07-18 18:13:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1263, 706, '2025-07-18 18:15:12', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1264, 725, '2025-07-18 18:17:17', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1265, 713, '2025-07-18 18:23:27', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1266, 713, '2025-07-18 18:24:31', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1267, 697, '2025-07-18 18:25:01', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1268, 719, '2025-07-18 18:27:33', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1269, 721, '2025-07-18 18:29:08', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1270, 726, '2025-07-18 18:31:48', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1271, 719, '2025-07-18 18:34:43', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1272, 713, '2025-07-18 18:37:30', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1273, 719, '2025-07-18 18:40:28', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1274, 719, '2025-07-18 18:42:16', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1275, 706, '2025-07-18 18:45:47', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1276, 726, '2025-07-18 18:47:29', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1277, 687, '2025-07-18 18:48:11', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1278, 687, '2025-07-18 18:48:43', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1279, 724, '2025-07-18 18:49:18', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1280, 713, '2025-07-18 18:49:59', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Naty'),
+(1281, 724, '2025-07-18 18:52:27', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1282, 687, '2025-07-18 18:53:11', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1283, 713, '2025-07-18 18:53:56', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1284, 698, '2025-07-18 18:56:29', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1285, 715, '2025-07-18 18:57:27', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1286, 697, '2025-07-18 19:01:20', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1287, 697, '2025-07-18 19:01:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1288, 713, '2025-07-18 19:08:17', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1289, 719, '2025-07-18 19:11:12', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1290, 713, '2025-07-18 19:12:50', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1291, 713, '2025-07-18 19:13:05', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1292, 719, '2025-07-18 19:14:24', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1293, 706, '2025-07-18 19:17:32', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1294, 713, '2025-07-18 19:24:16', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1295, 697, '2025-07-18 19:24:36', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1296, 715, '2025-07-18 19:26:20', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1297, 726, '2025-07-18 19:26:36', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1298, 721, '2025-07-18 19:27:32', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1299, 721, '2025-07-18 19:31:49', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1300, 713, '2025-07-18 19:39:38', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1301, 713, '2025-07-18 19:40:35', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1302, 713, '2025-07-18 19:41:03', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1303, 713, '2025-07-18 19:42:15', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1304, 713, '2025-07-18 19:43:05', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1305, 713, '2025-07-18 19:49:22', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1306, 719, '2025-07-18 20:11:08', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1307, 706, '2025-07-18 20:15:43', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1308, 713, '2025-07-18 20:36:33', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
+(1309, 727, '2025-07-19 14:07:43', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1310, 728, '2025-07-19 14:23:06', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1311, 729, '2025-07-19 14:24:08', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1312, 729, '2025-07-19 14:43:27', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1313, 730, '2025-07-19 14:49:23', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1314, 730, '2025-07-19 14:51:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1315, 731, '2025-07-19 14:53:35', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1316, 732, '2025-07-19 14:54:32', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1317, 731, '2025-07-19 15:03:44', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1318, 732, '2025-07-19 15:04:01', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1319, 727, '2025-07-19 15:05:52', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1320, 733, '2025-07-19 15:08:18', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1321, 733, '2025-07-19 15:12:53', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1322, 732, '2025-07-19 15:13:21', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1323, 731, '2025-07-19 15:27:32', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1324, 734, '2025-07-19 15:32:25', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1325, 735, '2025-07-19 15:36:45', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1326, 733, '2025-07-19 15:44:13', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1327, 731, '2025-07-19 15:45:17', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1328, 736, '2025-07-19 16:05:46', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1329, 737, '2025-07-19 16:07:58', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1330, 734, '2025-07-19 16:11:10', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1331, 733, '2025-07-19 16:12:45', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1332, 738, '2025-07-19 16:16:02', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1333, 739, '2025-07-19 16:17:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1334, 733, '2025-07-19 16:18:18', 'pending', 'other', NULL, NULL, NULL, NULL, 'Bez skleniček', 'Paja'),
+(1335, 734, '2025-07-19 16:23:18', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1336, 739, '2025-07-19 16:25:11', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1337, 735, '2025-07-19 16:30:43', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1338, 739, '2025-07-19 16:37:17', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1339, 740, '2025-07-19 16:43:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1340, 741, '2025-07-19 16:44:06', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1341, 742, '2025-07-19 16:44:19', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1342, 741, '2025-07-19 16:46:57', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1343, 739, '2025-07-19 16:48:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1344, 742, '2025-07-19 16:50:08', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1345, 735, '2025-07-19 16:50:18', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1346, 738, '2025-07-19 17:00:19', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1347, 735, '2025-07-19 17:00:27', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1348, 743, '2025-07-19 17:02:32', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1349, 738, '2025-07-19 17:04:52', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1350, 739, '2025-07-19 17:09:47', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1351, 740, '2025-07-19 17:11:21', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1352, 738, '2025-07-19 17:15:57', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1353, 738, '2025-07-19 17:16:06', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1354, 739, '2025-07-19 17:16:20', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1355, 744, '2025-07-19 17:16:57', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1356, 745, '2025-07-19 17:19:48', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1357, 742, '2025-07-19 17:20:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1358, 740, '2025-07-19 17:21:09', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1359, 739, '2025-07-19 17:21:27', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1360, 743, '2025-07-19 17:21:57', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1361, 741, '2025-07-19 17:22:14', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1362, 744, '2025-07-19 17:25:56', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1363, 746, '2025-07-19 17:30:31', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1364, 738, '2025-07-19 17:30:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1365, 747, '2025-07-19 17:35:43', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1366, 739, '2025-07-19 17:37:50', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1367, 740, '2025-07-19 17:38:57', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1368, 747, '2025-07-19 17:39:25', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1369, 745, '2025-07-19 17:48:01', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1370, 748, '2025-07-19 17:49:06', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1371, 744, '2025-07-19 17:50:05', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1372, 738, '2025-07-19 17:51:54', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1373, 746, '2025-07-19 17:55:10', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1374, 747, '2025-07-19 17:57:29', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1375, 749, '2025-07-19 17:59:25', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1376, 743, '2025-07-19 18:09:24', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1377, 743, '2025-07-19 18:12:53', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1378, 749, '2025-07-19 18:20:33', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1379, 744, '2025-07-19 18:21:13', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1380, 750, '2025-07-19 18:47:22', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1381, 751, '2025-07-19 18:49:49', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1382, 743, '2025-07-19 18:50:31', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1383, 752, '2025-07-19 18:55:54', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1384, 753, '2025-07-19 19:12:49', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1385, 753, '2025-07-19 19:15:36', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1386, 752, '2025-07-19 19:25:13', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1387, 753, '2025-07-19 19:51:49', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1388, 753, '2025-07-19 19:58:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1389, 754, '2025-07-19 20:09:50', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1390, 755, '2025-07-19 20:19:21', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1391, 756, '2025-07-19 20:37:22', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1392, 754, '2025-07-19 20:40:26', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1393, 755, '2025-07-19 21:02:12', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1394, 757, '2025-07-19 21:03:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1395, 756, '2025-07-19 21:21:00', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1396, 754, '2025-07-19 21:21:22', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1397, 757, '2025-07-19 21:23:17', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1398, 758, '2025-07-19 21:30:02', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1399, 756, '2025-07-19 21:38:56', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1400, 754, '2025-07-19 21:39:11', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1401, 756, '2025-07-19 21:46:45', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1404, 761, '2025-07-20 14:04:31', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1406, 762, '2025-07-20 14:06:30', 'pending', 'other', NULL, NULL, NULL, NULL, 'Klára Bílíková', 'Vladka'),
+(1407, 763, '2025-07-20 14:18:24', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1408, 764, '2025-07-20 14:23:29', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1409, 765, '2025-07-20 14:24:21', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1410, 766, '2025-07-20 14:31:36', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1411, 767, '2025-07-20 14:32:36', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1412, 768, '2025-07-20 14:33:22', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1413, 763, '2025-07-20 14:36:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1414, 761, '2025-07-20 14:39:55', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1415, 767, '2025-07-20 14:42:17', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1416, 773, '2025-07-20 14:43:15', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1417, 773, '2025-07-20 14:45:27', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1418, 764, '2025-07-20 14:45:45', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1419, 763, '2025-07-20 14:46:33', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1420, 770, '2025-07-20 14:49:25', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1421, 767, '2025-07-20 14:56:12', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1422, 761, '2025-07-20 14:57:15', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1423, 771, '2025-07-20 15:00:36', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1424, 763, '2025-07-20 15:02:17', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1425, 771, '2025-07-20 15:04:39', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1426, 773, '2025-07-20 15:11:25', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1427, 772, '2025-07-20 15:12:17', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1428, 771, '2025-07-20 15:12:59', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1429, 768, '2025-07-20 15:14:53', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1430, 763, '2025-07-20 15:15:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1431, 773, '2025-07-20 15:17:16', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1432, 773, '2025-07-20 15:19:33', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1433, 772, '2025-07-20 15:20:46', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1434, 774, '2025-07-20 15:23:40', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1435, 777, '2025-07-20 15:27:54', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1436, 776, '2025-07-20 15:28:14', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1437, 764, '2025-07-20 15:31:55', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1438, 772, '2025-07-20 15:33:30', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1439, 777, '2025-07-20 15:34:06', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1440, 771, '2025-07-20 15:34:50', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1441, 777, '2025-07-20 15:35:29', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1442, 774, '2025-07-20 15:35:48', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1443, 778, '2025-07-20 15:39:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1444, 774, '2025-07-20 15:39:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1445, 777, '2025-07-20 15:40:25', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1446, 771, '2025-07-20 15:40:49', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'viktorie'),
+(1447, 779, '2025-07-20 15:43:07', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1448, 771, '2025-07-20 15:47:45', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1449, 789, '2025-07-20 15:53:00', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1450, 777, '2025-07-20 15:53:32', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1451, 764, '2025-07-20 15:54:09', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1452, 781, '2025-07-20 15:55:07', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1453, 781, '2025-07-20 15:55:36', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1454, 782, '2025-07-20 15:58:26', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1455, 778, '2025-07-20 16:02:42', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1456, 772, '2025-07-20 16:04:16', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1457, 783, '2025-07-20 16:06:25', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1458, 784, '2025-07-20 16:06:47', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1459, 785, '2025-07-20 16:08:14', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1461, 772, '2025-07-20 16:11:09', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1462, 777, '2025-07-20 16:13:02', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1463, 786, '2025-07-20 16:13:29', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1464, 772, '2025-07-20 16:15:31', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1465, 781, '2025-07-20 16:16:29', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1466, 787, '2025-07-20 16:20:28', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1467, 781, '2025-07-20 16:21:16', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1468, 777, '2025-07-20 16:22:07', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1469, 789, '2025-07-20 16:22:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1470, 788, '2025-07-20 16:24:51', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1471, 783, '2025-07-20 16:25:22', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1472, 789, '2025-07-20 16:27:13', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1473, 789, '2025-07-20 16:28:13', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1474, 790, '2025-07-20 16:31:27', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1475, 791, '2025-07-20 16:31:53', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1476, 787, '2025-07-20 16:33:30', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1477, 792, '2025-07-20 16:37:11', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1478, 790, '2025-07-20 16:37:38', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1479, 793, '2025-07-20 16:38:58', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1480, 789, '2025-07-20 16:41:06', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1481, 779, '2025-07-20 16:42:52', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1482, 794, '2025-07-20 16:45:10', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1483, 789, '2025-07-20 16:46:54', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1484, 795, '2025-07-20 16:47:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1485, 786, '2025-07-20 16:49:14', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1486, 796, '2025-07-20 16:49:39', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1487, 792, '2025-07-20 16:50:56', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1489, 779, '2025-07-20 16:53:20', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1490, 797, '2025-07-20 16:59:18', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1491, 796, '2025-07-20 17:01:23', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1492, 789, '2025-07-20 17:03:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1493, 791, '2025-07-20 17:04:11', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1494, 786, '2025-07-20 17:05:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1495, 787, '2025-07-20 17:07:12', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1496, 798, '2025-07-20 17:10:10', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1497, 792, '2025-07-20 17:15:32', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1498, 799, '2025-07-20 17:17:03', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1499, 800, '2025-07-20 17:17:10', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1500, 791, '2025-07-20 17:20:53', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1501, 801, '2025-07-20 17:21:42', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1503, 760, '2025-07-20 17:23:51', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'viktorie'),
+(1504, 802, '2025-07-20 17:26:40', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1505, 792, '2025-07-20 17:29:45', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1506, 789, '2025-07-20 17:31:32', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1507, 760, '2025-07-20 17:31:54', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1508, 800, '2025-07-20 17:33:35', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1509, 779, '2025-07-20 17:36:57', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1510, 760, '2025-07-20 17:40:00', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1511, 803, '2025-07-20 17:41:36', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1513, 804, '2025-07-20 17:42:33', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1514, 779, '2025-07-20 17:42:46', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1515, 789, '2025-07-20 17:43:00', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1516, 796, '2025-07-20 17:45:52', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1517, 801, '2025-07-20 17:45:59', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1518, 800, '2025-07-20 17:47:17', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1520, 805, '2025-07-20 17:55:55', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1521, 791, '2025-07-20 18:02:31', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1522, 796, '2025-07-20 18:08:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1523, 802, '2025-07-20 18:10:07', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1524, 760, '2025-07-20 18:12:38', 'delivered', 'other', NULL, NULL, NULL, NULL, '', 'ondřej stávek'),
+(1525, 801, '2025-07-20 18:17:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1526, 789, '2025-07-20 18:20:38', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1527, 779, '2025-07-20 18:24:11', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1528, 792, '2025-07-20 18:26:35', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1529, 802, '2025-07-20 18:26:58', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1530, 806, '2025-07-20 18:34:33', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1531, 807, '2025-07-20 18:41:53', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1532, 789, '2025-07-20 18:42:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1533, 789, '2025-07-20 18:43:59', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Vladka'),
+(1534, 789, '2025-07-20 18:51:09', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1535, 806, '2025-07-20 18:52:38', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1561, 819, '2025-07-23 15:09:00', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1562, 820, '2025-07-23 15:43:02', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1563, 820, '2025-07-23 15:49:47', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1564, 821, '2025-07-23 15:55:30', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1565, 822, '2025-07-23 15:59:19', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1566, 823, '2025-07-23 16:13:37', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1567, 824, '2025-07-23 16:25:06', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1568, 825, '2025-07-23 16:30:36', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1569, 826, '2025-07-23 16:37:05', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1570, 823, '2025-07-23 16:39:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1571, 827, '2025-07-23 16:48:45', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1572, 828, '2025-07-23 16:49:41', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1573, 829, '2025-07-23 17:06:40', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1574, 828, '2025-07-23 17:07:34', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1575, 830, '2025-07-23 17:22:16', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
+(1576, 827, '2025-07-23 17:31:31', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
+(1577, 828, '2025-07-23 17:31:53', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
+(1578, 828, '2025-07-23 17:34:29', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
+(1579, 829, '2025-07-23 17:36:00', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
+(1580, 828, '2025-07-23 17:41:17', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1581, 827, '2025-07-23 17:43:42', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
+(1582, 828, '2025-07-23 17:56:13', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
+(1583, 828, '2025-07-23 18:09:10', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1584, 831, '2025-07-23 18:13:59', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1585, 828, '2025-07-23 18:26:28', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1586, 828, '2025-07-23 18:29:08', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1587, 826, '2025-07-23 18:30:16', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1588, 828, '2025-07-23 18:36:51', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
+(1589, 832, '2025-07-23 19:04:30', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1590, 832, '2025-07-23 19:08:20', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja'),
+(1591, 832, '2025-07-23 19:12:21', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
+(1592, 833, '2025-07-23 19:26:42', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Dominika'),
+(1593, 833, '2025-07-23 19:51:44', 'pending', 'other', NULL, NULL, NULL, NULL, '', 'Paja');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_categories`
+--
+
+CREATE TABLE `order_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `icon` varchar(10) DEFAULT NULL,
+  `color` varchar(7) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_categories`
+--
+
+INSERT INTO `order_categories` (`id`, `name`, `icon`, `color`) VALUES
+(1, 'Nápoje', '🍺', '#17a2b8'),
+(2, 'Potraviny', '🧀', '#28a745'),
+(3, 'Kancelář', '📎', '#6f42c1'),
+(4, 'Čištění', '🧽', '#20c997'),
+(5, 'Jiné', '📦', '#6c757d');
 
 -- --------------------------------------------------------
 
@@ -2496,14 +3049,1295 @@ INSERT INTO `order_items` (`id`, `order_id`, `item_type`, `item_name`, `quantity
 (2634, 1105, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-13 19:52:20', '2025-07-13 19:11:58', NULL, NULL, NULL),
 (2635, 1106, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-13 19:50:39', '2025-07-13 19:29:54', NULL, NULL, NULL),
 (2636, 1107, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-13 19:51:37', '2025-07-13 19:29:55', NULL, NULL, NULL),
-(2637, 1108, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-14 22:00:09', '2025-07-14 21:59:32', NULL, NULL, NULL),
-(2638, 1109, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'card', '2025-07-14 22:00:09', '2025-07-14 21:59:37', NULL, NULL, NULL),
-(2639, 1110, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-14 22:00:06', '2025-07-14 21:59:37', NULL, NULL, NULL),
-(2640, 1111, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'card', '2025-07-14 21:59:58', '2025-07-14 21:59:40', NULL, NULL, NULL),
-(2641, 1112, 'pizza', 'Daviola bianca', 1, 250.00, '', 'paid', 'cash', '2025-07-14 22:00:13', '2025-07-14 21:59:33', NULL, NULL, NULL),
-(2642, 1113, 'predkrm', 'Bruschetta pomodoro', 1, 145.00, '', 'paid', 'cash', '2025-07-14 22:00:00', '2025-07-14 21:59:35', NULL, NULL, NULL),
-(2643, 1114, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'card', '2025-07-14 22:00:03', '2025-07-14 21:59:41', NULL, NULL, NULL),
-(2644, 1115, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'card', '2025-07-14 22:00:15', '2025-07-14 21:59:41', NULL, NULL, NULL);
+(2662, 1120, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'cash', '2025-07-16 17:10:41', '2025-07-16 16:02:50', NULL, NULL, NULL),
+(2663, 1120, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-16 17:10:41', '2025-07-16 15:44:08', NULL, NULL, NULL),
+(2664, 1120, 'predkrm', 'Bruschetta pomodoro', 1, 145.00, '', 'paid', 'cash', '2025-07-16 17:10:41', '2025-07-16 15:49:11', NULL, NULL, NULL),
+(2665, 1120, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-16 17:10:41', '2025-07-16 15:44:08', NULL, NULL, NULL),
+(2666, 1121, 'predkrm', 'Bruschetta pomodoro', 1, 145.00, '', 'paid', 'cash', '2025-07-16 17:29:07', '2025-07-16 16:15:51', NULL, NULL, NULL),
+(2667, 1121, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'cash', '2025-07-16 17:29:07', '2025-07-16 16:15:52', NULL, NULL, NULL),
+(2668, 1121, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-16 17:29:07', '2025-07-16 16:10:59', NULL, NULL, NULL),
+(2669, 1121, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-16 17:29:07', '2025-07-16 16:11:00', NULL, NULL, NULL),
+(2670, 1121, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-16 17:29:07', '2025-07-16 16:22:53', NULL, NULL, NULL),
+(2671, 1121, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-16 17:29:07', '2025-07-16 16:11:00', NULL, NULL, NULL),
+(2672, 1121, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-16 17:29:07', '2025-07-16 16:11:01', NULL, NULL, NULL),
+(2673, 1122, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-16 17:10:41', '2025-07-16 16:12:38', NULL, NULL, NULL),
+(2674, 1123, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-16 17:10:41', '2025-07-16 16:40:42', NULL, NULL, NULL),
+(2675, 1124, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-16 17:30:10', '2025-07-16 16:36:22', NULL, NULL, NULL),
+(2676, 1124, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'cash', '2025-07-16 17:30:10', '2025-07-16 16:40:48', NULL, NULL, NULL),
+(2677, 1124, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-16 17:30:10', '2025-07-16 16:34:51', NULL, NULL, NULL),
+(2678, 1125, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'cash', '2025-07-16 17:29:07', '2025-07-16 16:40:49', NULL, NULL, NULL),
+(2679, 1126, 'vino', 'Víno Hibernal', 1, 240.00, '', 'cancelled', 'cash', NULL, '2025-07-16 16:34:51', NULL, NULL, NULL),
+(2680, 1127, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-16 17:52:50', '2025-07-16 16:54:44', NULL, NULL, NULL),
+(2681, 1127, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-16 17:52:50', '2025-07-16 16:54:44', NULL, NULL, NULL),
+(2682, 1127, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-16 17:52:50', '2025-07-16 16:54:45', NULL, NULL, NULL),
+(2683, 1127, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-16 17:52:50', '2025-07-16 16:54:45', NULL, NULL, NULL),
+(2684, 1127, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'card', '2025-07-16 17:52:50', '2025-07-16 16:57:50', NULL, NULL, NULL),
+(2685, 1127, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'card', '2025-07-16 17:52:50', '2025-07-16 16:57:50', NULL, NULL, NULL),
+(2686, 1127, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'card', '2025-07-16 17:52:50', '2025-07-16 16:57:51', NULL, NULL, NULL),
+(2687, 1127, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'card', '2025-07-16 17:52:50', '2025-07-16 16:57:51', NULL, NULL, NULL),
+(2688, 1127, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'card', '2025-07-16 17:52:50', '2025-07-16 16:54:46', NULL, NULL, NULL),
+(2689, 1128, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-16 17:35:58', '2025-07-16 17:01:12', NULL, NULL, NULL),
+(2690, 1128, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-16 17:35:58', '2025-07-16 17:01:13', NULL, NULL, NULL),
+(2691, 1129, 'vino', 'Víno Hibernal', 1, 240.00, '', 'paid', 'cash', '2025-07-16 17:30:10', '2025-07-16 17:09:11', NULL, NULL, NULL),
+(2692, 1130, 'predkrm', 'Bruschetta pomodoro', 1, 145.00, '', 'cancelled', 'cash', NULL, NULL, NULL, NULL, NULL),
+(2693, 1131, 'predkrm', 'Bruschetta pomodoro', 1, 145.00, '', 'paid', 'cash', '2025-07-16 17:35:58', '2025-07-16 17:20:14', NULL, NULL, NULL),
+(2694, 1132, 'vino', 'Víno Hibernal', 1, 240.00, '', 'paid', 'cash', '2025-07-16 17:29:07', '2025-07-16 17:28:15', NULL, NULL, NULL),
+(2695, 1133, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-16 17:35:58', '2025-07-16 17:34:52', NULL, NULL, NULL),
+(2696, 1133, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-16 17:35:58', '2025-07-16 17:34:52', NULL, NULL, NULL),
+(2697, 1134, 'spritz', 'Spritz Campari', 1, 130.00, '', 'paid', 'card', '2025-07-16 18:01:48', '2025-07-16 17:44:04', NULL, NULL, NULL),
+(2698, 1134, 'spritz', 'Spritz Campari', 1, 130.00, '', 'paid', 'card', '2025-07-16 18:01:48', '2025-07-16 17:44:04', NULL, NULL, NULL),
+(2699, 1134, 'predkrm', 'Bruschetta pomodoro', 1, 145.00, '', 'paid', 'card', '2025-07-16 18:01:48', '2025-07-16 17:49:25', NULL, NULL, NULL),
+(2700, 1135, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-16 18:35:16', '2025-07-16 17:54:07', NULL, NULL, NULL),
+(2701, 1135, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-16 18:35:16', '2025-07-16 17:54:08', NULL, NULL, NULL),
+(2702, 1135, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-16 18:37:14', '2025-07-16 17:54:09', NULL, NULL, NULL),
+(2703, 1135, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'cash', '2025-07-16 18:35:16', '2025-07-16 17:57:11', NULL, NULL, NULL),
+(2704, 1135, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'card', '2025-07-16 18:37:14', '2025-07-16 17:57:14', NULL, NULL, NULL),
+(2705, 1135, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'card', '2025-07-16 18:37:14', '2025-07-16 17:57:12', NULL, NULL, NULL),
+(2706, 1135, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'card', '2025-07-16 18:37:14', '2025-07-16 17:57:30', NULL, NULL, NULL),
+(2707, 1135, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-16 18:35:16', '2025-07-16 17:54:11', NULL, NULL, NULL),
+(2708, 1135, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-16 18:35:16', '2025-07-16 18:08:33', NULL, NULL, NULL),
+(2709, 1135, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-16 18:37:14', '2025-07-16 17:54:12', NULL, NULL, NULL),
+(2710, 1135, 'predkrm', 'Bruschetta pomodoro', 1, 145.00, '', 'paid', 'card', '2025-07-16 18:37:14', '2025-07-16 18:08:33', NULL, NULL, NULL),
+(2711, 1135, 'predkrm', 'Bruschetta pomodoro', 1, 145.00, '', 'paid', 'card', '2025-07-16 18:37:14', '2025-07-16 18:08:34', NULL, NULL, NULL),
+(2712, 1135, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'card', '2025-07-16 18:37:14', '2025-07-16 17:54:13', NULL, NULL, NULL),
+(2713, 1135, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-16 18:35:16', '2025-07-16 17:57:30', NULL, NULL, NULL),
+(2714, 1136, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 18:04:40', NULL, NULL, NULL),
+(2715, 1136, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 18:04:41', NULL, NULL, NULL),
+(2716, 1136, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 18:04:41', NULL, NULL, NULL),
+(2717, 1137, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 18:27:10', NULL, NULL, NULL),
+(2718, 1137, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 18:10:09', NULL, NULL, NULL),
+(2719, 1137, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 18:10:09', NULL, NULL, NULL),
+(2720, 1137, 'predkrm', 'Bruschetta pomodoro', 1, 145.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 18:26:45', NULL, NULL, NULL),
+(2721, 1137, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 18:18:54', NULL, NULL, NULL),
+(2722, 1137, 'predkrm', 'Focaccia e olio', 1, 75.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 18:13:36', NULL, NULL, NULL),
+(2723, 1137, 'predkrm', 'Foccacia, olio e olive', 1, 125.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 18:13:35', NULL, NULL, NULL),
+(2724, 1138, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 18:30:45', NULL, NULL, NULL),
+(2725, 1139, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 18:46:57', NULL, NULL, NULL),
+(2726, 1139, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 18:46:57', NULL, NULL, NULL);
+INSERT INTO `order_items` (`id`, `order_id`, `item_type`, `item_name`, `quantity`, `unit_price`, `note`, `status`, `payment_method`, `paid_at`, `prepared_at`, `delivered_at`, `problem_note`, `parent_id`) VALUES
+(2727, 1140, 'spritz', 'Spritz Campari', 1, 130.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 19:22:41', NULL, NULL, NULL),
+(2728, 1141, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 19:22:32', NULL, NULL, NULL),
+(2729, 1141, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 19:32:01', NULL, NULL, NULL),
+(2730, 1141, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 19:33:22', NULL, NULL, NULL),
+(2731, 1141, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 19:33:22', NULL, NULL, NULL),
+(2732, 1141, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-16 20:14:15', '2025-07-16 19:33:23', NULL, NULL, NULL),
+(2733, 1142, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-18 15:32:06', '2025-07-18 14:55:28', NULL, NULL, NULL),
+(2734, 1142, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 15:32:06', '2025-07-18 15:16:36', NULL, NULL, NULL),
+(2735, 1142, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 15:32:06', '2025-07-18 15:18:40', NULL, NULL, NULL),
+(2736, 1142, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 15:32:06', '2025-07-18 14:55:16', NULL, NULL, NULL),
+(2737, 1142, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 15:32:06', '2025-07-18 14:55:17', NULL, NULL, NULL),
+(2738, 1143, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 16:37:03', '2025-07-18 15:00:42', NULL, NULL, NULL),
+(2739, 1143, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 16:37:03', '2025-07-18 15:00:43', NULL, NULL, NULL),
+(2740, 1143, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 16:37:03', '2025-07-18 15:22:33', NULL, NULL, NULL),
+(2741, 1143, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-18 16:37:03', '2025-07-18 15:00:44', NULL, NULL, NULL),
+(2742, 1143, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 16:37:03', '2025-07-18 15:00:44', NULL, NULL, NULL),
+(2743, 1144, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 16:37:03', '2025-07-18 15:04:47', NULL, NULL, NULL),
+(2744, 1145, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 13:35:58', '2025-07-18 15:04:43', NULL, NULL, NULL),
+(2745, 1146, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:01:56', '2025-07-18 15:06:17', NULL, NULL, NULL),
+(2746, 1146, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:01:56', '2025-07-18 15:06:18', NULL, NULL, NULL),
+(2747, 1146, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-18 17:01:56', '2025-07-18 15:15:26', NULL, NULL, NULL),
+(2748, 1147, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:30:35', '2025-07-18 15:28:09', NULL, NULL, NULL),
+(2749, 1147, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:30:35', '2025-07-18 15:09:32', NULL, NULL, NULL),
+(2750, 1147, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:30:35', '2025-07-18 15:09:33', NULL, NULL, NULL),
+(2751, 1147, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:30:35', '2025-07-18 15:28:10', NULL, NULL, NULL),
+(2752, 1148, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'cash', '2025-07-18 16:37:03', '2025-07-18 15:31:48', NULL, NULL, NULL),
+(2753, 1149, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-18 15:32:06', '2025-07-18 15:10:30', NULL, NULL, NULL),
+(2754, 1150, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-18 15:32:06', '2025-07-18 15:16:29', NULL, NULL, NULL),
+(2755, 1151, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:30:35', '2025-07-18 15:15:02', NULL, NULL, NULL),
+(2756, 1151, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:31:41', '2025-07-18 15:32:52', NULL, NULL, NULL),
+(2757, 1151, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:31:41', '2025-07-18 15:15:21', NULL, NULL, NULL),
+(2758, 1151, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 18:31:41', '2025-07-18 15:15:04', NULL, NULL, NULL),
+(2759, 1151, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:30:35', '2025-07-18 15:15:06', NULL, NULL, NULL),
+(2760, 1152, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 17:01:56', '2025-07-18 15:18:13', NULL, NULL, NULL),
+(2761, 1153, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 13:35:58', '2025-07-18 15:19:46', NULL, NULL, NULL),
+(2762, 1154, 'dezert', 'Ricotta ale arancia', 1, 85.00, '', 'cancelled', 'cash', NULL, '2025-07-18 15:32:54', NULL, NULL, NULL),
+(2763, 1154, 'pizza', 'Margherita', 1, 230.00, '', 'cancelled', 'cash', NULL, '2025-07-18 15:39:15', NULL, NULL, NULL),
+(2764, 1154, 'pizza', 'Per bambini', 1, 250.00, '', 'cancelled', 'cash', NULL, '2025-07-18 15:37:46', NULL, NULL, NULL),
+(2765, 1155, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-18 16:01:31', '2025-07-18 15:29:09', NULL, NULL, NULL),
+(2766, 1155, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-18 16:01:31', '2025-07-18 15:29:11', NULL, NULL, NULL),
+(2767, 1156, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'cancelled', 'cash', NULL, '2025-07-18 15:32:16', NULL, NULL, NULL),
+(2768, 1156, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'cancelled', 'cash', NULL, '2025-07-18 15:32:16', NULL, NULL, NULL),
+(2769, 1157, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 16:01:31', '2025-07-18 15:42:59', NULL, NULL, NULL),
+(2770, 1157, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-18 16:01:31', '2025-07-18 15:44:39', NULL, NULL, NULL),
+(2771, 1158, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-18 16:37:03', '2025-07-18 15:35:50', NULL, NULL, NULL),
+(2772, 1159, 'vino', 'Víno Hibernal', 1, 240.00, '', 'paid', 'cash', '2025-07-18 17:01:56', '2025-07-18 15:34:48', NULL, NULL, NULL),
+(2773, 1160, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 16:37:03', '2025-07-18 15:40:11', NULL, NULL, NULL),
+(2774, 1161, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 13:35:58', '2025-07-18 15:40:09', NULL, NULL, NULL),
+(2775, 1162, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'card', '2025-07-18 16:21:32', '2025-07-18 15:49:15', NULL, NULL, NULL),
+(2776, 1162, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'card', '2025-07-18 16:21:32', '2025-07-18 15:49:16', NULL, NULL, NULL),
+(2777, 1162, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'card', '2025-07-18 16:21:32', '2025-07-18 15:47:53', NULL, NULL, NULL),
+(2778, 1162, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 16:21:32', '2025-07-18 15:44:56', NULL, NULL, NULL),
+(2779, 1162, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 16:21:32', '2025-07-18 15:44:56', NULL, NULL, NULL),
+(2780, 1162, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 16:21:32', '2025-07-18 15:44:57', NULL, NULL, NULL),
+(2781, 1162, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'card', '2025-07-18 16:21:32', '2025-07-18 15:44:58', NULL, NULL, NULL),
+(2782, 1163, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:31:41', '2025-07-18 15:45:58', NULL, NULL, NULL),
+(2783, 1163, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:30:35', '2025-07-18 15:45:59', NULL, NULL, NULL),
+(2784, 1164, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 16:43:59', '2025-07-18 15:46:01', NULL, NULL, NULL),
+(2785, 1164, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'card', '2025-07-18 16:44:00', '2025-07-18 15:46:02', NULL, NULL, NULL),
+(2786, 1164, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'card', '2025-07-18 16:43:59', '2025-07-18 16:00:02', NULL, NULL, NULL),
+(2787, 1165, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:06:50', '2025-07-18 15:54:08', NULL, NULL, NULL),
+(2788, 1165, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:06:50', '2025-07-18 15:54:08', NULL, NULL, NULL),
+(2789, 1165, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:06:50', '2025-07-18 15:54:09', NULL, NULL, NULL),
+(2790, 1165, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:06:50', '2025-07-18 15:54:10', NULL, NULL, NULL),
+(2791, 1165, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 18:06:50', '2025-07-18 15:54:11', NULL, NULL, NULL),
+(2792, 1165, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-18 18:06:49', '2025-07-18 16:07:17', NULL, NULL, NULL),
+(2793, 1165, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-18 18:06:49', '2025-07-18 16:06:05', NULL, NULL, NULL),
+(2794, 1166, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 17:01:56', '2025-07-18 16:06:55', NULL, NULL, NULL),
+(2795, 1166, 'pizza', 'Pancetta e pattate', 1, 250.00, '', 'paid', 'cash', '2025-07-18 17:01:56', '2025-07-18 16:06:56', NULL, NULL, NULL),
+(2796, 1167, 'predkrm', 'Focaccia e olio', 1, 75.00, 'Sebou', 'cancelled', 'cash', NULL, NULL, NULL, NULL, NULL),
+(2797, 1167, 'predkrm', 'Focaccia e olio', 1, 75.00, 'Sebou', 'cancelled', 'cash', NULL, NULL, NULL, NULL, NULL),
+(2798, 1168, 'predkrm', 'Foccacia, olio e olive', 1, 115.00, '', 'paid', 'cash', '2025-07-18 16:19:12', '2025-07-18 16:10:41', NULL, NULL, NULL),
+(2799, 1168, 'predkrm', 'Foccacia, olio e olive', 1, 115.00, '', 'paid', 'cash', '2025-07-18 16:19:12', '2025-07-18 16:10:42', NULL, NULL, NULL),
+(2800, 1169, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'cash', '2025-07-18 16:37:03', '2025-07-18 16:14:50', NULL, NULL, NULL),
+(2801, 1170, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:31:41', '2025-07-18 16:07:13', NULL, NULL, NULL),
+(2802, 1171, 'pizza', 'Pancetta e pattate', 1, 250.00, '', 'paid', 'card', '2025-07-18 16:44:00', '2025-07-18 16:12:50', NULL, NULL, NULL),
+(2803, 1171, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'card', '2025-07-18 16:43:59', '2025-07-18 16:09:59', NULL, NULL, NULL),
+(2804, 1172, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 16:08:34', NULL, NULL, NULL),
+(2805, 1172, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 16:08:35', NULL, NULL, NULL),
+(2806, 1172, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 16:08:35', NULL, NULL, NULL),
+(2807, 1172, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 16:13:47', NULL, NULL, NULL),
+(2808, 1172, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 16:15:28', NULL, NULL, NULL),
+(2809, 1173, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 20:18:11', '2025-07-18 16:11:39', NULL, NULL, NULL),
+(2810, 1173, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:18:11', '2025-07-18 16:11:40', NULL, NULL, NULL),
+(2811, 1173, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:18:11', '2025-07-18 16:11:41', NULL, NULL, NULL),
+(2812, 1173, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-18 20:18:11', '2025-07-18 16:17:36', NULL, NULL, NULL),
+(2813, 1173, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 20:18:11', '2025-07-18 16:19:35', NULL, NULL, NULL),
+(2814, 1173, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-18 20:18:11', '2025-07-18 16:18:25', NULL, NULL, NULL),
+(2815, 1174, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'cash', '2025-07-18 18:06:49', '2025-07-18 16:25:14', NULL, NULL, NULL),
+(2816, 1174, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:06:50', '2025-07-18 16:25:15', NULL, NULL, NULL),
+(2817, 1174, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:06:50', '2025-07-18 16:25:16', NULL, NULL, NULL),
+(2818, 1174, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:06:50', '2025-07-18 16:27:36', NULL, NULL, NULL),
+(2819, 1174, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:06:50', '2025-07-18 16:28:41', NULL, NULL, NULL),
+(2820, 1175, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'card', '2025-07-18 17:09:38', '2025-07-18 16:13:32', NULL, NULL, NULL),
+(2821, 1175, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'card', '2025-07-18 17:09:38', '2025-07-18 16:31:23', NULL, NULL, NULL),
+(2822, 1175, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 17:09:38', '2025-07-18 16:13:33', NULL, NULL, NULL),
+(2823, 1175, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 17:09:38', '2025-07-18 16:13:34', NULL, NULL, NULL),
+(2824, 1175, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 17:09:38', '2025-07-18 16:13:37', NULL, NULL, NULL),
+(2825, 1175, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-18 17:09:38', '2025-07-18 16:13:38', NULL, NULL, NULL),
+(2826, 1175, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-18 17:09:38', '2025-07-18 16:32:46', NULL, NULL, NULL),
+(2827, 1175, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'card', '2025-07-18 17:09:38', '2025-07-18 16:34:43', NULL, NULL, NULL),
+(2828, 1175, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'card', '2025-07-18 17:09:38', '2025-07-18 16:36:26', NULL, NULL, NULL),
+(2829, 1176, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-18 16:44:00', '2025-07-18 16:13:26', NULL, NULL, NULL),
+(2830, 1176, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'card', '2025-07-18 16:44:00', '2025-07-18 16:13:26', NULL, NULL, NULL),
+(2831, 1177, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 17:30:04', '2025-07-18 16:16:46', NULL, NULL, NULL),
+(2832, 1177, 'koktejl', 'Red Velvet gin Garage 22 a tonic', 1, 170.00, '', 'paid', 'card', '2025-07-18 17:30:04', '2025-07-18 16:16:45', NULL, NULL, NULL),
+(2833, 1178, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 17:47:32', '2025-07-18 16:19:42', NULL, NULL, NULL),
+(2834, 1178, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-18 17:47:32', '2025-07-18 16:19:43', NULL, NULL, NULL),
+(2835, 1179, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:41:41', '2025-07-18 16:18:55', NULL, NULL, NULL),
+(2836, 1179, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 17:41:41', '2025-07-18 16:44:20', NULL, NULL, NULL),
+(2837, 1179, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-18 17:41:41', '2025-07-18 16:18:54', NULL, NULL, NULL),
+(2838, 1179, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-18 17:41:41', '2025-07-18 16:44:22', NULL, NULL, NULL),
+(2839, 1180, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:37:30', '2025-07-18 16:25:34', NULL, NULL, NULL),
+(2840, 1180, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:39:48', '2025-07-18 16:25:32', NULL, NULL, NULL),
+(2841, 1180, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:39:48', '2025-07-18 16:25:33', NULL, NULL, NULL),
+(2842, 1180, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:38:38', '2025-07-18 16:25:25', NULL, NULL, NULL),
+(2843, 1180, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:38:38', '2025-07-18 16:25:25', NULL, NULL, NULL),
+(2844, 1180, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:38:38', '2025-07-18 16:25:26', NULL, NULL, NULL),
+(2845, 1180, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:39:48', '2025-07-18 16:25:27', NULL, NULL, NULL),
+(2846, 1180, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:39:48', '2025-07-18 16:25:27', NULL, NULL, NULL),
+(2847, 1180, 'koktejl', 'Summer gin Garage22 & tonic', 1, 150.00, '', 'paid', 'card', '2025-07-18 18:40:20', '2025-07-18 16:25:29', NULL, NULL, NULL),
+(2848, 1180, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 18:39:48', '2025-07-18 16:25:34', NULL, NULL, NULL),
+(2849, 1181, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 17:01:56', '2025-07-18 16:21:43', NULL, NULL, NULL),
+(2850, 1182, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-18 17:01:28', '2025-07-18 16:22:03', NULL, NULL, NULL),
+(2851, 1182, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-18 17:01:28', '2025-07-18 16:27:29', NULL, NULL, NULL),
+(2852, 1182, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 17:01:28', '2025-07-18 16:42:52', NULL, NULL, NULL),
+(2853, 1182, 'predkrm', 'Focaccia e olio', 1, 75.00, '', 'paid', 'cash', '2025-07-18 17:01:28', '2025-07-18 16:22:04', NULL, NULL, NULL),
+(2854, 1182, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:01:28', '2025-07-18 16:27:30', NULL, NULL, NULL),
+(2855, 1183, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 16:39:04', '2025-07-18 16:32:16', NULL, NULL, NULL),
+(2856, 1183, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 16:39:04', '2025-07-18 16:32:17', NULL, NULL, NULL),
+(2857, 1183, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 16:39:04', '2025-07-18 16:32:17', NULL, NULL, NULL),
+(2858, 1183, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 16:39:04', '2025-07-18 16:32:18', NULL, NULL, NULL),
+(2859, 1183, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 16:39:04', '2025-07-18 16:32:19', NULL, NULL, NULL),
+(2860, 1183, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 16:39:04', '2025-07-18 16:32:19', NULL, NULL, NULL),
+(2861, 1184, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 16:32:42', NULL, NULL, NULL),
+(2862, 1184, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 16:32:39', NULL, NULL, NULL),
+(2863, 1184, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 16:32:39', NULL, NULL, NULL),
+(2864, 1184, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 16:47:16', NULL, NULL, NULL),
+(2865, 1184, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 16:47:17', NULL, NULL, NULL),
+(2866, 1184, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 16:47:17', NULL, NULL, NULL),
+(2867, 1185, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'cash', '2025-07-18 16:51:59', '2025-07-18 16:51:20', NULL, NULL, NULL),
+(2868, 1185, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 16:51:59', '2025-07-18 16:51:21', NULL, NULL, NULL),
+(2869, 1185, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 16:51:59', '2025-07-18 16:34:29', NULL, NULL, NULL),
+(2870, 1186, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'card', '2025-07-18 17:30:04', '2025-07-18 16:56:20', NULL, NULL, NULL),
+(2871, 1186, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'card', '2025-07-18 17:30:04', '2025-07-18 16:56:21', NULL, NULL, NULL),
+(2872, 1187, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'card', '2025-07-18 18:25:29', '2025-07-18 16:58:20', NULL, NULL, NULL),
+(2873, 1187, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:25:29', '2025-07-18 16:28:59', NULL, NULL, NULL),
+(2874, 1187, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:25:29', '2025-07-18 16:29:00', NULL, NULL, NULL),
+(2875, 1188, 'pizza', 'Pancetta e pattate', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:37:30', '2025-07-18 17:03:31', NULL, NULL, NULL),
+(2876, 1188, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:38:38', '2025-07-18 17:03:32', NULL, NULL, NULL),
+(2877, 1188, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'card', '2025-07-18 18:40:20', '2025-07-18 17:03:34', NULL, NULL, NULL),
+(2878, 1188, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:38:38', '2025-07-18 17:05:32', NULL, NULL, NULL),
+(2879, 1188, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:39:48', '2025-07-18 17:07:43', NULL, NULL, NULL),
+(2880, 1188, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-18 18:39:48', '2025-07-18 17:07:44', NULL, NULL, NULL),
+(2881, 1188, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-18 18:39:48', '2025-07-18 17:08:51', NULL, NULL, NULL),
+(2882, 1188, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:39:48', '2025-07-18 17:11:30', NULL, NULL, NULL),
+(2883, 1188, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-18 18:40:20', '2025-07-18 17:12:41', NULL, NULL, NULL),
+(2884, 1189, 'pizza', 'Pancetta e pattate', 1, 250.00, '', 'paid', 'cash', '2025-07-18 17:46:46', '2025-07-18 17:14:30', NULL, NULL, NULL),
+(2885, 1189, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-18 17:46:46', '2025-07-18 17:15:28', NULL, NULL, NULL),
+(2886, 1189, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'cash', '2025-07-18 17:46:46', '2025-07-18 17:18:25', NULL, NULL, NULL),
+(2887, 1189, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:46:46', '2025-07-18 16:34:31', NULL, NULL, NULL),
+(2888, 1189, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:46:46', '2025-07-18 16:34:31', NULL, NULL, NULL),
+(2889, 1190, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:06:50', '2025-07-18 16:36:44', NULL, NULL, NULL),
+(2890, 1191, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'cash', '2025-07-18 17:01:56', '2025-07-18 16:36:56', NULL, NULL, NULL),
+(2891, 1191, 'dezert', 'Ricotta ale arancia', 1, 85.00, '', 'paid', 'cash', '2025-07-18 17:01:56', '2025-07-18 16:36:57', NULL, NULL, NULL),
+(2892, 1192, 'dezert', 'Canollo', 1, 95.00, '', 'cancelled', 'cash', NULL, '2025-07-18 16:34:33', NULL, NULL, NULL),
+(2893, 1192, 'dezert', 'Ricotta ale arancia', 1, 85.00, '', 'paid', 'card', '2025-07-18 16:44:00', '2025-07-18 16:34:34', NULL, NULL, NULL),
+(2894, 1193, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 17:09:38', '2025-07-18 16:36:49', NULL, NULL, NULL),
+(2895, 1194, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:04:45', '2025-07-18 16:41:43', NULL, NULL, NULL),
+(2896, 1194, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:04:45', '2025-07-18 16:41:44', NULL, NULL, NULL),
+(2897, 1194, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:05:39', '2025-07-18 16:41:45', NULL, NULL, NULL),
+(2898, 1194, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:05:39', '2025-07-18 16:41:45', NULL, NULL, NULL),
+(2899, 1194, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'card', '2025-07-18 18:04:45', '2025-07-18 17:22:27', NULL, NULL, NULL),
+(2900, 1194, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:05:39', '2025-07-18 17:22:27', NULL, NULL, NULL),
+(2901, 1194, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'cash', '2025-07-18 18:05:39', '2025-07-18 17:22:28', NULL, NULL, NULL),
+(2902, 1194, 'koktejl', 'Red Velvet gin Garage 22 a tonic', 1, 170.00, '', 'paid', 'cash', '2025-07-18 18:05:39', '2025-07-18 16:41:40', NULL, NULL, NULL),
+(2903, 1194, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-18 18:04:45', '2025-07-18 16:41:39', NULL, NULL, NULL),
+(2904, 1194, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:04:45', '2025-07-18 16:44:15', NULL, NULL, NULL),
+(2905, 1194, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:04:45', '2025-07-18 16:44:16', NULL, NULL, NULL),
+(2906, 1195, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'card', '2025-07-18 16:43:59', '2025-07-18 16:43:32', NULL, NULL, NULL),
+(2907, 1195, 'dezert', 'Ricotta ale arancia', 1, 85.00, ' - Automaticky povoleno (bez pizzy)', 'cancelled', 'cash', NULL, NULL, NULL, NULL, NULL),
+(2908, 1196, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 16:44:47', NULL, NULL, NULL),
+(2909, 1197, 'pizza', 'Pancetta e pattate', 1, 250.00, '', 'paid', 'cash', '2025-07-18 17:58:15', '2025-07-18 17:25:04', NULL, NULL, NULL),
+(2910, 1197, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-18 17:58:15', '2025-07-18 17:26:58', NULL, NULL, NULL),
+(2911, 1197, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-18 17:58:15', '2025-07-18 17:30:28', NULL, NULL, NULL),
+(2912, 1197, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 17:58:15', '2025-07-18 17:29:16', NULL, NULL, NULL),
+(2913, 1197, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-18 17:58:15', '2025-07-18 16:45:07', NULL, NULL, NULL),
+(2914, 1197, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-18 17:58:15', '2025-07-18 16:45:08', NULL, NULL, NULL),
+(2915, 1197, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:58:15', '2025-07-18 16:45:09', NULL, NULL, NULL),
+(2916, 1197, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 17:58:15', '2025-07-18 16:45:10', NULL, NULL, NULL),
+(2917, 1198, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 17:53:17', '2025-07-18 17:32:50', NULL, NULL, NULL),
+(2918, 1198, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 17:53:17', '2025-07-18 17:34:45', NULL, NULL, NULL),
+(2919, 1199, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 18:06:50', '2025-07-18 16:47:35', NULL, NULL, NULL),
+(2920, 1200, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:29:47', '2025-07-18 17:40:50', NULL, NULL, NULL),
+(2921, 1200, 'vino', 'Víno Ryzlink vlašský', 1, 220.00, '', 'paid', 'cash', '2025-07-18 18:31:41', '2025-07-18 16:47:38', NULL, NULL, NULL),
+(2922, 1200, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:30:35', '2025-07-18 16:47:38', NULL, NULL, NULL),
+(2923, 1200, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 18:31:41', '2025-07-18 16:48:06', NULL, NULL, NULL),
+(2924, 1201, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:37:30', '2025-07-18 16:51:36', NULL, NULL, NULL),
+(2925, 1201, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:39:48', '2025-07-18 16:51:34', NULL, NULL, NULL),
+(2926, 1201, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:40:20', '2025-07-18 16:51:35', NULL, NULL, NULL),
+(2927, 1202, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 16:53:00', NULL, NULL, NULL),
+(2928, 1202, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 16:53:01', NULL, NULL, NULL),
+(2929, 1203, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:52:34', '2025-07-18 16:54:51', NULL, NULL, NULL),
+(2930, 1203, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 19:31:11', '2025-07-18 16:54:52', NULL, NULL, NULL),
+(2931, 1203, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-18 19:31:11', '2025-07-18 16:54:53', NULL, NULL, NULL),
+(2932, 1203, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:52:34', '2025-07-18 16:54:54', NULL, NULL, NULL),
+(2933, 1203, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:52:34', '2025-07-18 16:54:54', NULL, NULL, NULL),
+(2934, 1203, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-18 19:31:12', '2025-07-18 17:46:28', NULL, NULL, NULL),
+(2935, 1203, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 19:31:11', '2025-07-18 17:47:50', NULL, NULL, NULL),
+(2936, 1203, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-18 19:32:27', '2025-07-18 17:51:19', NULL, NULL, NULL),
+(2937, 1203, 'pizza', 'Pancetta e pattate', 1, 250.00, '', 'paid', 'cash', '2025-07-18 19:31:12', '2025-07-18 17:49:50', NULL, NULL, NULL),
+(2938, 1204, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 19:05:37', '2025-07-18 16:58:14', NULL, NULL, NULL),
+(2939, 1204, 'negroni', 'Negroni Classico', 1, 150.00, '', 'paid', 'cash', '2025-07-18 19:05:37', '2025-07-18 16:58:13', NULL, NULL, NULL),
+(2940, 1204, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 19:05:37', '2025-07-18 17:53:46', NULL, NULL, NULL),
+(2941, 1204, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-18 19:05:37', '2025-07-18 17:57:55', NULL, NULL, NULL),
+(2942, 1205, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 19:05:37', '2025-07-18 16:58:12', NULL, NULL, NULL),
+(2943, 1206, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:53:28', '2025-07-18 17:00:22', NULL, NULL, NULL),
+(2944, 1206, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:05:43', '2025-07-18 17:00:23', NULL, NULL, NULL),
+(2945, 1206, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:05:43', '2025-07-18 17:00:24', NULL, NULL, NULL),
+(2946, 1206, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 20:53:28', '2025-07-18 17:00:25', NULL, NULL, NULL),
+(2947, 1206, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:03:48', '2025-07-18 17:00:23', NULL, NULL, NULL),
+(2948, 1206, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-18 20:53:28', '2025-07-18 17:04:29', NULL, NULL, NULL),
+(2949, 1206, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-18 20:03:48', '2025-07-18 18:00:08', NULL, NULL, NULL),
+(2950, 1206, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 20:03:48', '2025-07-18 18:02:13', NULL, NULL, NULL),
+(2951, 1207, 'spritz', 'Spritz Campari', 1, 130.00, '', 'paid', 'cash', '2025-07-18 17:47:32', '2025-07-18 17:00:29', NULL, NULL, NULL),
+(2952, 1207, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:47:32', '2025-07-18 17:00:29', NULL, NULL, NULL),
+(2953, 1208, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'cash', '2025-07-18 17:01:28', '2025-07-18 17:01:06', NULL, NULL, NULL),
+(2954, 1209, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'card', '2025-07-18 19:07:55', '2025-07-18 18:06:45', NULL, NULL, NULL),
+(2955, 1209, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'card', '2025-07-18 19:07:55', '2025-07-18 17:01:27', NULL, NULL, NULL),
+(2956, 1209, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'card', '2025-07-18 19:07:55', '2025-07-18 18:06:46', NULL, NULL, NULL),
+(2957, 1209, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 19:07:55', '2025-07-18 17:01:28', NULL, NULL, NULL),
+(2958, 1210, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-18 18:19:09', '2025-07-18 18:11:32', NULL, NULL, NULL),
+(2959, 1210, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-18 18:19:09', '2025-07-18 17:05:46', NULL, NULL, NULL),
+(2960, 1210, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'card', '2025-07-18 18:19:09', '2025-07-18 17:05:46', NULL, NULL, NULL),
+(2961, 1211, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 18:13:59', NULL, NULL, NULL),
+(2962, 1211, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 18:14:00', NULL, NULL, NULL),
+(2963, 1211, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 17:04:30', NULL, NULL, NULL),
+(2964, 1211, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 17:04:31', NULL, NULL, NULL),
+(2965, 1212, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'card', '2025-07-18 18:41:44', '2025-07-18 17:13:20', NULL, NULL, NULL),
+(2966, 1212, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'card', '2025-07-18 18:41:44', '2025-07-18 18:16:23', NULL, NULL, NULL),
+(2967, 1212, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:41:44', '2025-07-18 17:07:50', NULL, NULL, NULL),
+(2968, 1212, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-18 18:41:44', '2025-07-18 17:07:51', NULL, NULL, NULL),
+(2969, 1212, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:41:44', '2025-07-18 17:07:49', NULL, NULL, NULL),
+(2970, 1213, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 17:10:15', NULL, NULL, NULL),
+(2971, 1213, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 17:10:16', NULL, NULL, NULL),
+(2972, 1213, 'koktejl', 'Summer gin Garage22 & tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 17:10:17', NULL, NULL, NULL),
+(2973, 1213, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 17:10:18', NULL, NULL, NULL),
+(2974, 1213, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 17:10:19', NULL, NULL, NULL),
+(2975, 1214, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-18 17:46:46', '2025-07-18 17:12:08', NULL, NULL, NULL),
+(2976, 1214, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-18 17:46:46', '2025-07-18 17:12:08', NULL, NULL, NULL),
+(2977, 1214, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:46:46', '2025-07-18 17:12:09', NULL, NULL, NULL),
+(2978, 1215, 'koktejl', 'Summer gin Garage22 & tonic', 1, 150.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 17:13:26', NULL, NULL, NULL),
+(2979, 1215, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 17:13:27', NULL, NULL, NULL),
+(2980, 1215, 'dezert', 'Ricotta ale arancia', 1, 85.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 17:08:39', NULL, NULL, NULL),
+(2981, 1216, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:31:41', '2025-07-18 17:15:23', NULL, NULL, NULL),
+(2982, 1217, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:41:41', '2025-07-18 17:15:27', NULL, NULL, NULL),
+(2983, 1218, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 17:41:41', '2025-07-18 17:15:26', NULL, NULL, NULL),
+(2984, 1219, 'predkrm', 'Tagliere di salumi', 1, 220.00, '', 'paid', 'cash', '2025-07-18 19:57:49', '2025-07-18 17:19:59', NULL, NULL, NULL),
+(2985, 1219, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 19:59:30', '2025-07-18 17:18:41', NULL, NULL, NULL),
+(2986, 1219, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 17:18:42', NULL, NULL, NULL),
+(2987, 1219, 'negroni', 'Negroni Classico', 1, 150.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 17:18:41', NULL, NULL, NULL),
+(2988, 1219, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 17:18:43', NULL, NULL, NULL),
+(2989, 1219, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-18 19:57:18', '2025-07-18 17:19:59', NULL, NULL, NULL),
+(2990, 1219, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-18 19:57:18', '2025-07-18 17:18:43', NULL, NULL, NULL),
+(2991, 1220, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 19:31:11', '2025-07-18 17:21:42', NULL, NULL, NULL),
+(2992, 1220, 'dezert', 'Ricotta ale arancia', 1, 85.00, '', 'paid', 'cash', '2025-07-18 17:52:34', '2025-07-18 17:23:08', NULL, NULL, NULL),
+(2993, 1220, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-18 20:08:37', '2025-07-18 17:21:41', NULL, NULL, NULL),
+(2994, 1221, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:29:47', '2025-07-18 17:15:22', NULL, NULL, NULL),
+(2995, 1221, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:29:47', '2025-07-18 17:15:22', NULL, NULL, NULL),
+(2996, 1222, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:38:38', '2025-07-18 17:23:54', NULL, NULL, NULL),
+(2997, 1223, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:18:11', '2025-07-18 17:24:40', NULL, NULL, NULL),
+(2998, 1223, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:18:11', '2025-07-18 17:24:41', NULL, NULL, NULL),
+(2999, 1223, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 20:18:11', '2025-07-18 17:24:41', NULL, NULL, NULL),
+(3000, 1224, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:22:02', '2025-07-18 17:28:55', NULL, NULL, NULL),
+(3001, 1224, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:22:02', '2025-07-18 17:28:56', NULL, NULL, NULL),
+(3002, 1224, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:22:02', '2025-07-18 17:28:57', NULL, NULL, NULL),
+(3003, 1224, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 20:22:02', '2025-07-18 17:28:58', NULL, NULL, NULL),
+(3004, 1225, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:53:28', '2025-07-18 17:31:19', NULL, NULL, NULL),
+(3005, 1226, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 13:35:58', '2025-07-18 17:23:36', NULL, NULL, NULL),
+(3006, 1227, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 19:31:11', '2025-07-18 17:33:09', NULL, NULL, NULL),
+(3007, 1227, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 19:31:12', '2025-07-18 17:33:10', NULL, NULL, NULL),
+(3008, 1228, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 20:22:02', '2025-07-18 18:17:45', NULL, NULL, NULL),
+(3009, 1228, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 20:22:02', '2025-07-18 18:19:44', NULL, NULL, NULL),
+(3010, 1228, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-18 20:22:02', '2025-07-18 17:33:28', NULL, NULL, NULL),
+(3011, 1229, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:39:48', '2025-07-18 17:36:16', NULL, NULL, NULL),
+(3012, 1230, 'pizza', 'Pancetta e pattate', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:43:52', '2025-07-18 18:31:59', NULL, NULL, NULL),
+(3013, 1230, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:43:52', '2025-07-18 17:36:16', NULL, NULL, NULL),
+(3014, 1231, 'negroni', 'Negroni Classico', 1, 150.00, '', 'paid', 'cash', '2025-07-18 19:05:37', '2025-07-18 17:40:01', NULL, NULL, NULL),
+(3015, 1232, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:58:15', '2025-07-18 17:38:56', NULL, NULL, NULL),
+(3016, 1233, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 17:47:32', '2025-07-18 17:38:58', NULL, NULL, NULL),
+(3017, 1234, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 17:42:41', NULL, NULL, NULL),
+(3018, 1234, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 17:42:41', NULL, NULL, NULL),
+(3019, 1234, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 17:42:42', NULL, NULL, NULL),
+(3020, 1234, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 17:42:42', NULL, NULL, NULL),
+(3021, 1235, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:29:47', '2025-07-18 17:41:33', NULL, NULL, NULL),
+(3022, 1235, 'digestiv', 'Grapa di moscato', 1, 120.00, '', 'paid', 'cash', '2025-07-18 18:29:47', '2025-07-18 17:41:31', NULL, NULL, NULL),
+(3023, 1235, 'digestiv', 'Grapa di moscato', 1, 120.00, '', 'paid', 'cash', '2025-07-18 18:29:47', '2025-07-18 17:41:32', NULL, NULL, NULL),
+(3024, 1235, 'digestiv', 'Grapa di moscato', 1, 120.00, '', 'paid', 'cash', '2025-07-18 18:29:47', '2025-07-18 17:41:32', NULL, NULL, NULL),
+(3025, 1235, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-18 18:29:47', '2025-07-18 17:47:05', NULL, NULL, NULL),
+(3026, 1235, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 18:31:41', '2025-07-18 18:27:00', NULL, NULL, NULL),
+(3027, 1236, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 19:31:11', '2025-07-18 17:42:44', NULL, NULL, NULL),
+(3028, 1237, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 17:43:44', NULL, NULL, NULL),
+(3029, 1238, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 13:35:58', '2025-07-18 17:43:52', NULL, NULL, NULL),
+(3030, 1238, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 13:35:58', '2025-07-18 17:43:53', NULL, NULL, NULL),
+(3031, 1239, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:41:44', '2025-07-18 17:47:33', NULL, NULL, NULL),
+(3032, 1239, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'card', '2025-07-18 18:41:44', '2025-07-18 17:53:25', NULL, NULL, NULL),
+(3033, 1239, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'card', '2025-07-18 18:41:44', '2025-07-18 18:21:13', NULL, NULL, NULL),
+(3034, 1239, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-18 18:41:44', '2025-07-18 18:21:32', NULL, NULL, NULL),
+(3035, 1239, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'card', '2025-07-18 18:41:44', '2025-07-18 18:22:56', NULL, NULL, NULL),
+(3036, 1239, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:41:44', '2025-07-18 17:47:33', NULL, NULL, NULL),
+(3037, 1239, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:41:44', '2025-07-18 17:47:32', NULL, NULL, NULL),
+(3038, 1240, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:40:20', '2025-07-18 17:48:36', NULL, NULL, NULL),
+(3039, 1240, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:40:20', '2025-07-18 17:48:36', NULL, NULL, NULL),
+(3040, 1241, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:05:39', '2025-07-18 17:52:16', NULL, NULL, NULL),
+(3041, 1241, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:05:39', '2025-07-18 17:52:17', NULL, NULL, NULL),
+(3042, 1241, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'card', '2025-07-18 18:04:45', '2025-07-18 17:52:18', NULL, NULL, NULL),
+(3043, 1241, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:04:45', '2025-07-18 17:52:19', NULL, NULL, NULL),
+(3044, 1242, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 19:05:37', '2025-07-18 17:54:37', NULL, NULL, NULL),
+(3045, 1243, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:03:48', '2025-07-18 17:54:39', NULL, NULL, NULL),
+(3046, 1244, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'cash', '2025-07-19 13:35:58', '2025-07-18 18:36:28', NULL, NULL, NULL),
+(3047, 1244, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-19 13:35:58', '2025-07-18 18:36:29', NULL, NULL, NULL),
+(3048, 1245, 'koktejl', 'Summer gin Garage22 & tonic', 1, 150.00, '', 'paid', 'card', '2025-07-18 18:40:20', '2025-07-18 17:54:53', NULL, NULL, NULL),
+(3049, 1245, 'spritz', 'Crodino', 1, 95.00, '', 'paid', 'cash', '2025-07-18 18:37:30', '2025-07-18 17:54:53', NULL, NULL, NULL),
+(3050, 1246, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-18 19:32:27', '2025-07-18 18:47:13', NULL, NULL, NULL),
+(3051, 1246, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'cash', '2025-07-18 19:32:27', '2025-07-18 18:44:38', NULL, NULL, NULL),
+(3052, 1246, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'cash', '2025-07-18 20:08:37', '2025-07-18 17:56:00', NULL, NULL, NULL),
+(3053, 1246, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-18 21:05:51', '2025-07-18 17:56:01', NULL, NULL, NULL),
+(3054, 1247, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:50:32', '2025-07-18 17:59:54', NULL, NULL, NULL),
+(3055, 1247, 'pivo', 'Kyseláč 0,3l', 1, 60.00, '', 'paid', 'cash', '2025-07-18 20:01:51', '2025-07-18 17:59:54', NULL, NULL, NULL),
+(3056, 1247, 'negroni', 'Negroni Tartufo', 1, 180.00, '', 'paid', 'cash', '2025-07-18 19:58:48', '2025-07-18 17:59:52', NULL, NULL, NULL),
+(3057, 1247, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:50:32', '2025-07-18 17:59:53', NULL, NULL, NULL),
+(3058, 1247, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-18 20:50:32', '2025-07-18 18:46:39', NULL, NULL, NULL),
+(3059, 1247, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'card', '2025-07-18 20:06:09', '2025-07-18 18:47:58', NULL, NULL, NULL),
+(3060, 1248, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 19:59:30', '2025-07-18 18:02:07', NULL, NULL, NULL),
+(3061, 1248, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-18 19:57:18', '2025-07-18 18:02:07', NULL, NULL, NULL),
+(3062, 1248, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-18 19:59:30', '2025-07-18 18:02:08', NULL, NULL, NULL),
+(3063, 1248, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-18 19:59:30', '2025-07-18 18:02:09', NULL, NULL, NULL),
+(3064, 1249, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-18 20:12:13', '2025-07-18 18:05:50', NULL, NULL, NULL),
+(3065, 1249, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-18 20:12:13', '2025-07-18 18:05:50', NULL, NULL, NULL),
+(3066, 1249, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-18 20:12:13', '2025-07-18 18:05:51', NULL, NULL, NULL),
+(3067, 1249, 'vino', 'Víno Rulandské šedé', 1, 220.00, '', 'paid', 'card', '2025-07-18 20:12:13', '2025-07-18 18:05:52', NULL, NULL, NULL),
+(3068, 1249, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'card', '2025-07-18 20:12:13', '2025-07-18 18:05:54', NULL, NULL, NULL),
+(3069, 1249, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'card', '2025-07-18 20:12:13', '2025-07-18 18:05:55', NULL, NULL, NULL),
+(3070, 1249, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'card', '2025-07-18 20:12:13', '2025-07-18 18:51:35', NULL, NULL, NULL),
+(3071, 1249, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-18 20:12:13', '2025-07-18 18:53:11', NULL, NULL, NULL),
+(3072, 1249, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'card', '2025-07-18 20:12:13', '2025-07-18 18:55:25', NULL, NULL, NULL),
+(3073, 1250, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 18:38:38', '2025-07-18 18:08:47', NULL, NULL, NULL),
+(3074, 1251, 'digestiv', 'Amaro', 1, 90.00, '', 'paid', 'cash', '2025-07-18 18:29:47', '2025-07-18 18:08:49', NULL, NULL, NULL),
+(3075, 1252, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:43:52', '2025-07-18 18:11:28', NULL, NULL, NULL),
+(3076, 1253, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 19:31:12', '2025-07-18 18:11:32', NULL, NULL, NULL),
+(3077, 1254, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 18:41:44', '2025-07-18 18:13:33', NULL, NULL, NULL),
+(3078, 1255, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 18:31:41', '2025-07-18 18:08:48', NULL, NULL, NULL),
+(3079, 1256, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 19:05:37', '2025-07-18 18:12:55', NULL, NULL, NULL),
+(3080, 1256, 'negroni', 'Negroni Classico', 1, 150.00, '', 'paid', 'cash', '2025-07-18 19:05:37', '2025-07-18 18:12:55', NULL, NULL, NULL),
+(3081, 1257, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 19:31:11', '2025-07-18 18:11:31', NULL, NULL, NULL),
+(3082, 1257, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 19:32:27', '2025-07-18 18:44:47', NULL, NULL, NULL),
+(3083, 1258, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'cancelled', 'cash', NULL, '2025-07-18 18:15:02', NULL, NULL, NULL),
+(3084, 1259, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'card', '2025-07-18 19:07:55', '2025-07-18 18:15:01', NULL, NULL, NULL),
+(3085, 1260, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'cash', '2025-07-18 19:32:27', '2025-07-18 18:15:10', NULL, NULL, NULL),
+(3086, 1261, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-18 20:53:28', '2025-07-18 18:17:47', NULL, NULL, NULL),
+(3087, 1262, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:22:02', '2025-07-18 18:17:48', NULL, NULL, NULL),
+(3088, 1263, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 18:20:23', NULL, NULL, NULL),
+(3089, 1263, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 18:20:23', NULL, NULL, NULL),
+(3090, 1263, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 18:20:25', NULL, NULL, NULL),
+(3091, 1263, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 18:20:25', NULL, NULL, NULL),
+(3092, 1264, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-18 19:09:30', '2025-07-18 18:29:16', NULL, NULL, NULL),
+(3093, 1264, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-18 19:09:30', '2025-07-18 18:29:17', NULL, NULL, NULL),
+(3094, 1264, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'cash', '2025-07-18 19:09:30', '2025-07-18 18:21:13', NULL, NULL, NULL),
+(3095, 1264, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 19:09:30', '2025-07-18 18:21:14', NULL, NULL, NULL),
+(3096, 1264, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 19:09:30', '2025-07-18 18:21:14', NULL, NULL, NULL),
+(3097, 1265, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:22:56', '2025-07-18 18:28:19', NULL, NULL, NULL),
+(3098, 1266, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'cash', '2025-07-18 20:08:37', '2025-07-18 18:28:15', NULL, NULL, NULL),
+(3099, 1266, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:22:56', '2025-07-18 18:28:15', NULL, NULL, NULL);
+INSERT INTO `order_items` (`id`, `order_id`, `item_type`, `item_name`, `quantity`, `unit_price`, `note`, `status`, `payment_method`, `paid_at`, `prepared_at`, `delivered_at`, `problem_note`, `parent_id`) VALUES
+(3100, 1266, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:22:56', '2025-07-18 18:28:17', NULL, NULL, NULL),
+(3101, 1266, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:07:18', '2025-07-18 18:28:18', NULL, NULL, NULL),
+(3102, 1267, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 19:00:37', NULL, NULL, NULL),
+(3103, 1267, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 19:00:38', NULL, NULL, NULL),
+(3104, 1267, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 18:33:30', NULL, NULL, NULL),
+(3105, 1267, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 18:33:30', NULL, NULL, NULL),
+(3106, 1268, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 19:57:18', '2025-07-18 18:33:21', NULL, NULL, NULL),
+(3107, 1268, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-18 19:57:18', '2025-07-18 19:03:21', NULL, NULL, NULL),
+(3108, 1268, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 18:33:20', NULL, NULL, NULL),
+(3109, 1269, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:22:02', '2025-07-18 18:34:32', NULL, NULL, NULL),
+(3110, 1269, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-18 20:22:02', '2025-07-18 18:34:32', NULL, NULL, NULL),
+(3111, 1270, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:50:32', '2025-07-18 18:39:39', NULL, NULL, NULL),
+(3112, 1270, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:50:32', '2025-07-18 18:39:39', NULL, NULL, NULL),
+(3113, 1270, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:50:32', '2025-07-18 18:39:41', NULL, NULL, NULL),
+(3114, 1270, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 20:06:09', '2025-07-18 18:39:38', NULL, NULL, NULL),
+(3115, 1270, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 20:06:58', '2025-07-18 18:39:42', NULL, NULL, NULL),
+(3116, 1270, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 20:06:58', '2025-07-18 18:39:43', NULL, NULL, NULL),
+(3117, 1270, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 20:06:58', '2025-07-18 18:39:43', NULL, NULL, NULL),
+(3118, 1270, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'card', '2025-07-18 20:06:09', '2025-07-18 18:39:37', NULL, NULL, NULL),
+(3119, 1270, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'card', '2025-07-18 20:06:09', '2025-07-18 19:10:13', NULL, NULL, NULL),
+(3120, 1270, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'card', '2025-07-18 20:06:58', '2025-07-18 19:12:48', NULL, NULL, NULL),
+(3121, 1270, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-18 20:50:32', '2025-07-18 19:24:15', NULL, NULL, NULL),
+(3122, 1271, 'negroni', 'Negroni Classico', 1, 150.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 18:41:17', NULL, NULL, NULL),
+(3123, 1272, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:07:18', '2025-07-18 18:43:05', NULL, NULL, NULL),
+(3124, 1273, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 18:41:16', NULL, NULL, NULL),
+(3125, 1274, 'predkrm', 'Foccacia, olio e olive', 1, 115.00, '', 'paid', 'cash', '2025-07-18 19:58:34', '2025-07-18 18:53:06', NULL, NULL, NULL),
+(3126, 1275, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'cancelled', 'cash', NULL, NULL, NULL, NULL, NULL),
+(3127, 1275, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 19:32:07', NULL, NULL, NULL),
+(3128, 1275, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 19:37:20', NULL, NULL, NULL),
+(3129, 1276, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:50:32', '2025-07-18 18:50:09', NULL, NULL, NULL),
+(3130, 1277, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-19 13:35:58', '2025-07-18 18:51:55', NULL, NULL, NULL),
+(3131, 1277, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-19 13:35:58', '2025-07-18 18:51:56', NULL, NULL, NULL),
+(3132, 1277, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-19 13:35:58', '2025-07-18 18:51:56', NULL, NULL, NULL),
+(3133, 1278, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 13:35:58', '2025-07-18 18:51:55', NULL, NULL, NULL),
+(3134, 1279, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'card', '2025-07-18 20:12:13', '2025-07-18 18:52:15', NULL, NULL, NULL),
+(3135, 1280, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:22:56', '2025-07-18 18:52:18', NULL, NULL, NULL),
+(3136, 1281, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-18 20:12:13', '2025-07-18 18:57:25', NULL, NULL, NULL),
+(3137, 1281, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-18 20:12:13', '2025-07-18 18:57:25', NULL, NULL, NULL),
+(3138, 1281, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-18 20:12:13', '2025-07-18 18:57:26', NULL, NULL, NULL),
+(3139, 1282, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'cash', '2025-07-19 13:35:58', '2025-07-18 18:55:53', NULL, NULL, NULL),
+(3140, 1283, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'cash', '2025-07-18 20:08:37', '2025-07-18 18:55:55', NULL, NULL, NULL),
+(3141, 1284, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:18:11', '2025-07-18 18:59:19', NULL, NULL, NULL),
+(3142, 1284, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:18:11', '2025-07-18 18:59:19', NULL, NULL, NULL),
+(3143, 1285, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:03:48', '2025-07-18 19:02:10', NULL, NULL, NULL),
+(3144, 1285, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:03:48', '2025-07-18 19:02:10', NULL, NULL, NULL),
+(3145, 1285, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:05:43', '2025-07-18 19:02:11', NULL, NULL, NULL),
+(3146, 1286, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 19:03:42', NULL, NULL, NULL),
+(3147, 1287, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 19:03:41', NULL, NULL, NULL),
+(3148, 1288, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:07:18', '2025-07-18 19:10:29', NULL, NULL, NULL),
+(3149, 1288, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:22:56', '2025-07-18 19:10:30', NULL, NULL, NULL),
+(3150, 1289, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 19:15:50', NULL, NULL, NULL),
+(3151, 1289, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 19:15:51', NULL, NULL, NULL),
+(3152, 1290, 'dezert', 'Ricotta ale arancia', 1, 85.00, '', 'paid', 'cash', '2025-07-18 19:32:27', '2025-07-18 19:15:44', NULL, NULL, NULL),
+(3153, 1290, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'cash', '2025-07-18 21:07:18', '2025-07-18 19:15:54', NULL, NULL, NULL),
+(3154, 1291, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:05:51', '2025-07-18 19:15:53', NULL, NULL, NULL),
+(3155, 1292, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 19:30:58', NULL, NULL, NULL),
+(3156, 1292, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-18 19:57:18', '2025-07-18 19:24:40', NULL, NULL, NULL),
+(3157, 1292, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 19:15:49', NULL, NULL, NULL),
+(3158, 1293, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 19:18:40', NULL, NULL, NULL),
+(3159, 1294, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:05:51', '2025-07-18 19:25:11', NULL, NULL, NULL),
+(3160, 1295, 'dezert', 'Ricotta ale arancia', 1, 85.00, '', 'paid', 'card', '2025-07-18 19:44:08', '2025-07-18 19:27:41', NULL, NULL, NULL),
+(3161, 1296, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'cash', '2025-07-18 20:53:28', '2025-07-18 19:29:06', NULL, NULL, NULL),
+(3162, 1297, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:50:32', '2025-07-18 19:29:07', NULL, NULL, NULL),
+(3163, 1297, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:50:32', '2025-07-18 19:29:08', NULL, NULL, NULL),
+(3164, 1298, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:22:02', '2025-07-18 19:31:06', NULL, NULL, NULL),
+(3165, 1298, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:22:02', '2025-07-18 19:31:06', NULL, NULL, NULL),
+(3166, 1299, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:22:02', '2025-07-18 19:34:39', NULL, NULL, NULL),
+(3167, 1300, 'dezert', 'Ricotta ale arancia', 1, 85.00, '', 'paid', 'cash', '2025-07-18 21:07:18', '2025-07-18 19:41:08', NULL, NULL, NULL),
+(3168, 1300, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:05:51', '2025-07-18 19:42:21', NULL, NULL, NULL),
+(3169, 1301, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-18 20:08:37', '2025-07-18 19:40:43', NULL, NULL, NULL),
+(3170, 1302, 'pizza', 'Burrata e crudo', 1, 350.00, '', 'paid', 'cash', '2025-07-18 20:08:37', '2025-07-18 19:41:10', NULL, NULL, NULL),
+(3171, 1303, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:08:37', '2025-07-18 19:42:18', NULL, NULL, NULL),
+(3172, 1303, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:08:37', '2025-07-18 19:42:19', NULL, NULL, NULL),
+(3173, 1303, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'cash', '2025-07-18 20:08:37', '2025-07-18 19:42:19', NULL, NULL, NULL),
+(3174, 1303, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:07:18', '2025-07-18 19:42:20', NULL, NULL, NULL),
+(3175, 1303, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:07:18', '2025-07-18 19:42:20', NULL, NULL, NULL),
+(3176, 1304, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-18 21:05:51', '2025-07-18 19:43:10', NULL, NULL, NULL),
+(3177, 1305, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:05:51', '2025-07-18 19:55:58', NULL, NULL, NULL),
+(3178, 1305, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:05:51', '2025-07-18 19:55:58', NULL, NULL, NULL),
+(3179, 1305, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:07:18', '2025-07-18 19:55:59', NULL, NULL, NULL),
+(3180, 1306, 'spritz', 'Spritz Campari', 1, 130.00, '', 'cancelled', 'cash', NULL, '2025-07-18 20:18:02', NULL, NULL, NULL),
+(3181, 1306, 'negroni', 'Negroni Classico', 1, 150.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 20:18:03', NULL, NULL, NULL),
+(3182, 1306, 'negroni', 'Negroni Classico', 1, 150.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 20:18:03', NULL, NULL, NULL),
+(3183, 1306, 'negroni', 'Negroni Classico', 1, 150.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 20:18:04', NULL, NULL, NULL),
+(3184, 1306, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 20:18:09', NULL, NULL, NULL),
+(3185, 1306, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 20:18:10', NULL, NULL, NULL),
+(3186, 1306, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-18 20:53:15', '2025-07-18 20:18:11', NULL, NULL, NULL),
+(3187, 1307, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 20:20:27', NULL, NULL, NULL),
+(3188, 1307, 'pivo', 'Kyseláč 0,3l', 1, 60.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 20:20:27', NULL, NULL, NULL),
+(3189, 1307, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-18 21:27:48', '2025-07-18 20:20:28', NULL, NULL, NULL),
+(3190, 1308, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-18 21:07:18', '2025-07-18 20:37:22', NULL, NULL, NULL),
+(3191, 1309, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'cash', '2025-07-19 15:28:54', '2025-07-19 14:23:53', NULL, NULL, NULL),
+(3192, 1309, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 15:28:54', '2025-07-19 14:10:42', NULL, NULL, NULL),
+(3193, 1309, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 15:28:54', '2025-07-19 14:10:43', NULL, NULL, NULL),
+(3194, 1309, 'pizza', 'Focaccia con salsiccia', 1, 220.00, '', 'paid', 'cash', '2025-07-19 15:28:54', '2025-07-19 14:17:53', NULL, NULL, NULL),
+(3195, 1309, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'cash', '2025-07-19 15:28:54', '2025-07-19 14:10:44', NULL, NULL, NULL),
+(3196, 1309, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-19 15:28:54', '2025-07-19 14:38:08', NULL, NULL, NULL),
+(3197, 1310, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 14:48:22', '2025-07-19 14:28:37', NULL, NULL, NULL),
+(3198, 1310, 'predkrm', 'Foccacia, olio e olive', 1, 115.00, '', 'paid', 'cash', '2025-07-19 14:48:22', '2025-07-19 14:32:06', NULL, NULL, NULL),
+(3199, 1310, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-19 14:48:22', '2025-07-19 14:32:06', NULL, NULL, NULL),
+(3200, 1310, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'cash', '2025-07-19 14:48:22', '2025-07-19 14:28:39', NULL, NULL, NULL),
+(3201, 1311, 'pizza', 'Focaccia con mortadella', 1, 220.00, '', 'paid', 'card', '2025-07-19 15:00:36', '2025-07-19 14:32:54', NULL, NULL, NULL),
+(3202, 1311, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-19 15:00:36', '2025-07-19 14:28:40', NULL, NULL, NULL),
+(3203, 1311, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'card', '2025-07-19 15:00:36', '2025-07-19 14:28:42', NULL, NULL, NULL),
+(3204, 1311, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'card', '2025-07-19 15:00:36', '2025-07-19 14:38:43', NULL, NULL, NULL),
+(3205, 1312, 'predkrm', 'Focaccia e olio', 1, 75.00, '', 'paid', 'card', '2025-07-19 15:00:36', '2025-07-19 14:45:40', NULL, NULL, NULL),
+(3206, 1313, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-19 15:23:33', '2025-07-19 14:51:47', NULL, NULL, NULL),
+(3207, 1313, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 15:23:33', '2025-07-19 14:51:48', NULL, NULL, NULL),
+(3208, 1314, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-19 15:23:33', '2025-07-19 14:58:30', NULL, NULL, NULL),
+(3209, 1314, 'predkrm', 'Foccacia, olio e olive', 1, 115.00, '', 'paid', 'cash', '2025-07-19 15:23:33', '2025-07-19 14:58:30', NULL, NULL, NULL),
+(3210, 1315, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 17:48:10', '2025-07-19 14:55:33', NULL, NULL, NULL),
+(3211, 1315, 'pivo', 'Kyseláč 0,3l', 1, 60.00, '', 'paid', 'cash', '2025-07-19 17:48:10', '2025-07-19 14:55:34', NULL, NULL, NULL),
+(3212, 1316, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 15:33:17', '2025-07-19 14:56:24', NULL, NULL, NULL),
+(3213, 1316, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-19 15:33:17', '2025-07-19 14:56:25', NULL, NULL, NULL),
+(3214, 1317, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-19 17:48:10', '2025-07-19 15:07:01', NULL, NULL, NULL),
+(3215, 1317, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'cash', '2025-07-19 17:48:10', '2025-07-19 15:08:56', NULL, NULL, NULL),
+(3216, 1318, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-19 15:33:17', '2025-07-19 15:17:41', NULL, NULL, NULL),
+(3217, 1318, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'cash', '2025-07-19 15:33:17', '2025-07-19 15:08:57', NULL, NULL, NULL),
+(3218, 1319, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'cash', '2025-07-19 15:28:54', '2025-07-19 15:07:07', NULL, NULL, NULL),
+(3219, 1320, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-19 16:32:31', '2025-07-19 15:13:57', NULL, NULL, NULL),
+(3220, 1320, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 16:32:31', '2025-07-19 15:09:42', NULL, NULL, NULL),
+(3221, 1320, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 16:32:31', '2025-07-19 15:09:43', NULL, NULL, NULL),
+(3222, 1321, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-19 16:32:31', '2025-07-19 15:25:04', NULL, NULL, NULL),
+(3223, 1322, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 15:33:17', '2025-07-19 15:17:49', NULL, NULL, NULL),
+(3224, 1323, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'cash', '2025-07-19 17:48:10', '2025-07-19 15:28:18', NULL, NULL, NULL),
+(3225, 1324, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 17:23:12', '2025-07-19 15:36:12', NULL, NULL, NULL),
+(3226, 1324, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-19 17:23:12', '2025-07-19 15:36:13', NULL, NULL, NULL),
+(3227, 1324, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-19 17:23:12', '2025-07-19 15:36:13', NULL, NULL, NULL),
+(3228, 1325, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'card', '2025-07-19 17:42:28', '2025-07-19 15:49:54', NULL, NULL, NULL),
+(3229, 1325, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'card', '2025-07-19 17:43:48', '2025-07-19 15:49:54', NULL, NULL, NULL),
+(3230, 1325, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-19 17:42:28', '2025-07-19 15:41:10', NULL, NULL, NULL),
+(3231, 1325, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-19 17:42:28', '2025-07-19 15:41:11', NULL, NULL, NULL),
+(3232, 1325, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-19 17:42:28', '2025-07-19 15:41:12', NULL, NULL, NULL),
+(3233, 1325, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-19 17:43:48', '2025-07-19 15:41:12', NULL, NULL, NULL),
+(3234, 1325, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-19 17:43:48', '2025-07-19 15:41:13', NULL, NULL, NULL),
+(3235, 1325, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-19 17:45:43', '2025-07-19 15:42:50', NULL, NULL, NULL),
+(3236, 1325, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'card', '2025-07-19 17:44:14', '2025-07-19 15:42:28', NULL, NULL, NULL),
+(3237, 1325, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'cash', '2025-07-19 17:44:40', '2025-07-19 15:42:29', NULL, NULL, NULL),
+(3238, 1325, 'predkrm', 'Foccacia, olio e olive', 1, 115.00, '', 'paid', 'card', '2025-07-19 17:44:14', '2025-07-19 15:42:30', NULL, NULL, NULL),
+(3239, 1325, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'card', '2025-07-19 17:45:15', '2025-07-19 15:48:41', NULL, NULL, NULL),
+(3240, 1325, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-19 17:42:28', '2025-07-19 15:39:55', NULL, NULL, NULL),
+(3241, 1326, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 16:32:31', '2025-07-19 15:45:00', NULL, NULL, NULL),
+(3242, 1326, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-19 16:32:31', '2025-07-19 15:45:18', NULL, NULL, NULL),
+(3243, 1327, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'cash', '2025-07-19 17:48:10', '2025-07-19 15:46:19', NULL, NULL, NULL),
+(3244, 1328, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-19 16:10:56', '2025-07-19 16:07:09', NULL, NULL, NULL),
+(3245, 1329, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 16:42:30', '2025-07-19 16:10:59', NULL, NULL, NULL),
+(3246, 1329, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 16:42:30', '2025-07-19 16:11:00', NULL, NULL, NULL),
+(3247, 1329, 'vino', 'Víno Merlot', 1, 240.00, '', 'paid', 'cash', '2025-07-19 16:42:30', '2025-07-19 16:11:00', NULL, NULL, NULL),
+(3248, 1329, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-19 16:42:30', '2025-07-19 16:11:01', NULL, NULL, NULL),
+(3249, 1329, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-19 16:42:30', '2025-07-19 16:22:08', NULL, NULL, NULL),
+(3250, 1329, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'cash', '2025-07-19 16:42:30', '2025-07-19 16:14:19', NULL, NULL, NULL),
+(3251, 1329, 'pizza', 'Focaccia con salsiccia', 1, 220.00, '', 'paid', 'cash', '2025-07-19 16:42:30', '2025-07-19 16:13:22', NULL, NULL, NULL),
+(3252, 1330, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-19 17:23:12', '2025-07-19 16:11:18', NULL, NULL, NULL),
+(3253, 1331, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'cancelled', 'cash', NULL, '2025-07-19 16:16:48', NULL, NULL, NULL),
+(3254, 1331, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'cancelled', 'cash', NULL, '2025-07-19 16:16:48', NULL, NULL, NULL),
+(3255, 1331, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'cancelled', 'cash', NULL, '2025-07-19 16:16:49', NULL, NULL, NULL),
+(3256, 1332, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 16:18:19', NULL, NULL, NULL),
+(3257, 1332, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 16:20:06', NULL, NULL, NULL),
+(3258, 1332, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 16:22:20', NULL, NULL, NULL),
+(3259, 1332, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 16:22:21', NULL, NULL, NULL),
+(3260, 1332, 'spritz', 'Crodino', 1, 95.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 16:22:21', NULL, NULL, NULL),
+(3261, 1332, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 16:22:22', NULL, NULL, NULL),
+(3262, 1333, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 16:28:21', NULL, NULL, NULL),
+(3263, 1333, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 16:28:22', NULL, NULL, NULL),
+(3264, 1333, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 16:28:22', NULL, NULL, NULL),
+(3265, 1333, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 16:28:23', NULL, NULL, NULL),
+(3266, 1333, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 16:28:23', NULL, NULL, NULL),
+(3267, 1333, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 16:28:24', NULL, NULL, NULL),
+(3268, 1333, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 16:28:25', NULL, NULL, NULL),
+(3269, 1333, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:18:34', '2025-07-19 16:28:26', NULL, NULL, NULL),
+(3270, 1333, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:18:34', '2025-07-19 16:28:27', NULL, NULL, NULL),
+(3271, 1333, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 16:23:06', NULL, NULL, NULL),
+(3272, 1333, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 16:23:06', NULL, NULL, NULL),
+(3273, 1333, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-19 18:18:34', '2025-07-19 16:23:07', NULL, NULL, NULL),
+(3274, 1334, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'cancelled', 'cash', NULL, '2025-07-19 16:29:36', NULL, NULL, NULL),
+(3275, 1335, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 17:23:12', '2025-07-19 16:29:37', NULL, NULL, NULL),
+(3276, 1335, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 17:23:12', '2025-07-19 16:29:38', NULL, NULL, NULL),
+(3277, 1336, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 16:31:16', NULL, NULL, NULL),
+(3278, 1336, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'cash', '2025-07-19 18:18:34', '2025-07-19 16:31:16', NULL, NULL, NULL),
+(3279, 1336, 'pizza', 'Focaccia con salsiccia', 1, 220.00, '', 'paid', 'cash', '2025-07-19 18:18:34', '2025-07-19 16:31:17', NULL, NULL, NULL),
+(3280, 1336, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 16:36:07', NULL, NULL, NULL),
+(3281, 1336, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-19 18:18:34', '2025-07-19 16:36:07', NULL, NULL, NULL),
+(3282, 1337, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-19 17:43:48', '2025-07-19 16:30:46', NULL, NULL, NULL),
+(3283, 1337, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-19 17:44:14', '2025-07-19 16:30:47', NULL, NULL, NULL),
+(3284, 1337, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-19 17:44:14', '2025-07-19 16:30:47', NULL, NULL, NULL),
+(3285, 1337, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-19 17:45:15', '2025-07-19 16:30:48', NULL, NULL, NULL),
+(3286, 1338, 'predkrm', 'Focaccia e olio', 1, 75.00, '', 'paid', 'cash', '2025-07-19 18:18:34', '2025-07-19 16:38:27', NULL, NULL, NULL),
+(3287, 1339, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'cash', '2025-07-19 17:52:37', '2025-07-19 16:48:24', NULL, NULL, NULL),
+(3288, 1339, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'cash', '2025-07-19 17:52:37', '2025-07-19 16:48:25', NULL, NULL, NULL),
+(3289, 1339, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 17:52:37', '2025-07-19 16:49:14', NULL, NULL, NULL),
+(3290, 1339, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 17:52:37', '2025-07-19 16:49:14', NULL, NULL, NULL),
+(3291, 1340, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-19 18:48:20', '2025-07-19 16:49:25', NULL, NULL, NULL),
+(3292, 1341, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-19 18:23:27', '2025-07-19 16:53:21', NULL, NULL, NULL),
+(3293, 1341, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:23:27', '2025-07-19 16:53:22', NULL, NULL, NULL),
+(3294, 1342, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'card', '2025-07-19 18:24:32', '2025-07-19 16:54:28', NULL, NULL, NULL),
+(3295, 1342, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'card', '2025-07-19 18:48:20', '2025-07-19 16:54:28', NULL, NULL, NULL),
+(3296, 1342, 'pizza', 'Focaccia con mortadella', 1, 220.00, '', 'paid', 'card', '2025-07-19 18:48:20', '2025-07-19 16:54:29', NULL, NULL, NULL),
+(3297, 1342, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'card', '2025-07-19 18:24:32', '2025-07-19 16:51:30', NULL, NULL, NULL),
+(3298, 1342, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-19 18:24:32', '2025-07-19 16:53:24', NULL, NULL, NULL),
+(3299, 1342, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-19 18:24:32', '2025-07-19 16:53:24', NULL, NULL, NULL),
+(3300, 1342, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'card', '2025-07-19 18:24:32', '2025-07-19 16:53:26', NULL, NULL, NULL),
+(3301, 1342, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-19 18:24:32', '2025-07-19 16:53:26', NULL, NULL, NULL),
+(3302, 1343, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 16:54:14', NULL, NULL, NULL),
+(3303, 1344, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'cash', '2025-07-19 18:23:27', '2025-07-19 16:56:36', NULL, NULL, NULL),
+(3304, 1344, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-19 18:23:27', '2025-07-19 16:56:26', NULL, NULL, NULL),
+(3305, 1345, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-19 17:44:40', '2025-07-19 16:58:07', NULL, NULL, NULL),
+(3306, 1345, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-19 17:44:40', '2025-07-19 16:58:08', NULL, NULL, NULL),
+(3307, 1346, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 17:05:18', NULL, NULL, NULL),
+(3308, 1346, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 17:00:34', NULL, NULL, NULL),
+(3309, 1347, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-19 17:45:43', '2025-07-19 17:04:16', NULL, NULL, NULL),
+(3310, 1347, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-19 17:45:43', '2025-07-19 17:04:16', NULL, NULL, NULL),
+(3311, 1347, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-19 17:45:43', '2025-07-19 17:04:16', NULL, NULL, NULL),
+(3312, 1348, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 17:08:31', NULL, NULL, NULL),
+(3313, 1348, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 17:05:12', NULL, NULL, NULL),
+(3314, 1349, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 17:08:32', NULL, NULL, NULL),
+(3315, 1350, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:18:34', '2025-07-19 17:12:20', NULL, NULL, NULL),
+(3316, 1350, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 17:12:22', NULL, NULL, NULL),
+(3317, 1351, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-19 17:52:37', '2025-07-19 17:16:30', NULL, NULL, NULL),
+(3318, 1351, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'cash', '2025-07-19 17:52:37', '2025-07-19 17:15:19', NULL, NULL, NULL),
+(3319, 1351, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 17:52:37', '2025-07-19 17:15:20', NULL, NULL, NULL),
+(3320, 1352, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 17:21:34', NULL, NULL, NULL),
+(3321, 1352, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 17:21:34', NULL, NULL, NULL),
+(3322, 1353, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 17:21:33', NULL, NULL, NULL),
+(3323, 1354, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:18:34', '2025-07-19 17:23:48', NULL, NULL, NULL),
+(3324, 1355, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:48:39', '2025-07-19 17:23:49', NULL, NULL, NULL),
+(3325, 1355, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:48:39', '2025-07-19 17:23:50', NULL, NULL, NULL),
+(3326, 1355, 'predkrm', 'Foccacia, olio e olive', 1, 115.00, '', 'paid', 'cash', '2025-07-19 18:48:39', '2025-07-19 17:18:51', NULL, NULL, NULL),
+(3327, 1355, 'pizza', 'Focaccia con mortadella', 1, 220.00, '', 'paid', 'cash', '2025-07-19 18:48:39', '2025-07-19 17:19:03', NULL, NULL, NULL),
+(3328, 1356, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-19 18:11:32', '2025-07-19 17:35:15', NULL, NULL, NULL),
+(3329, 1356, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-19 18:12:14', '2025-07-19 17:35:15', NULL, NULL, NULL),
+(3330, 1356, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:11:32', '2025-07-19 17:26:00', NULL, NULL, NULL),
+(3331, 1356, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:12:14', '2025-07-19 17:26:01', NULL, NULL, NULL),
+(3332, 1356, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:12:58', '2025-07-19 17:26:02', NULL, NULL, NULL),
+(3333, 1356, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:13:14', '2025-07-19 17:26:03', NULL, NULL, NULL),
+(3334, 1356, 'pizza', 'Focaccia con mortadella', 1, 220.00, '', 'paid', 'cash', '2025-07-19 18:12:58', '2025-07-19 17:22:28', NULL, NULL, NULL),
+(3335, 1357, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:23:27', '2025-07-19 17:26:56', NULL, NULL, NULL),
+(3336, 1358, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-19 17:52:37', '2025-07-19 17:26:57', NULL, NULL, NULL),
+(3337, 1359, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:17:26', '2025-07-19 17:23:48', NULL, NULL, NULL),
+(3338, 1360, 'pizza', 'Focaccia con mortadella', 1, 220.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 17:37:35', NULL, NULL, NULL),
+(3339, 1360, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 17:29:28', NULL, NULL, NULL),
+(3340, 1360, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 17:29:28', NULL, NULL, NULL),
+(3341, 1360, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 17:29:29', NULL, NULL, NULL),
+(3342, 1360, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 17:29:29', NULL, NULL, NULL),
+(3343, 1360, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 17:29:30', NULL, NULL, NULL),
+(3344, 1360, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 17:34:26', NULL, NULL, NULL),
+(3345, 1361, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-19 18:48:20', '2025-07-19 17:31:23', NULL, NULL, NULL),
+(3346, 1361, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-19 18:24:32', '2025-07-19 17:31:24', NULL, NULL, NULL),
+(3347, 1361, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-19 18:24:32', '2025-07-19 17:31:24', NULL, NULL, NULL),
+(3348, 1362, 'predkrm', 'Focaccia e olio', 1, 75.00, '', 'paid', 'cash', '2025-07-19 18:48:39', '2025-07-19 17:29:04', NULL, NULL, NULL),
+(3349, 1363, 'pizza', 'Focaccia con salsiccia', 1, 220.00, '', 'paid', 'card', '2025-07-19 18:49:23', '2025-07-19 17:33:04', NULL, NULL, NULL),
+(3350, 1363, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'card', '2025-07-19 18:49:23', '2025-07-19 17:33:05', NULL, NULL, NULL),
+(3351, 1363, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-19 18:49:23', '2025-07-19 17:33:46', NULL, NULL, NULL),
+(3352, 1363, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-19 18:49:23', '2025-07-19 17:33:46', NULL, NULL, NULL),
+(3353, 1363, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-19 18:49:23', '2025-07-19 17:33:47', NULL, NULL, NULL),
+(3354, 1363, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-19 18:49:23', '2025-07-19 17:33:47', NULL, NULL, NULL),
+(3355, 1364, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 17:35:27', NULL, NULL, NULL),
+(3356, 1365, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:14:16', '2025-07-19 17:38:30', NULL, NULL, NULL),
+(3357, 1365, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:14:16', '2025-07-19 17:38:30', NULL, NULL, NULL),
+(3358, 1365, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:14:16', '2025-07-19 17:38:31', NULL, NULL, NULL),
+(3359, 1365, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:14:16', '2025-07-19 17:38:32', NULL, NULL, NULL),
+(3360, 1366, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:18:34', '2025-07-19 17:39:43', NULL, NULL, NULL),
+(3361, 1367, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 17:52:37', '2025-07-19 17:40:08', NULL, NULL, NULL),
+(3362, 1368, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-19 18:14:16', '2025-07-19 17:41:40', NULL, NULL, NULL),
+(3363, 1368, 'pizza', 'Focaccia con mortadella', 1, 220.00, '', 'paid', 'cash', '2025-07-19 18:14:16', '2025-07-19 17:41:37', NULL, NULL, NULL),
+(3364, 1369, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-19 18:12:58', '2025-07-19 17:50:08', NULL, NULL, NULL),
+(3365, 1370, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-19 18:30:54', '2025-07-19 17:54:10', NULL, NULL, NULL),
+(3366, 1370, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:30:54', '2025-07-19 17:54:10', NULL, NULL, NULL),
+(3367, 1370, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:30:54', '2025-07-19 17:54:11', NULL, NULL, NULL),
+(3368, 1370, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-19 18:30:54', '2025-07-19 17:52:31', NULL, NULL, NULL),
+(3369, 1370, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-19 18:30:54', '2025-07-19 18:03:19', NULL, NULL, NULL),
+(3370, 1370, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'cash', '2025-07-19 18:30:54', '2025-07-19 17:56:12', NULL, NULL, NULL),
+(3371, 1371, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-19 18:48:39', '2025-07-19 17:52:32', NULL, NULL, NULL),
+(3372, 1371, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:48:39', '2025-07-19 17:55:59', NULL, NULL, NULL),
+(3373, 1372, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 17:56:00', NULL, NULL, NULL),
+(3374, 1372, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-19 18:24:14', '2025-07-19 17:55:46', NULL, NULL, NULL),
+(3375, 1373, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-19 18:49:23', '2025-07-19 17:57:13', NULL, NULL, NULL),
+(3376, 1374, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-19 18:14:16', '2025-07-19 17:58:31', NULL, NULL, NULL),
+(3377, 1374, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:14:16', '2025-07-19 17:59:20', NULL, NULL, NULL),
+(3378, 1374, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:14:16', '2025-07-19 17:59:21', NULL, NULL, NULL),
+(3379, 1374, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-19 18:14:16', '2025-07-19 17:59:22', NULL, NULL, NULL),
+(3380, 1375, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-19 18:23:47', '2025-07-19 18:01:52', NULL, NULL, NULL),
+(3381, 1375, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'card', '2025-07-19 18:23:47', '2025-07-19 18:01:53', NULL, NULL, NULL),
+(3382, 1375, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'card', '2025-07-19 18:23:47', '2025-07-19 18:01:54', NULL, NULL, NULL),
+(3383, 1375, 'pizza', 'Focaccia con salsiccia', 1, 220.00, '', 'paid', 'card', '2025-07-19 18:23:47', '2025-07-19 18:09:06', NULL, NULL, NULL),
+(3384, 1375, 'pizza', 'Focaccia con porchetta', 1, 230.00, '', 'paid', 'card', '2025-07-19 18:23:47', '2025-07-19 18:09:07', NULL, NULL, NULL),
+(3385, 1376, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 18:11:32', NULL, NULL, NULL),
+(3386, 1376, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 18:11:33', NULL, NULL, NULL),
+(3387, 1377, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 18:13:00', NULL, NULL, NULL),
+(3388, 1377, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 18:13:01', NULL, NULL, NULL),
+(3389, 1378, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'card', '2025-07-19 18:23:47', '2025-07-19 18:21:53', NULL, NULL, NULL),
+(3390, 1379, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 18:48:39', '2025-07-19 18:21:17', NULL, NULL, NULL),
+(3391, 1380, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-19 21:28:50', '2025-07-19 19:01:18', NULL, NULL, NULL),
+(3392, 1380, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-19 21:28:50', '2025-07-19 19:01:19', NULL, NULL, NULL),
+(3393, 1380, 'pizza', 'Focaccia con mortadella', 1, 220.00, '', 'paid', 'cash', '2025-07-19 21:28:50', '2025-07-19 18:56:11', NULL, NULL, NULL),
+(3394, 1381, 'vino', 'Víno Tramín', 1, 220.00, '', 'paid', 'card', '2025-07-19 19:20:32', '2025-07-19 18:53:41', NULL, NULL, NULL),
+(3395, 1382, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 19:18:07', '2025-07-19 18:53:42', NULL, NULL, NULL),
+(3396, 1383, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-19 20:15:21', '2025-07-19 19:02:25', NULL, NULL, NULL),
+(3397, 1383, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-19 20:15:21', '2025-07-19 19:02:27', NULL, NULL, NULL),
+(3398, 1383, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-19 20:15:21', '2025-07-19 19:02:28', NULL, NULL, NULL),
+(3399, 1383, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-19 20:15:21', '2025-07-19 19:01:24', NULL, NULL, NULL),
+(3400, 1383, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-19 20:15:21', '2025-07-19 19:01:24', NULL, NULL, NULL),
+(3401, 1383, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-19 20:15:21', '2025-07-19 19:02:29', NULL, NULL, NULL),
+(3402, 1384, 'vino', 'Víno Hibernal', 1, 240.00, '', 'paid', 'card', '2025-07-19 20:12:12', '2025-07-19 19:13:50', NULL, NULL, NULL),
+(3403, 1384, 'vino', 'Víno Rulandské šedé', 1, 220.00, '', 'paid', 'card', '2025-07-19 20:12:12', '2025-07-19 19:13:52', NULL, NULL, NULL),
+(3404, 1385, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'card', '2025-07-19 20:12:12', '2025-07-19 19:24:42', NULL, NULL, NULL),
+(3405, 1385, 'negroni', 'Negroni Classico', 1, 150.00, '', 'paid', 'card', '2025-07-19 20:12:12', '2025-07-19 19:24:43', NULL, NULL, NULL),
+(3406, 1386, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-19 20:15:21', '2025-07-19 19:29:22', NULL, NULL, NULL),
+(3407, 1387, 'vino', 'Víno Tramín', 1, 220.00, '', 'paid', 'card', '2025-07-19 20:12:12', '2025-07-19 19:54:39', NULL, NULL, NULL),
+(3408, 1387, 'vino', 'Víno Rulandské šedé', 1, 220.00, '', 'paid', 'card', '2025-07-19 20:12:12', '2025-07-19 19:54:40', NULL, NULL, NULL),
+(3409, 1388, 'digestiv', 'Limoncello', 1, 90.00, '', 'paid', 'card', '2025-07-19 20:12:12', '2025-07-19 20:11:44', NULL, NULL, NULL),
+(3410, 1388, 'digestiv', 'Limoncello', 1, 90.00, '', 'paid', 'card', '2025-07-19 20:12:12', '2025-07-19 20:11:45', NULL, NULL, NULL),
+(3411, 1388, 'digestiv', 'Limoncello', 1, 90.00, '', 'paid', 'card', '2025-07-19 20:12:12', '2025-07-19 20:11:46', NULL, NULL, NULL),
+(3412, 1388, 'digestiv', 'Limoncello', 1, 90.00, '', 'paid', 'card', '2025-07-19 20:12:12', '2025-07-19 20:11:46', NULL, NULL, NULL),
+(3413, 1388, 'digestiv', 'Limoncello', 1, 90.00, '', 'paid', 'card', '2025-07-19 20:12:12', '2025-07-19 20:11:47', NULL, NULL, NULL),
+(3414, 1388, 'digestiv', 'Limoncello', 1, 90.00, '', 'paid', 'card', '2025-07-19 20:12:12', '2025-07-19 20:11:47', NULL, NULL, NULL),
+(3415, 1389, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-19 21:55:38', '2025-07-19 20:17:48', NULL, NULL, NULL),
+(3416, 1389, 'predkrm', 'Focaccia e olio', 1, 75.00, '', 'paid', 'cash', '2025-07-19 21:57:09', '2025-07-19 20:17:59', NULL, NULL, NULL),
+(3417, 1389, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:57:09', '2025-07-19 20:17:49', NULL, NULL, NULL),
+(3418, 1389, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-19 21:55:38', '2025-07-19 20:20:56', NULL, NULL, NULL),
+(3419, 1390, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:37:29', '2025-07-19 20:20:59', NULL, NULL, NULL),
+(3420, 1390, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:37:29', '2025-07-19 20:21:02', NULL, NULL, NULL),
+(3421, 1391, 'vino', 'Víno Ryzlink vlašský', 1, 220.00, '', 'paid', 'card', '2025-07-19 21:49:57', '2025-07-19 21:04:14', NULL, NULL, NULL),
+(3422, 1391, 'vino', 'Víno Tramín', 1, 220.00, '', 'paid', 'card', '2025-07-19 21:49:57', '2025-07-19 21:04:15', NULL, NULL, NULL),
+(3423, 1392, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-19 21:55:38', '2025-07-19 21:04:24', NULL, NULL, NULL),
+(3424, 1392, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-19 21:56:33', '2025-07-19 21:04:25', NULL, NULL, NULL),
+(3425, 1392, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:57:09', '2025-07-19 21:04:25', NULL, NULL, NULL),
+(3426, 1393, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:37:29', '2025-07-19 21:04:18', NULL, NULL, NULL),
+(3427, 1393, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:37:29', '2025-07-19 21:04:18', NULL, NULL, NULL),
+(3428, 1394, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:37:07', '2025-07-19 21:03:55', NULL, NULL, NULL),
+(3429, 1394, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:37:07', '2025-07-19 21:03:56', NULL, NULL, NULL),
+(3430, 1394, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:37:07', '2025-07-19 21:03:57', NULL, NULL, NULL),
+(3431, 1394, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:37:07', '2025-07-19 21:03:58', NULL, NULL, NULL),
+(3432, 1394, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:37:07', '2025-07-19 21:03:58', NULL, NULL, NULL),
+(3433, 1395, 'vino', 'Víno Tramín', 1, 220.00, '', 'paid', 'card', '2025-07-19 21:49:57', '2025-07-19 21:24:21', NULL, NULL, NULL),
+(3434, 1395, 'vino', 'Víno Ryzlink vlašský', 1, 220.00, '', 'paid', 'card', '2025-07-19 21:49:57', '2025-07-19 21:24:21', NULL, NULL, NULL),
+(3435, 1396, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-19 21:56:33', '2025-07-19 21:31:59', NULL, NULL, NULL),
+(3436, 1396, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-19 21:56:33', '2025-07-19 21:32:00', NULL, NULL, NULL),
+(3437, 1397, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:37:07', '2025-07-19 21:32:01', NULL, NULL, NULL),
+(3438, 1397, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:37:07', '2025-07-19 21:32:01', NULL, NULL, NULL),
+(3439, 1397, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:37:07', '2025-07-19 21:32:02', NULL, NULL, NULL),
+(3440, 1397, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:37:07', '2025-07-19 21:32:02', NULL, NULL, NULL),
+(3441, 1398, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:30:41', '2025-07-19 21:30:23', NULL, NULL, NULL),
+(3442, 1398, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:30:41', '2025-07-19 21:30:24', NULL, NULL, NULL),
+(3443, 1398, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-19 21:30:41', '2025-07-19 21:30:25', NULL, NULL, NULL),
+(3444, 1399, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'card', '2025-07-19 21:49:57', '2025-07-19 21:42:25', NULL, NULL, NULL),
+(3445, 1399, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'card', '2025-07-19 21:49:57', '2025-07-19 21:42:26', NULL, NULL, NULL),
+(3446, 1399, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'card', '2025-07-19 21:49:57', '2025-07-19 21:42:27', NULL, NULL, NULL),
+(3447, 1400, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-19 21:57:09', '2025-07-19 21:42:27', NULL, NULL, NULL),
+(3448, 1401, 'vino', 'Víno Ryzlink vlašský', 1, 220.00, '', 'paid', 'card', '2025-07-19 21:49:57', '2025-07-19 21:48:40', NULL, NULL, NULL),
+(3449, 1401, 'vino', 'Víno Rulandské šedé', 1, 220.00, '', 'paid', 'card', '2025-07-19 21:49:57', '2025-07-19 21:48:41', NULL, NULL, NULL),
+(3453, 1404, 'predkrm', 'Tagliere di salumi', 1, 220.00, '', 'paid', 'cash', '2025-07-20 15:33:18', '2025-07-20 14:17:17', NULL, NULL, NULL),
+(3454, 1404, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-20 15:33:18', '2025-07-20 14:17:18', NULL, NULL, NULL),
+(3455, 1404, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 15:33:18', '2025-07-20 14:09:42', NULL, NULL, NULL),
+(3456, 1404, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-20 15:33:18', '2025-07-20 14:09:40', NULL, NULL, NULL),
+(3457, 1404, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 15:33:18', '2025-07-20 14:12:18', NULL, NULL, NULL),
+(3460, 1406, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-20 14:48:57', '2025-07-20 14:14:55', NULL, NULL, NULL),
+(3461, 1406, 'pizza', 'Salsiccia e pattatine', 1, 270.00, '', 'paid', 'cash', '2025-07-20 14:48:57', '2025-07-20 14:18:42', NULL, NULL, NULL),
+(3462, 1407, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-20 15:29:19', '2025-07-20 14:28:15', NULL, NULL, NULL),
+(3463, 1407, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-20 15:29:19', '2025-07-20 14:23:11', NULL, NULL, NULL),
+(3464, 1407, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 15:29:53', '2025-07-20 14:23:05', NULL, NULL, NULL),
+(3465, 1407, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 15:29:53', '2025-07-20 14:23:06', NULL, NULL, NULL),
+(3466, 1407, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-20 15:31:02', '2025-07-20 14:23:07', NULL, NULL, NULL),
+(3467, 1407, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-20 15:31:02', '2025-07-20 14:28:16', NULL, NULL, NULL),
+(3468, 1407, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-20 15:31:46', '2025-07-20 14:28:17', NULL, NULL, NULL),
+(3469, 1407, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-20 15:31:02', '2025-07-20 14:28:49', NULL, NULL, NULL),
+(3470, 1407, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-20 15:29:19', '2025-07-20 14:27:34', NULL, NULL, NULL),
+(3471, 1407, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-20 15:31:02', '2025-07-20 14:27:35', NULL, NULL, NULL),
+(3472, 1407, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-20 15:31:46', '2025-07-20 14:28:50', NULL, NULL, NULL),
+(3473, 1407, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-20 15:31:46', '2025-07-20 14:22:51', NULL, NULL, NULL);
+INSERT INTO `order_items` (`id`, `order_id`, `item_type`, `item_name`, `quantity`, `unit_price`, `note`, `status`, `payment_method`, `paid_at`, `prepared_at`, `delivered_at`, `problem_note`, `parent_id`) VALUES
+(3474, 1407, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 15:29:19', '2025-07-20 14:27:36', NULL, NULL, NULL),
+(3475, 1408, 'pizza', 'Salsiccia e pattatine', 1, 270.00, '', 'paid', 'cash', '2025-07-20 17:00:24', '2025-07-20 14:31:56', NULL, NULL, NULL),
+(3476, 1408, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:00:24', '2025-07-20 14:26:07', NULL, NULL, NULL),
+(3477, 1408, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-20 17:00:24', '2025-07-20 14:26:08', NULL, NULL, NULL),
+(3478, 1409, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 14:49:02', '2025-07-20 14:28:41', NULL, NULL, NULL),
+(3479, 1409, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 14:49:02', '2025-07-20 14:28:41', NULL, NULL, NULL),
+(3480, 1409, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'card', '2025-07-20 14:49:02', '2025-07-20 14:35:55', NULL, NULL, NULL),
+(3481, 1409, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'card', '2025-07-20 14:49:02', '2025-07-20 14:35:55', NULL, NULL, NULL),
+(3482, 1410, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 14:57:06', '2025-07-20 14:33:44', NULL, NULL, NULL),
+(3483, 1410, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 14:57:06', '2025-07-20 14:33:45', NULL, NULL, NULL),
+(3484, 1411, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 15:09:29', '2025-07-20 14:35:22', NULL, NULL, NULL),
+(3485, 1411, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 15:09:29', '2025-07-20 14:35:23', NULL, NULL, NULL),
+(3486, 1411, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 15:09:29', '2025-07-20 14:35:24', NULL, NULL, NULL),
+(3487, 1411, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-20 15:09:29', '2025-07-20 14:41:27', NULL, NULL, NULL),
+(3488, 1411, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'card', '2025-07-20 15:09:29', '2025-07-20 14:41:28', NULL, NULL, NULL),
+(3489, 1412, 'digestiv', 'Limoncello', 1, 90.00, '', 'cancelled', 'cash', NULL, '2025-07-20 14:38:48', NULL, NULL, NULL),
+(3490, 1412, 'digestiv', 'Limoncello', 1, 90.00, '', 'cancelled', 'cash', NULL, '2025-07-20 14:38:49', NULL, NULL, NULL),
+(3491, 1412, 'digestiv', 'Limoncello', 1, 90.00, '', 'cancelled', 'cash', NULL, '2025-07-20 14:38:50', NULL, NULL, NULL),
+(3492, 1412, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-20 15:16:04', '2025-07-20 14:43:04', NULL, NULL, NULL),
+(3493, 1412, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 15:17:03', '2025-07-20 14:38:56', NULL, NULL, NULL),
+(3494, 1413, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 15:31:02', '2025-07-20 14:42:41', NULL, NULL, NULL),
+(3495, 1413, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 15:31:46', '2025-07-20 14:42:42', NULL, NULL, NULL),
+(3496, 1413, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-20 15:31:02', '2025-07-20 14:42:42', NULL, NULL, NULL),
+(3497, 1413, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-20 15:31:02', '2025-07-20 14:42:43', NULL, NULL, NULL),
+(3498, 1413, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-20 15:31:46', '2025-07-20 14:42:44', NULL, NULL, NULL),
+(3499, 1414, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-20 15:33:18', '2025-07-20 14:56:34', NULL, NULL, NULL),
+(3500, 1414, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-20 15:33:18', '2025-07-20 14:56:34', NULL, NULL, NULL),
+(3501, 1414, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 15:33:18', '2025-07-20 14:45:31', NULL, NULL, NULL),
+(3502, 1414, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 15:33:18', '2025-07-20 14:45:32', NULL, NULL, NULL),
+(3503, 1415, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-20 15:09:29', '2025-07-20 14:44:49', NULL, NULL, NULL),
+(3504, 1416, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:17:00', '2025-07-20 14:46:26', NULL, NULL, NULL),
+(3505, 1417, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 15:16:43', '2025-07-20 14:59:04', NULL, NULL, NULL),
+(3506, 1417, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:17:00', '2025-07-20 14:46:25', NULL, NULL, NULL),
+(3507, 1418, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:00:24', '2025-07-20 14:47:20', NULL, NULL, NULL),
+(3508, 1419, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-20 15:31:02', '2025-07-20 14:51:34', NULL, NULL, NULL),
+(3509, 1420, 'pizza', 'Porchetta', 1, 270.00, '', 'paid', 'cash', '2025-07-20 15:26:56', '2025-07-20 15:03:58', NULL, NULL, NULL),
+(3510, 1420, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 15:26:56', '2025-07-20 15:03:59', NULL, NULL, NULL),
+(3511, 1421, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'card', '2025-07-20 15:09:29', '2025-07-20 15:00:51', NULL, NULL, NULL),
+(3512, 1422, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 15:33:18', '2025-07-20 14:58:26', NULL, NULL, NULL),
+(3513, 1423, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:08:04', '2025-07-20 15:02:28', NULL, NULL, NULL),
+(3514, 1424, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-20 15:31:46', '2025-07-20 15:03:51', NULL, NULL, NULL),
+(3515, 1424, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'cash', '2025-07-20 15:31:46', '2025-07-20 15:03:51', NULL, NULL, NULL),
+(3516, 1425, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:08:04', '2025-07-20 15:06:28', NULL, NULL, NULL),
+(3517, 1425, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:08:04', '2025-07-20 15:06:28', NULL, NULL, NULL),
+(3518, 1425, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:08:04', '2025-07-20 15:06:29', NULL, NULL, NULL),
+(3519, 1426, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:17:00', '2025-07-20 15:13:12', NULL, NULL, NULL),
+(3520, 1426, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:17:00', '2025-07-20 15:13:13', NULL, NULL, NULL),
+(3521, 1427, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 17:00:12', '2025-07-20 15:17:50', NULL, NULL, NULL),
+(3522, 1427, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:55:57', '2025-07-20 15:16:22', NULL, NULL, NULL),
+(3523, 1427, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-20 17:00:48', '2025-07-20 15:16:22', NULL, NULL, NULL),
+(3524, 1428, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'cash', '2025-07-20 16:08:04', '2025-07-20 15:17:18', NULL, NULL, NULL),
+(3525, 1428, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 16:08:04', '2025-07-20 15:23:14', NULL, NULL, NULL),
+(3526, 1428, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 16:08:04', '2025-07-20 15:23:14', NULL, NULL, NULL),
+(3527, 1429, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-20 15:16:04', '2025-07-20 15:15:03', NULL, NULL, NULL),
+(3528, 1429, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-20 15:16:04', '2025-07-20 15:15:04', NULL, NULL, NULL),
+(3529, 1430, 'digestiv', 'Limoncello', 1, 90.00, '', 'paid', 'cash', '2025-07-20 15:31:46', '2025-07-20 15:18:39', NULL, NULL, NULL),
+(3530, 1430, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-20 15:31:46', '2025-07-20 15:18:40', NULL, NULL, NULL),
+(3531, 1431, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:26:29', '2025-07-20 15:21:03', NULL, NULL, NULL),
+(3532, 1431, 'koktejl', 'Bellini', 1, 130.00, '', 'paid', 'cash', '2025-07-20 16:26:29', '2025-07-20 15:21:04', NULL, NULL, NULL),
+(3533, 1431, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-20 16:26:29', '2025-07-20 15:30:37', NULL, NULL, NULL),
+(3534, 1432, 'predkrm', 'Focaccia e olio', 1, 75.00, '', 'paid', 'cash', '2025-07-20 16:26:29', '2025-07-20 15:24:56', NULL, NULL, NULL),
+(3535, 1432, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-20 16:17:00', '2025-07-20 15:30:37', NULL, NULL, NULL),
+(3536, 1433, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-20 17:00:48', '2025-07-20 15:24:42', NULL, NULL, NULL),
+(3537, 1433, 'digestiv', 'Limoncello', 1, 90.00, '', 'paid', 'cash', '2025-07-20 16:55:57', '2025-07-20 15:24:43', NULL, NULL, NULL),
+(3538, 1433, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-20 16:55:57', '2025-07-20 15:26:52', NULL, NULL, NULL),
+(3539, 1433, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-20 17:00:12', '2025-07-20 15:34:22', NULL, NULL, NULL),
+(3540, 1433, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-20 17:00:12', '2025-07-20 15:24:43', NULL, NULL, NULL),
+(3541, 1433, 'pizza', 'Salsiccia e pattatine', 1, 270.00, '', 'paid', 'cash', '2025-07-20 16:55:57', '2025-07-20 15:41:24', NULL, NULL, NULL),
+(3542, 1434, 'pivo', 'Kyseláč 0,3l', 1, 60.00, '', 'paid', 'card', '2025-07-20 16:24:38', '2025-07-20 15:37:36', NULL, NULL, NULL),
+(3543, 1434, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:25:36', '2025-07-20 15:37:37', NULL, NULL, NULL),
+(3544, 1434, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:25:36', '2025-07-20 15:37:37', NULL, NULL, NULL),
+(3545, 1434, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:25:36', '2025-07-20 15:37:38', NULL, NULL, NULL),
+(3546, 1434, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'card', '2025-07-20 16:24:38', '2025-07-20 15:37:38', NULL, NULL, NULL),
+(3547, 1435, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 17:07:26', '2025-07-20 15:32:34', NULL, NULL, NULL),
+(3548, 1435, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-20 17:07:26', '2025-07-20 15:32:35', NULL, NULL, NULL),
+(3549, 1435, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-20 17:07:26', '2025-07-20 15:32:35', NULL, NULL, NULL),
+(3550, 1435, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'card', '2025-07-20 17:06:58', '2025-07-20 15:32:36', NULL, NULL, NULL),
+(3551, 1435, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-20 17:07:26', '2025-07-20 15:32:37', NULL, NULL, NULL),
+(3552, 1436, 'pizza', 'Porchetta', 1, 270.00, '', 'paid', 'card', '2025-07-20 15:50:11', '2025-07-20 15:49:11', NULL, NULL, NULL),
+(3553, 1436, 'pizza', 'Salsiccia e pattatine', 1, 270.00, '', 'paid', 'card', '2025-07-20 15:50:11', '2025-07-20 15:49:12', NULL, NULL, NULL),
+(3554, 1436, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'card', '2025-07-20 15:50:11', '2025-07-20 15:49:13', NULL, NULL, NULL),
+(3555, 1437, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-20 17:00:24', '2025-07-20 15:35:39', NULL, NULL, NULL),
+(3556, 1438, 'pizza', 'Salsiccia e pattatine', 1, 270.00, '', 'paid', 'cash', '2025-07-20 17:00:04', '2025-07-20 15:41:28', NULL, NULL, NULL),
+(3557, 1438, 'pizza', 'Salsiccia e pattatine', 1, 270.00, '', 'paid', 'cash', '2025-07-20 17:00:04', '2025-07-20 15:41:29', NULL, NULL, NULL),
+(3558, 1438, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:00:04', '2025-07-20 15:40:38', NULL, NULL, NULL),
+(3559, 1438, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:00:04', '2025-07-20 15:40:39', NULL, NULL, NULL),
+(3560, 1439, 'predkrm', 'Burrate e crudo predkrm', 1, 220.00, '', 'cancelled', 'cash', NULL, NULL, NULL, NULL, NULL),
+(3561, 1439, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'card', '2025-07-20 17:06:58', '2025-07-20 15:52:20', NULL, NULL, NULL),
+(3562, 1440, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 16:08:04', '2025-07-20 15:54:53', NULL, NULL, NULL),
+(3563, 1440, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-20 16:08:04', '2025-07-20 15:43:15', NULL, NULL, NULL),
+(3564, 1440, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'cash', '2025-07-20 16:08:04', '2025-07-20 15:43:15', NULL, NULL, NULL),
+(3565, 1441, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 17:07:26', '2025-07-20 15:48:57', NULL, NULL, NULL),
+(3566, 1442, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'card', '2025-07-20 16:24:38', '2025-07-20 15:59:37', NULL, NULL, NULL),
+(3567, 1442, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-20 16:25:36', '2025-07-20 15:59:38', NULL, NULL, NULL),
+(3568, 1442, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'card', '2025-07-20 16:25:36', '2025-07-20 15:49:15', NULL, NULL, NULL),
+(3569, 1443, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'card', '2025-07-20 16:27:49', '2025-07-20 16:14:23', NULL, NULL, NULL),
+(3570, 1443, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:27:49', '2025-07-20 15:39:49', NULL, NULL, NULL),
+(3571, 1443, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:27:49', '2025-07-20 15:47:31', NULL, NULL, NULL),
+(3572, 1443, 'pizza', 'Porchetta', 1, 270.00, '', 'paid', 'card', '2025-07-20 16:27:49', '2025-07-20 16:01:44', NULL, NULL, NULL),
+(3573, 1443, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:27:49', '2025-07-20 15:47:32', NULL, NULL, NULL),
+(3574, 1444, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:25:36', '2025-07-20 15:39:49', NULL, NULL, NULL),
+(3575, 1444, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'cancelled', 'cash', NULL, '2025-07-20 15:49:10', NULL, NULL, NULL),
+(3576, 1444, 'pivo', 'Kyseláč 0,3l', 1, 60.00, '', 'paid', 'card', '2025-07-20 16:24:38', '2025-07-20 15:39:47', NULL, NULL, NULL),
+(3577, 1444, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'card', '2025-07-20 16:24:38', '2025-07-20 15:39:48', NULL, NULL, NULL),
+(3578, 1444, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:25:36', '2025-07-20 15:39:48', NULL, NULL, NULL),
+(3579, 1445, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'card', '2025-07-20 17:07:26', '2025-07-20 15:49:16', NULL, NULL, NULL),
+(3580, 1446, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:08:04', '2025-07-20 15:43:14', NULL, NULL, NULL),
+(3581, 1447, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:40:07', '2025-07-20 15:51:08', NULL, NULL, NULL),
+(3582, 1447, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:40:07', '2025-07-20 15:51:10', NULL, NULL, NULL),
+(3583, 1447, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 15:51:11', NULL, NULL, NULL),
+(3584, 1447, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 15:51:12', NULL, NULL, NULL),
+(3585, 1447, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 16:08:31', NULL, NULL, NULL),
+(3586, 1447, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 16:08:31', NULL, NULL, NULL),
+(3587, 1447, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-20 18:40:07', '2025-07-20 16:10:18', NULL, NULL, NULL),
+(3588, 1448, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:08:04', '2025-07-20 15:52:38', NULL, NULL, NULL),
+(3589, 1448, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:08:04', '2025-07-20 15:52:39', NULL, NULL, NULL),
+(3590, 1449, 'pivo', 'Kyseláč 0,3l', 1, 60.00, '', 'paid', 'card', '2025-07-20 18:43:43', '2025-07-20 15:59:01', NULL, NULL, NULL),
+(3591, 1449, 'pivo', 'Kyseláč 0,3l', 1, 60.00, '', 'paid', 'card', '2025-07-20 19:19:27', '2025-07-20 15:59:01', NULL, NULL, NULL),
+(3592, 1449, 'pivo', 'Kyseláč 0,3l', 1, 60.00, '', 'paid', 'card', '2025-07-20 19:20:26', '2025-07-20 15:59:01', NULL, NULL, NULL),
+(3593, 1449, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:43:43', '2025-07-20 15:59:02', NULL, NULL, NULL),
+(3594, 1449, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:43:43', '2025-07-20 15:59:02', NULL, NULL, NULL),
+(3595, 1449, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:43:43', '2025-07-20 15:59:03', NULL, NULL, NULL),
+(3596, 1450, 'predkrm', 'Tagliere di salumi', 1, 220.00, '', 'paid', 'card', '2025-07-20 17:07:26', '2025-07-20 16:00:46', NULL, NULL, NULL),
+(3597, 1451, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-20 17:00:24', '2025-07-20 16:01:21', NULL, NULL, NULL),
+(3598, 1452, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:22:06', '2025-07-20 15:57:55', NULL, NULL, NULL),
+(3599, 1452, 'pivo', 'Kyseláč 0,3l', 1, 60.00, '', 'paid', 'card', '2025-07-20 16:22:06', '2025-07-20 15:57:56', NULL, NULL, NULL),
+(3600, 1452, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-20 16:22:06', '2025-07-20 15:57:56', NULL, NULL, NULL),
+(3601, 1452, 'predkrm', 'Focaccia e olio', 1, 75.00, '', 'paid', 'card', '2025-07-20 16:22:06', '2025-07-20 16:04:09', NULL, NULL, NULL),
+(3602, 1453, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'card', '2025-07-20 16:22:06', '2025-07-20 16:04:09', NULL, NULL, NULL),
+(3603, 1453, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'card', '2025-07-20 16:22:06', '2025-07-20 16:11:35', NULL, NULL, NULL),
+(3604, 1454, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-20 16:32:32', '2025-07-20 16:18:55', NULL, NULL, NULL),
+(3605, 1454, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'card', '2025-07-20 16:32:32', '2025-07-20 16:25:32', NULL, NULL, NULL),
+(3606, 1454, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'card', '2025-07-20 16:32:32', '2025-07-20 16:25:33', NULL, NULL, NULL),
+(3607, 1454, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'card', '2025-07-20 16:32:32', '2025-07-20 16:00:05', NULL, NULL, NULL),
+(3608, 1455, 'pizza', 'Salsiccia e pattatine', 1, 270.00, '', 'paid', 'card', '2025-07-20 16:27:49', '2025-07-20 16:15:43', NULL, NULL, NULL),
+(3609, 1456, 'spritz', 'Crodino', 1, 95.00, '', 'paid', 'cash', '2025-07-20 16:55:57', '2025-07-20 16:08:07', NULL, NULL, NULL),
+(3610, 1456, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:00:04', '2025-07-20 16:08:08', NULL, NULL, NULL),
+(3611, 1456, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:00:12', '2025-07-20 16:08:09', NULL, NULL, NULL),
+(3612, 1456, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'cancelled', 'cash', NULL, '2025-07-20 16:08:09', NULL, NULL, NULL),
+(3613, 1456, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:55:57', '2025-07-20 16:08:10', NULL, NULL, NULL),
+(3614, 1456, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:00:04', '2025-07-20 16:08:11', NULL, NULL, NULL),
+(3615, 1456, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-20 17:00:04', '2025-07-20 16:12:59', NULL, NULL, NULL),
+(3616, 1456, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-20 17:00:12', '2025-07-20 16:12:59', NULL, NULL, NULL),
+(3617, 1457, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:54:43', '2025-07-20 16:11:39', NULL, NULL, NULL),
+(3618, 1457, 'predkrm', 'Foccacia, olio e olive', 1, 115.00, '', 'paid', 'cash', '2025-07-20 16:54:43', '2025-07-20 16:14:20', NULL, NULL, NULL),
+(3619, 1457, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-20 16:54:43', '2025-07-20 16:11:40', NULL, NULL, NULL),
+(3620, 1458, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 16:38:53', '2025-07-20 16:21:39', NULL, NULL, NULL),
+(3621, 1458, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:38:53', '2025-07-20 16:15:36', NULL, NULL, NULL),
+(3622, 1459, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-20 16:58:20', '2025-07-20 16:33:32', NULL, NULL, NULL),
+(3623, 1459, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 16:58:20', '2025-07-20 16:36:45', NULL, NULL, NULL),
+(3624, 1459, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 16:58:20', '2025-07-20 16:33:31', NULL, NULL, NULL),
+(3625, 1459, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:58:20', '2025-07-20 16:14:43', NULL, NULL, NULL),
+(3626, 1459, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:58:20', '2025-07-20 16:14:43', NULL, NULL, NULL),
+(3628, 1461, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:00:48', '2025-07-20 16:12:59', NULL, NULL, NULL),
+(3629, 1462, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-20 17:07:26', '2025-07-20 16:19:47', NULL, NULL, NULL),
+(3630, 1462, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-20 17:07:26', '2025-07-20 16:19:48', NULL, NULL, NULL),
+(3631, 1463, 'predkrm', 'Tagliere di salumi', 1, 220.00, '', 'paid', 'card', '2025-07-20 17:19:19', '2025-07-20 16:18:58', NULL, NULL, NULL),
+(3632, 1463, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'card', '2025-07-20 17:19:19', '2025-07-20 16:19:50', NULL, NULL, NULL),
+(3633, 1463, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'card', '2025-07-20 17:19:19', '2025-07-20 16:19:50', NULL, NULL, NULL),
+(3634, 1463, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-20 17:19:19', '2025-07-20 16:39:20', NULL, NULL, NULL),
+(3635, 1464, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:00:48', '2025-07-20 16:16:02', NULL, NULL, NULL),
+(3636, 1465, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 16:22:06', '2025-07-20 16:16:40', NULL, NULL, NULL),
+(3637, 1466, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-20 17:35:48', '2025-07-20 16:45:44', NULL, NULL, NULL),
+(3638, 1466, 'predkrm', 'Focaccia e olio', 1, 75.00, '', 'paid', 'cash', '2025-07-20 17:35:48', '2025-07-20 16:23:33', NULL, NULL, NULL),
+(3639, 1466, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:35:48', '2025-07-20 16:23:14', NULL, NULL, NULL),
+(3640, 1466, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:35:48', '2025-07-20 16:23:15', NULL, NULL, NULL),
+(3641, 1466, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:35:48', '2025-07-20 16:23:15', NULL, NULL, NULL),
+(3642, 1466, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-20 17:35:48', '2025-07-20 16:23:16', NULL, NULL, NULL),
+(3643, 1467, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'card', '2025-07-20 16:22:06', '2025-07-20 16:21:31', NULL, NULL, NULL),
+(3644, 1468, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'card', '2025-07-20 17:06:58', '2025-07-20 16:24:57', NULL, NULL, NULL),
+(3645, 1469, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 19:19:27', '2025-07-20 16:29:59', NULL, NULL, NULL),
+(3646, 1469, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 19:19:27', '2025-07-20 16:30:00', NULL, NULL, NULL),
+(3647, 1469, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 19:19:27', '2025-07-20 16:30:00', NULL, NULL, NULL),
+(3648, 1470, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 17:02:09', '2025-07-20 16:26:36', NULL, NULL, NULL),
+(3649, 1470, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'card', '2025-07-20 17:02:09', '2025-07-20 16:46:20', NULL, NULL, NULL),
+(3650, 1470, 'pizza', 'Porchetta', 1, 270.00, '', 'paid', 'card', '2025-07-20 17:02:09', '2025-07-20 16:49:49', NULL, NULL, NULL),
+(3651, 1470, 'pizza', 'Porchetta', 1, 270.00, '', 'paid', 'card', '2025-07-20 17:02:09', '2025-07-20 16:49:50', NULL, NULL, NULL),
+(3652, 1470, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 17:02:09', '2025-07-20 16:26:36', NULL, NULL, NULL),
+(3653, 1470, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 17:02:09', '2025-07-20 16:26:37', NULL, NULL, NULL),
+(3654, 1471, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 16:54:43', '2025-07-20 16:27:11', NULL, NULL, NULL),
+(3655, 1472, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 19:19:27', '2025-07-20 16:29:58', NULL, NULL, NULL),
+(3656, 1473, 'pizza', 'Porchetta', 1, 270.00, '', 'paid', 'card', '2025-07-20 19:20:26', '2025-07-20 16:52:10', NULL, NULL, NULL),
+(3657, 1473, 'predkrm', 'Focaccia e olio', 1, 75.00, '', 'paid', 'card', '2025-07-20 19:19:27', '2025-07-20 16:31:06', NULL, NULL, NULL),
+(3658, 1474, 'pizza', 'Salsiccia e pattatine', 1, 270.00, '', 'paid', 'cash', '2025-07-20 17:24:58', '2025-07-20 16:54:51', NULL, NULL, NULL),
+(3659, 1474, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-20 17:24:58', '2025-07-20 16:54:51', NULL, NULL, NULL),
+(3660, 1474, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:24:58', '2025-07-20 16:36:00', NULL, NULL, NULL),
+(3661, 1475, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 16:36:02', NULL, NULL, NULL),
+(3662, 1475, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 16:36:02', NULL, NULL, NULL),
+(3663, 1475, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 16:38:44', NULL, NULL, NULL),
+(3664, 1475, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 16:38:45', NULL, NULL, NULL),
+(3665, 1475, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 16:40:57', NULL, NULL, NULL),
+(3666, 1475, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 16:59:56', NULL, NULL, NULL),
+(3667, 1475, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 16:59:57', NULL, NULL, NULL),
+(3668, 1475, 'pizza', 'Porchetta', 1, 270.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 17:03:33', NULL, NULL, NULL),
+(3669, 1475, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 17:03:33', NULL, NULL, NULL),
+(3670, 1475, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 16:40:57', NULL, NULL, NULL),
+(3671, 1476, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:35:48', '2025-07-20 16:39:53', NULL, NULL, NULL),
+(3672, 1476, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:35:48', '2025-07-20 16:39:53', NULL, NULL, NULL),
+(3673, 1476, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 17:35:48', '2025-07-20 16:45:50', NULL, NULL, NULL),
+(3674, 1477, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 17:35:35', '2025-07-20 16:43:32', NULL, NULL, NULL),
+(3675, 1477, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'card', '2025-07-20 17:35:35', '2025-07-20 16:43:42', NULL, NULL, NULL),
+(3676, 1477, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-20 17:35:35', '2025-07-20 17:06:37', NULL, NULL, NULL),
+(3677, 1477, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'card', '2025-07-20 17:35:35', '2025-07-20 16:41:42', NULL, NULL, NULL),
+(3678, 1477, 'spritz', 'Crodino', 1, 95.00, '', 'paid', 'card', '2025-07-20 17:35:35', '2025-07-20 16:43:30', NULL, NULL, NULL),
+(3679, 1477, 'spritz', 'Crodino', 1, 95.00, '', 'paid', 'card', '2025-07-20 17:35:35', '2025-07-20 16:43:30', NULL, NULL, NULL),
+(3680, 1478, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-20 17:24:58', '2025-07-20 16:44:46', NULL, NULL, NULL),
+(3681, 1479, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:38:32', '2025-07-20 16:48:51', NULL, NULL, NULL),
+(3682, 1479, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:38:32', '2025-07-20 16:48:51', NULL, NULL, NULL),
+(3683, 1479, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:36:32', '2025-07-20 16:48:50', NULL, NULL, NULL),
+(3684, 1479, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:38:20', '2025-07-20 16:48:51', NULL, NULL, NULL),
+(3685, 1479, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-20 17:36:32', '2025-07-20 16:48:48', NULL, NULL, NULL),
+(3686, 1479, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-20 17:38:20', '2025-07-20 16:48:48', NULL, NULL, NULL),
+(3687, 1479, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 17:38:32', '2025-07-20 17:11:02', NULL, NULL, NULL),
+(3688, 1479, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 17:38:33', '2025-07-20 17:11:03', NULL, NULL, NULL),
+(3689, 1479, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-20 17:36:32', '2025-07-20 17:12:56', NULL, NULL, NULL),
+(3690, 1479, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-20 17:38:20', '2025-07-20 17:12:57', NULL, NULL, NULL),
+(3691, 1480, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 19:19:27', '2025-07-20 16:50:05', NULL, NULL, NULL),
+(3692, 1481, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 17:17:50', NULL, NULL, NULL),
+(3693, 1481, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-20 18:40:07', '2025-07-20 17:17:52', NULL, NULL, NULL),
+(3694, 1481, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 16:51:49', NULL, NULL, NULL),
+(3695, 1481, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 16:51:50', NULL, NULL, NULL),
+(3696, 1481, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:40:07', '2025-07-20 16:51:51', NULL, NULL, NULL),
+(3697, 1481, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:40:07', '2025-07-20 16:51:52', NULL, NULL, NULL),
+(3698, 1481, 'pasta', 'Pasta spaghetti con pesto e stracciarella', 1, 210.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 16:52:52', NULL, NULL, NULL),
+(3699, 1482, 'vino', 'Víno Frizzante bílé', 1, 220.00, '', 'paid', 'cash', '2025-07-20 17:30:43', '2025-07-20 16:53:45', NULL, NULL, NULL),
+(3700, 1483, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 19:20:26', '2025-07-20 16:50:05', NULL, NULL, NULL),
+(3701, 1484, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 17:53:20', '2025-07-20 16:58:38', NULL, NULL, NULL),
+(3702, 1484, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 17:53:20', '2025-07-20 16:58:38', NULL, NULL, NULL),
+(3703, 1484, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-20 17:53:20', '2025-07-20 16:56:36', NULL, NULL, NULL),
+(3704, 1484, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'card', '2025-07-20 17:53:20', '2025-07-20 16:56:32', NULL, NULL, NULL),
+(3705, 1484, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 17:53:20', '2025-07-20 16:58:32', NULL, NULL, NULL),
+(3706, 1484, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 17:53:20', '2025-07-20 16:58:34', NULL, NULL, NULL),
+(3707, 1484, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 17:53:20', '2025-07-20 16:58:37', NULL, NULL, NULL),
+(3708, 1484, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'card', '2025-07-20 17:53:20', '2025-07-20 16:56:33', NULL, NULL, NULL),
+(3709, 1484, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'card', '2025-07-20 17:53:20', '2025-07-20 17:22:39', NULL, NULL, NULL),
+(3710, 1484, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'card', '2025-07-20 17:53:20', '2025-07-20 17:23:54', NULL, NULL, NULL),
+(3711, 1484, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'card', '2025-07-20 17:53:20', '2025-07-20 16:57:40', NULL, NULL, NULL),
+(3712, 1484, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-20 17:53:20', '2025-07-20 17:22:40', NULL, NULL, NULL),
+(3713, 1484, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'card', '2025-07-20 17:53:20', '2025-07-20 16:57:40', NULL, NULL, NULL),
+(3714, 1485, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-20 17:19:19', '2025-07-20 16:59:29', NULL, NULL, NULL),
+(3715, 1486, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:14:40', '2025-07-20 17:01:12', NULL, NULL, NULL),
+(3716, 1486, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:14:40', '2025-07-20 17:01:12', NULL, NULL, NULL),
+(3717, 1486, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'card', '2025-07-20 18:14:40', '2025-07-20 17:01:12', NULL, NULL, NULL),
+(3718, 1487, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-20 19:04:54', '2025-07-20 17:29:01', NULL, NULL, NULL),
+(3719, 1487, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 19:04:26', '2025-07-20 17:04:39', NULL, NULL, NULL),
+(3720, 1487, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 19:04:26', '2025-07-20 17:04:39', NULL, NULL, NULL),
+(3721, 1487, 'koktejl', 'Red Velvet gin Garage 22 a tonic', 1, 170.00, '', 'paid', 'cash', '2025-07-20 19:04:26', '2025-07-20 17:04:38', NULL, NULL, NULL),
+(3722, 1487, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-20 19:04:26', '2025-07-20 17:29:02', NULL, NULL, NULL),
+(3723, 1487, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-20 19:04:26', '2025-07-20 17:29:02', NULL, NULL, NULL),
+(3726, 1489, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 17:07:47', NULL, NULL, NULL),
+(3727, 1489, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 17:07:49', NULL, NULL, NULL),
+(3728, 1490, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'cash', '2025-07-20 18:00:25', '2025-07-20 17:10:15', NULL, NULL, NULL),
+(3729, 1490, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-20 18:00:25', '2025-07-20 17:07:51', NULL, NULL, NULL),
+(3730, 1490, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:00:25', '2025-07-20 17:07:51', NULL, NULL, NULL),
+(3731, 1490, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-20 18:00:25', '2025-07-20 17:37:40', NULL, NULL, NULL),
+(3732, 1490, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-20 18:00:25', '2025-07-20 17:07:50', NULL, NULL, NULL),
+(3733, 1491, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'card', '2025-07-20 18:14:40', '2025-07-20 17:15:59', NULL, NULL, NULL),
+(3734, 1491, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'card', '2025-07-20 18:14:40', '2025-07-20 17:43:06', NULL, NULL, NULL),
+(3735, 1491, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'card', '2025-07-20 18:14:40', '2025-07-20 17:44:59', NULL, NULL, NULL),
+(3736, 1492, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 19:20:26', '2025-07-20 17:09:48', NULL, NULL, NULL),
+(3737, 1492, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 19:20:26', '2025-07-20 17:09:50', NULL, NULL, NULL),
+(3738, 1493, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 17:09:51', NULL, NULL, NULL),
+(3739, 1494, 'negroni', 'Negroni Tartufo', 1, 180.00, '', 'paid', 'card', '2025-07-20 17:19:19', '2025-07-20 17:12:05', NULL, NULL, NULL),
+(3740, 1494, 'negroni', 'Negroni Tartufo', 1, 180.00, '', 'paid', 'card', '2025-07-20 17:19:19', '2025-07-20 17:12:05', NULL, NULL, NULL),
+(3741, 1495, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 17:35:48', '2025-07-20 17:17:05', NULL, NULL, NULL),
+(3742, 1496, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-20 18:13:35', '2025-07-20 17:14:39', NULL, NULL, NULL),
+(3743, 1496, 'vino', 'Víno Hibernal', 1, 240.00, '', 'paid', 'cash', '2025-07-20 18:13:35', '2025-07-20 17:14:38', NULL, NULL, NULL),
+(3744, 1496, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 18:13:35', '2025-07-20 17:43:07', NULL, NULL, NULL),
+(3745, 1496, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 18:13:35', '2025-07-20 17:46:18', NULL, NULL, NULL),
+(3746, 1497, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'card', '2025-07-20 17:35:35', '2025-07-20 17:27:38', NULL, NULL, NULL),
+(3747, 1497, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'card', '2025-07-20 17:35:35', '2025-07-20 17:18:07', NULL, NULL, NULL),
+(3748, 1498, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'cash', '2025-07-20 17:39:35', '2025-07-20 17:34:17', NULL, NULL, NULL),
+(3749, 1499, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'card', '2025-07-20 18:12:05', '2025-07-20 17:50:01', NULL, NULL, NULL),
+(3750, 1499, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:12:05', '2025-07-20 17:21:03', NULL, NULL, NULL),
+(3751, 1499, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:12:05', '2025-07-20 17:21:04', NULL, NULL, NULL),
+(3752, 1499, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:12:05', '2025-07-20 17:21:05', NULL, NULL, NULL),
+(3753, 1499, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'card', '2025-07-20 18:12:05', '2025-07-20 17:37:35', NULL, NULL, NULL),
+(3754, 1499, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'card', '2025-07-20 18:12:05', '2025-07-20 17:37:36', NULL, NULL, NULL),
+(3755, 1499, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-20 18:12:05', '2025-07-20 17:50:02', NULL, NULL, NULL),
+(3756, 1499, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:12:05', '2025-07-20 17:21:03', NULL, NULL, NULL),
+(3757, 1500, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 17:29:11', NULL, NULL, NULL),
+(3758, 1500, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 17:29:12', NULL, NULL, NULL),
+(3759, 1500, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 17:30:05', NULL, NULL, NULL),
+(3760, 1500, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 17:30:06', NULL, NULL, NULL),
+(3761, 1500, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 17:24:51', NULL, NULL, NULL),
+(3762, 1500, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 17:24:50', NULL, NULL, NULL),
+(3763, 1500, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 17:24:51', NULL, NULL, NULL),
+(3764, 1501, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-20 18:19:55', '2025-07-20 17:54:18', NULL, NULL, NULL),
+(3765, 1501, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'card', '2025-07-20 18:19:55', '2025-07-20 17:27:03', NULL, NULL, NULL),
+(3766, 1501, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'card', '2025-07-20 18:19:55', '2025-07-20 17:27:03', NULL, NULL, NULL),
+(3768, 1503, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'card', '2025-07-21 17:04:03', '2025-07-20 17:56:33', NULL, NULL, NULL),
+(3769, 1504, 'pizza', 'Porchetta', 1, 270.00, '', 'paid', 'card', '2025-07-20 19:05:54', '2025-07-20 18:01:34', NULL, NULL, NULL),
+(3770, 1504, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'card', '2025-07-20 19:05:54', '2025-07-20 18:01:35', NULL, NULL, NULL),
+(3771, 1504, 'vino', 'Víno Frizzante růžové', 1, 220.00, '', 'paid', 'card', '2025-07-20 19:05:54', '2025-07-20 17:30:59', NULL, NULL, NULL),
+(3772, 1504, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-20 19:05:54', '2025-07-20 17:31:00', NULL, NULL, NULL),
+(3773, 1505, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 19:05:29', '2025-07-20 17:33:48', NULL, NULL, NULL),
+(3774, 1505, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 19:04:26', '2025-07-20 17:33:49', NULL, NULL, NULL),
+(3775, 1505, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 19:04:54', '2025-07-20 17:33:49', NULL, NULL, NULL),
+(3776, 1505, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 19:04:54', '2025-07-20 17:33:50', NULL, NULL, NULL),
+(3777, 1506, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 19:20:26', '2025-07-20 17:35:41', NULL, NULL, NULL),
+(3778, 1506, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 19:22:10', '2025-07-20 17:35:41', NULL, NULL, NULL),
+(3779, 1506, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 19:22:10', '2025-07-20 17:35:42', NULL, NULL, NULL),
+(3780, 1507, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-21 17:04:03', '2025-07-20 17:39:49', NULL, NULL, NULL),
+(3781, 1508, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'card', '2025-07-20 18:12:05', '2025-07-20 17:36:56', NULL, NULL, NULL),
+(3782, 1509, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 17:39:45', NULL, NULL, NULL),
+(3783, 1509, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 17:39:47', NULL, NULL, NULL),
+(3784, 1509, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 17:39:48', NULL, NULL, NULL),
+(3785, 1510, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'card', '2025-07-21 17:04:03', '2025-07-20 18:04:43', NULL, NULL, NULL),
+(3786, 1511, 'pizza', 'Porchetta', 1, 270.00, '', 'paid', 'card', '2025-07-20 18:40:39', '2025-07-20 18:04:29', NULL, NULL, NULL),
+(3787, 1511, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-20 18:40:39', '2025-07-20 17:44:00', NULL, NULL, NULL),
+(3788, 1511, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-20 18:40:39', '2025-07-20 17:44:00', NULL, NULL, NULL),
+(3789, 1511, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'card', '2025-07-20 18:40:39', '2025-07-20 17:44:01', NULL, NULL, NULL),
+(3792, 1513, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-20 18:31:22', '2025-07-20 18:08:59', NULL, NULL, NULL),
+(3793, 1513, 'pizza', 'Salsiccia e pattatine', 1, 270.00, '', 'paid', 'card', '2025-07-20 18:31:22', '2025-07-20 18:08:59', NULL, NULL, NULL),
+(3794, 1513, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:31:22', '2025-07-20 18:00:29', NULL, NULL, NULL),
+(3795, 1513, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:31:22', '2025-07-20 18:00:29', NULL, NULL, NULL),
+(3796, 1514, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 17:55:21', NULL, NULL, NULL),
+(3797, 1514, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 17:55:22', NULL, NULL, NULL),
+(3798, 1515, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:43:43', '2025-07-20 18:00:30', NULL, NULL, NULL),
+(3799, 1516, 'nealko', 'Coca-Cola', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:14:40', '2025-07-20 17:53:08', NULL, NULL, NULL),
+(3800, 1517, 'pivo', 'Mazák 0,3l', 1, 40.00, '', 'paid', 'card', '2025-07-20 18:19:55', '2025-07-20 17:55:33', NULL, NULL, NULL),
+(3801, 1518, 'vino', 'Víno 1 dcl', 1, 50.00, '', 'paid', 'card', '2025-07-20 18:12:05', '2025-07-20 17:55:34', NULL, NULL, NULL),
+(3803, 1520, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-20 18:10:49', '2025-07-20 18:10:31', NULL, NULL, NULL),
+(3804, 1521, 'pizza', 'Porchetta', 1, 270.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 18:16:52', NULL, NULL, NULL),
+(3805, 1521, 'pizza', 'Diavola', 1, 250.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 18:16:53', NULL, NULL, NULL),
+(3806, 1521, 'pizza', 'Per bambini', 1, 250.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 18:16:58', NULL, NULL, NULL),
+(3807, 1521, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 18:09:14', NULL, NULL, NULL),
+(3808, 1521, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-20 18:18:54', '2025-07-20 18:09:14', NULL, NULL, NULL),
+(3809, 1522, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'card', '2025-07-20 18:14:40', '2025-07-20 18:11:54', NULL, NULL, NULL),
+(3810, 1523, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-20 19:05:54', '2025-07-20 18:21:19', NULL, NULL, NULL),
+(3811, 1524, 'vino', 'Víno Hibernal', 1, 240.00, '', 'paid', 'card', '2025-07-21 17:04:03', '2025-07-20 18:12:46', NULL, NULL, NULL),
+(3812, 1524, 'vino', 'Víno Hibernal', 1, 240.00, '', 'paid', 'card', '2025-07-21 17:04:03', '2025-07-20 18:12:47', NULL, NULL, NULL),
+(3813, 1524, 'vino', 'Víno Hibernal', 1, 240.00, '', 'paid', 'card', '2025-07-21 17:04:03', '2025-07-20 18:12:48', NULL, NULL, NULL),
+(3814, 1525, 'dezert', 'Tiramisu', 1, 95.00, '', 'paid', 'card', '2025-07-20 18:19:55', '2025-07-20 18:17:42', NULL, NULL, NULL),
+(3815, 1526, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 19:22:10', '2025-07-20 18:25:09', NULL, NULL, NULL),
+(3816, 1526, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-20 19:22:10', '2025-07-20 18:25:10', NULL, NULL, NULL),
+(3817, 1527, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 18:28:03', NULL, NULL, NULL),
+(3818, 1527, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 18:40:08', '2025-07-20 18:28:03', NULL, NULL, NULL),
+(3819, 1528, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 19:04:54', '2025-07-20 18:30:53', NULL, NULL, NULL),
+(3820, 1529, 'vino', 'Víno Frizzante bílé', 1, 220.00, '', 'paid', 'card', '2025-07-20 19:05:54', '2025-07-20 18:30:53', NULL, NULL, NULL),
+(3821, 1530, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'cash', '2025-07-20 19:08:44', '2025-07-20 18:40:01', NULL, NULL, NULL),
+(3822, 1530, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'cash', '2025-07-20 19:08:44', '2025-07-20 18:38:14', NULL, NULL, NULL),
+(3823, 1531, 'pizza', 'Margherita', 1, 230.00, '', 'paid', 'card', '2025-07-20 19:23:26', '2025-07-20 18:46:26', NULL, NULL, NULL),
+(3824, 1531, 'pizza', 'Prosciutto cotto', 1, 250.00, '', 'paid', 'card', '2025-07-20 19:23:26', '2025-07-20 18:45:17', NULL, NULL, NULL),
+(3825, 1531, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-20 19:23:26', '2025-07-20 18:48:29', NULL, NULL, NULL),
+(3826, 1531, 'vino', 'Víno Ryzlink vlašský', 1, 220.00, '', 'paid', 'card', '2025-07-20 19:23:26', '2025-07-20 18:48:30', NULL, NULL, NULL),
+(3827, 1532, 'negroni', 'Negroni Classico', 1, 150.00, '', 'paid', 'card', '2025-07-20 19:21:28', '2025-07-20 18:52:31', NULL, NULL, NULL),
+(3828, 1533, 'pivo', 'Kyseláč 0,3l', 1, 60.00, '', 'paid', 'card', '2025-07-20 19:22:10', '2025-07-20 18:52:31', NULL, NULL, NULL),
+(3829, 1534, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-20 19:18:30', '2025-07-20 18:51:15', NULL, NULL, NULL),
+(3830, 1535, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-20 19:08:44', '2025-07-20 18:56:46', NULL, NULL, NULL),
+(3886, 1561, 'predkrm', 'Burrata e crudo predkrm', 1, 220.00, '', 'paid', 'card', '2025-07-23 16:39:51', '2025-07-23 15:19:34', NULL, NULL, NULL),
+(3887, 1561, 'predkrm', 'Burrata e crudo predkrm', 1, 220.00, '', 'paid', 'card', '2025-07-23 16:39:51', '2025-07-23 15:19:36', NULL, NULL, NULL),
+(3888, 1561, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-23 16:39:51', '2025-07-23 15:17:08', NULL, NULL, NULL),
+(3889, 1561, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'card', '2025-07-23 16:39:51', '2025-07-23 15:17:09', NULL, NULL, NULL),
+(3890, 1561, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'card', '2025-07-23 16:39:51', '2025-07-23 15:17:10', NULL, NULL, NULL),
+(3891, 1561, 'predkrm', 'Tagliere di salumi', 1, 220.00, '', 'paid', 'card', '2025-07-23 16:39:51', '2025-07-23 15:26:27', NULL, NULL, NULL),
+(3892, 1562, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-23 16:19:48', '2025-07-23 15:48:14', NULL, NULL, NULL),
+(3893, 1562, 'spritz', 'Spritz Sarti', 1, 130.00, '', 'paid', 'cash', '2025-07-23 16:19:48', '2025-07-23 15:47:00', NULL, NULL, NULL),
+(3894, 1562, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'cancelled', 'cash', NULL, '2025-07-23 15:47:01', NULL, NULL, NULL),
+(3895, 1563, 'spritz', 'Crodino', 1, 95.00, '', 'paid', 'cash', '2025-07-23 16:19:48', '2025-07-23 15:49:51', NULL, NULL, NULL),
+(3896, 1564, 'predkrm', 'Burrata e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-23 16:22:11', '2025-07-23 16:21:13', NULL, NULL, NULL),
+(3897, 1564, 'predkrm', 'Burrata e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-23 16:22:11', '2025-07-23 16:21:15', NULL, NULL, NULL),
+(3898, 1564, 'predkrm', 'Burrata e crudo predkrm', 1, 220.00, '', 'paid', 'cash', '2025-07-23 16:22:11', '2025-07-23 16:21:16', NULL, NULL, NULL),
+(3899, 1564, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'cash', '2025-07-23 16:22:11', '2025-07-23 16:21:17', NULL, NULL, NULL),
+(3900, 1565, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'card', '2025-07-23 16:23:10', '2025-07-23 15:59:28', NULL, NULL, NULL),
+(3901, 1566, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'card', '2025-07-23 16:59:38', '2025-07-23 16:21:08', NULL, NULL, NULL),
+(3902, 1566, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'card', '2025-07-23 16:59:38', '2025-07-23 16:21:09', NULL, NULL, NULL),
+(3903, 1567, 'predkrm', 'Tagliere di salumi', 1, 220.00, '', 'paid', 'card', '2025-07-23 17:46:53', '2025-07-23 16:46:45', NULL, NULL, NULL),
+(3904, 1567, 'predkrm', 'Tagliere di salumi', 1, 220.00, '', 'paid', 'card', '2025-07-23 17:47:36', '2025-07-23 16:46:46', NULL, NULL, NULL),
+(3905, 1567, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'card', '2025-07-23 17:47:36', '2025-07-23 16:31:02', NULL, NULL, NULL),
+(3906, 1567, 'predkrm', 'Burrata e crudo predkrm', 1, 220.00, '', 'paid', 'card', '2025-07-23 17:46:53', '2025-07-23 16:46:48', NULL, NULL, NULL),
+(3907, 1567, 'predkrm', 'Burrata e crudo predkrm', 1, 220.00, '', 'paid', 'card', '2025-07-23 17:47:36', '2025-07-23 16:46:49', NULL, NULL, NULL),
+(3908, 1567, 'predkrm', 'Burrata e crudo predkrm', 1, 220.00, '', 'paid', 'card', '2025-07-23 17:57:53', '2025-07-23 16:46:51', NULL, NULL, NULL);
+INSERT INTO `order_items` (`id`, `order_id`, `item_type`, `item_name`, `quantity`, `unit_price`, `note`, `status`, `payment_method`, `paid_at`, `prepared_at`, `delivered_at`, `problem_note`, `parent_id`) VALUES
+(3909, 1567, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-23 17:46:53', '2025-07-23 16:31:04', NULL, NULL, NULL),
+(3910, 1567, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-23 17:47:36', '2025-07-23 16:31:25', NULL, NULL, NULL),
+(3911, 1567, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-23 17:57:53', '2025-07-23 16:32:21', NULL, NULL, NULL),
+(3912, 1567, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'card', '2025-07-23 17:46:53', '2025-07-23 16:30:31', NULL, NULL, NULL),
+(3913, 1567, 'pivo', 'Kyseláč 0,5l', 1, 70.00, '', 'paid', 'card', '2025-07-23 17:46:53', '2025-07-23 16:34:45', NULL, NULL, NULL),
+(3914, 1567, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'card', '2025-07-23 17:57:53', '2025-07-23 16:48:28', NULL, NULL, NULL),
+(3915, 1567, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'card', '2025-07-23 17:57:53', '2025-07-23 16:44:47', NULL, NULL, NULL),
+(3916, 1567, 'nealko', 'Voda neperlivá', 1, 40.00, '', 'paid', 'card', '2025-07-23 17:47:36', '2025-07-23 16:30:36', NULL, NULL, NULL),
+(3917, 1568, 'vino', 'Víno Ryzlink vlašský', 1, 220.00, '', 'paid', 'card', '2025-07-23 17:25:14', '2025-07-23 16:35:53', NULL, NULL, NULL),
+(3918, 1568, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-23 17:25:14', '2025-07-23 16:36:46', NULL, NULL, NULL),
+(3919, 1568, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-23 17:25:14', '2025-07-23 16:37:38', NULL, NULL, NULL),
+(3920, 1568, 'predkrm', 'Burrata e crudo predkrm', 1, 220.00, '', 'paid', 'card', '2025-07-23 17:25:14', '2025-07-23 16:53:29', NULL, NULL, NULL),
+(3921, 1568, 'predkrm', 'Bruschetta pomodoro', 1, 125.00, '', 'paid', 'card', '2025-07-23 17:25:14', '2025-07-23 16:53:30', NULL, NULL, NULL),
+(3922, 1569, 'predkrm', 'Tagliere di salumi', 1, 220.00, '', 'paid', 'cash', '2025-07-23 19:17:02', '2025-07-23 17:13:26', NULL, NULL, NULL),
+(3923, 1569, 'vino', 'Víno Frizzante růžové', 1, 220.00, '', 'paid', 'cash', '2025-07-23 19:17:02', '2025-07-23 16:39:32', NULL, NULL, NULL),
+(3924, 1570, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-23 16:59:38', '2025-07-23 16:47:05', NULL, NULL, NULL),
+(3925, 1570, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-23 16:59:38', '2025-07-23 16:47:05', NULL, NULL, NULL),
+(3926, 1571, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-23 18:05:46', '2025-07-23 16:54:02', NULL, NULL, NULL),
+(3927, 1571, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-23 18:05:46', '2025-07-23 16:54:14', NULL, NULL, NULL),
+(3928, 1571, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-23 18:06:49', '2025-07-23 16:54:48', NULL, NULL, NULL),
+(3929, 1571, 'predkrm', 'Focaccia e olio', 1, 75.00, '', 'paid', 'cash', '2025-07-23 18:07:16', '2025-07-23 16:58:04', NULL, NULL, NULL),
+(3930, 1572, 'predkrm', 'Burrata e crudo predkrm', 1, 220.00, '', 'paid', 'card', '2025-07-23 18:46:55', '2025-07-23 17:13:28', NULL, NULL, NULL),
+(3931, 1572, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-23 18:46:55', '2025-07-23 16:56:29', NULL, NULL, NULL),
+(3932, 1573, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-23 17:58:10', '2025-07-23 17:12:28', NULL, NULL, NULL),
+(3933, 1573, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-23 17:58:10', '2025-07-23 17:12:29', NULL, NULL, NULL),
+(3934, 1573, 'predkrm', 'Burrata e crudo predkrm', 1, 220.00, '', 'paid', 'card', '2025-07-23 17:58:10', '2025-07-23 17:20:00', NULL, NULL, NULL),
+(3935, 1573, 'predkrm', 'Burrata e crudo predkrm', 1, 220.00, '', 'paid', 'card', '2025-07-23 17:58:10', '2025-07-23 17:20:01', NULL, NULL, NULL),
+(3936, 1573, 'spritz', 'Spritz Hugo', 1, 130.00, '', 'paid', 'card', '2025-07-23 17:58:10', '2025-07-23 17:10:35', NULL, NULL, NULL),
+(3937, 1573, 'predkrm', 'Mozzarella e pomodorini', 1, 145.00, '', 'paid', 'card', '2025-07-23 17:58:10', '2025-07-23 17:22:10', NULL, NULL, NULL),
+(3938, 1573, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-23 17:58:10', '2025-07-23 17:10:36', NULL, NULL, NULL),
+(3939, 1573, 'predkrm', 'Tagliere di salumi', 1, 220.00, '', 'paid', 'card', '2025-07-23 17:58:10', '2025-07-23 17:19:59', NULL, NULL, NULL),
+(3940, 1574, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-23 18:46:55', '2025-07-23 17:16:06', NULL, NULL, NULL),
+(3941, 1575, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'card', '2025-07-23 18:31:40', '2025-07-23 17:35:17', NULL, NULL, NULL),
+(3942, 1575, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'card', '2025-07-23 18:31:40', '2025-07-23 17:35:18', NULL, NULL, NULL),
+(3943, 1575, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'card', '2025-07-23 18:31:40', '2025-07-23 17:26:16', NULL, NULL, NULL),
+(3944, 1575, 'koktejl', 'Martini Fiero & tonic', 1, 130.00, '', 'paid', 'card', '2025-07-23 18:31:40', '2025-07-23 17:26:17', NULL, NULL, NULL),
+(3945, 1576, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-23 18:06:49', '2025-07-23 17:35:32', NULL, NULL, NULL),
+(3946, 1576, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-23 18:07:16', '2025-07-23 17:35:32', NULL, NULL, NULL),
+(3947, 1576, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-23 18:07:16', '2025-07-23 17:35:33', NULL, NULL, NULL),
+(3948, 1577, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'card', '2025-07-23 18:46:55', '2025-07-23 17:35:19', NULL, NULL, NULL),
+(3949, 1578, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-23 18:46:55', '2025-07-23 17:39:45', NULL, NULL, NULL),
+(3950, 1578, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-23 18:47:25', '2025-07-23 17:39:46', NULL, NULL, NULL),
+(3951, 1579, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'card', '2025-07-23 17:58:10', '2025-07-23 17:39:36', NULL, NULL, NULL),
+(3952, 1579, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'card', '2025-07-23 17:58:10', '2025-07-23 17:39:37', NULL, NULL, NULL),
+(3953, 1580, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-23 18:47:25', '2025-07-23 17:49:34', NULL, NULL, NULL),
+(3954, 1581, 'dezert', 'Canollo', 1, 95.00, '', 'paid', 'cash', '2025-07-23 18:07:16', '2025-07-23 17:54:57', NULL, NULL, NULL),
+(3955, 1582, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-23 18:47:08', '2025-07-23 17:56:28', NULL, NULL, NULL),
+(3956, 1583, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-23 18:47:25', '2025-07-23 18:10:43', NULL, NULL, NULL),
+(3957, 1583, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-23 18:49:21', '2025-07-23 18:10:44', NULL, NULL, NULL),
+(3958, 1583, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-23 18:49:21', '2025-07-23 18:10:45', NULL, NULL, NULL),
+(3959, 1584, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'card', '2025-07-23 19:11:53', '2025-07-23 18:16:44', NULL, NULL, NULL),
+(3960, 1584, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'card', '2025-07-23 19:11:53', '2025-07-23 18:16:45', NULL, NULL, NULL),
+(3961, 1584, 'nealko', 'Voda perlivá', 1, 40.00, '', 'paid', 'card', '2025-07-23 19:11:53', '2025-07-23 18:16:48', NULL, NULL, NULL),
+(3962, 1584, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'card', '2025-07-23 19:11:53', '2025-07-23 18:16:46', NULL, NULL, NULL),
+(3963, 1585, 'nealko', 'Domácí limonáda', 1, 50.00, '', 'paid', 'cash', '2025-07-23 18:47:08', '2025-07-23 18:28:29', NULL, NULL, NULL),
+(3964, 1586, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'cash', '2025-07-23 18:49:21', '2025-07-23 18:35:14', NULL, NULL, NULL),
+(3965, 1586, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-23 18:49:26', '2025-07-23 18:35:15', NULL, NULL, NULL),
+(3966, 1587, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'cash', '2025-07-23 19:17:02', '2025-07-23 18:35:15', NULL, NULL, NULL),
+(3967, 1587, 'vino', 'Víno 2 dcl', 1, 100.00, '', 'paid', 'cash', '2025-07-23 19:17:02', '2025-07-23 18:35:16', NULL, NULL, NULL),
+(3968, 1588, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-23 18:49:26', '2025-07-23 18:37:08', NULL, NULL, NULL),
+(3969, 1589, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'cancelled', 'cash', NULL, NULL, NULL, NULL, NULL),
+(3970, 1589, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-23 20:07:53', '2025-07-23 19:50:53', NULL, NULL, NULL),
+(3971, 1590, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-23 20:09:31', '2025-07-23 19:50:52', NULL, NULL, NULL),
+(3972, 1590, 'spritz', 'Spritz Aperol', 1, 130.00, '', 'paid', 'cash', '2025-07-23 20:09:34', '2025-07-23 19:50:53', NULL, NULL, NULL),
+(3973, 1591, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-23 20:09:23', '2025-07-23 19:50:50', NULL, NULL, NULL),
+(3974, 1591, 'koktejl', 'Blue gin Garage22 a tonic', 1, 150.00, '', 'paid', 'cash', '2025-07-23 20:09:28', '2025-07-23 19:50:51', NULL, NULL, NULL),
+(3975, 1592, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-23 20:18:37', '2025-07-23 19:50:55', NULL, NULL, NULL),
+(3976, 1592, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'cash', '2025-07-23 20:18:37', '2025-07-23 19:50:55', NULL, NULL, NULL),
+(3977, 1592, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'card', '2025-07-23 20:19:29', '2025-07-23 19:50:56', NULL, NULL, NULL),
+(3978, 1593, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'card', '2025-07-23 20:22:03', '2025-07-23 20:09:40', NULL, NULL, NULL),
+(3979, 1593, 'spritz', 'Spritz Limoncello', 1, 130.00, '', 'paid', 'card', '2025-07-23 20:22:03', '2025-07-23 20:09:40', NULL, NULL, NULL),
+(3980, 1593, 'pivo', 'Mazák 0,5l', 1, 50.00, '', 'paid', 'card', '2025-07-23 20:19:29', '2025-07-23 20:09:40', NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_requests`
+--
+
+CREATE TABLE `order_requests` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `product` varchar(200) NOT NULL,
+  `quantity` varchar(100) NOT NULL,
+  `note` text DEFAULT NULL,
+  `priority` enum('low','normal','urgent') DEFAULT 'normal',
+  `status` enum('pending','ordered','cancelled') DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `ordered_at` timestamp NULL DEFAULT NULL,
+  `ordered_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_requests`
+--
+
+INSERT INTO `order_requests` (`id`, `user_id`, `category_id`, `product`, `quantity`, `note`, `priority`, `status`, `created_at`, `ordered_at`, `ordered_by`) VALUES
+(8, 1, 1, 'Sarti', '6x', NULL, 'normal', 'ordered', '2025-07-22 14:05:07', '2025-07-22 14:05:08', 1),
+(9, 1, 1, 'Fiero', '6x', NULL, 'normal', 'ordered', '2025-07-22 14:05:20', '2025-07-22 14:05:21', 1),
+(10, 1, 1, 'Vermut', '2x', NULL, 'normal', 'ordered', '2025-07-22 14:05:32', '2025-07-22 14:05:33', 1),
+(11, 1, 1, 'Crodino cervene ', '3x baleni', NULL, 'normal', 'ordered', '2025-07-22 14:05:54', '2025-07-22 14:05:56', 1),
+(12, 1, 1, 'Crodino zlute', '3x baleni', NULL, 'normal', 'ordered', '2025-07-22 14:06:12', '2025-07-22 14:06:13', 1),
+(13, 1, 5, 'JBL CHARGE 6', '3x', NULL, 'normal', 'pending', '2025-07-23 14:11:06', NULL, NULL),
+(14, 1, 5, 'BERKEL PRO LINE x25-30', '1x', NULL, 'normal', 'pending', '2025-07-23 14:11:21', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2516,6 +4350,31 @@ CREATE TABLE `order_tables` (
   `order_id` int(11) NOT NULL,
   `table_number` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_users`
+--
+
+CREATE TABLE `order_users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password_hash` varchar(255) NOT NULL,
+  `full_name` varchar(100) DEFAULT NULL,
+  `is_admin` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_users`
+--
+
+INSERT INTO `order_users` (`id`, `username`, `password_hash`, `full_name`, `is_admin`, `created_at`) VALUES
+(1, 'centycz', '$2y$10$96MJj0K/uccL5FW0v032yuokhKBdR/BAWJzQ2Y2fGCKLpIyMXp2CG', 'Mirek', 1, '2025-07-22 13:25:44'),
+(4, 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrátor', 1, '2025-07-23 08:05:07'),
+(5, 'employee1', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Jan Novák', 0, '2025-07-23 08:05:07'),
+(6, 'employee2', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Marie Svobodová', 0, '2025-07-23 08:05:07');
 
 -- --------------------------------------------------------
 
@@ -2624,6 +4483,58 @@ INSERT INTO `payments` (`id`, `table_session_id`, `amount`, `paid_at`, `payment_
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `payroll_entries`
+--
+
+CREATE TABLE `payroll_entries` (
+  `id` int(11) NOT NULL,
+  `period_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `hours_worked` decimal(6,2) DEFAULT 0.00,
+  `overtime_hours` decimal(6,2) DEFAULT 0.00,
+  `base_hourly_rate` decimal(8,2) DEFAULT 150.00,
+  `overtime_rate` decimal(8,2) DEFAULT 225.00,
+  `bonus` decimal(10,2) DEFAULT 0.00,
+  `deductions` decimal(10,2) DEFAULT 0.00,
+  `gross_pay` decimal(10,2) DEFAULT 0.00,
+  `tax_deduction` decimal(10,2) DEFAULT 0.00,
+  `insurance_deduction` decimal(10,2) DEFAULT 0.00,
+  `net_pay` decimal(10,2) DEFAULT 0.00,
+  `notes` text DEFAULT NULL,
+  `calculated_at` timestamp NULL DEFAULT NULL,
+  `paid_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payroll_periods`
+--
+
+CREATE TABLE `payroll_periods` (
+  `id` int(11) NOT NULL,
+  `period_name` varchar(100) NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `status` enum('open','calculated','paid','closed') DEFAULT 'open',
+  `created_by` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `calculated_at` timestamp NULL DEFAULT NULL,
+  `paid_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `payroll_periods`
+--
+
+INSERT INTO `payroll_periods` (`id`, `period_name`, `start_date`, `end_date`, `status`, `created_by`, `created_at`, `calculated_at`, `paid_at`) VALUES
+(1, 'Červenec 2025', '2025-07-01', '2025-07-31', 'calculated', 1, '2025-07-23 08:04:23', '2025-07-23 14:34:00', NULL),
+(2, 'Červen 2025', '2025-06-01', '2025-06-30', 'calculated', 1, '2025-07-23 08:04:23', '2025-07-23 08:39:02', NULL),
+(3, 'Srpen 2025', '2025-08-01', '2025-08-31', 'open', 1, '2025-07-23 08:04:23', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pickup_items`
 --
 
@@ -2666,26 +4577,56 @@ CREATE TABLE `pizza_types` (
 --
 
 INSERT INTO `pizza_types` (`id`, `type`, `name`, `price`, `description`, `is_active`, `created_at`, `updated_at`, `category`, `display_order`, `cost_price`) VALUES
-(1, 'margherita', 'Margherita', 230.00, 'italská bio rajčata, mozzarella fior di latte, bazalka, \nolivový olej extra vergine', 1, '2025-06-30 14:13:50', '2025-07-07 14:04:25', 'pizza', 2, 0.00),
-(2, 'diavola', 'Diavola', 250.00, 'italská bio rajčata, pikantní salám Ventricina, \nmozzarella fior di latte, bazalka', 0, '2025-06-30 14:13:50', '2025-07-11 12:04:11', 'pizza', 2, 0.00),
-(3, 'prosciutto', 'Prosciutto cotto', 250.00, 'italská bio rajčata, mozzarella fior di latte, \nitalská dušená šunka', 1, '2025-06-30 14:13:50', '2025-07-07 14:04:25', 'pizza', 2, 0.00),
-(6, 'bambiny', 'Per bambini', 250.00, 'italská bio rajčata, mozzarella fior di latte, \nitalská dušená šunka, kukuřice', 1, '2025-07-05 11:19:13', '2025-07-07 14:04:25', 'pizza', 2, 0.00),
-(7, 'salame', 'Salame', 250.00, 'italská bio rajčata, salám Milano, mozzarella fior di latte, \nbazalka, červená cibule', 1, '2025-07-05 11:19:28', '2025-07-07 14:04:25', 'pizza', 2, 0.00),
-(8, 'capocollo', 'Capocollo', 270.00, 'mozzarela fior di latte, cherry rajčata, \nitalská sušená krkovice, Grana Padano', 1, '2025-07-05 11:19:42', '2025-07-07 14:04:25', 'pizza', 2, 0.00),
+(1, 'margherita', 'Margherita', 230.00, 'italská bio rajčata, mozzarella fior di latte, bazalka, \nolivový olej extra vergine', 1, '2025-06-30 14:13:50', '2025-07-20 10:43:40', 'pizza', 2, 0.00),
+(2, 'diavola', 'Diavola', 250.00, 'italská bio rajčata, pikantní salám Ventricina, \nmozzarella fior di latte, bazalka', 1, '2025-06-30 14:13:50', '2025-07-20 10:43:31', 'pizza', 2, 0.00),
+(3, 'prosciutto', 'Prosciutto cotto', 250.00, 'italská bio rajčata, mozzarella fior di latte, \nitalská dušená šunka', 1, '2025-06-30 14:13:50', '2025-07-20 10:43:46', 'pizza', 2, 0.00),
+(6, 'bambiny', 'Per bambini', 250.00, 'italská bio rajčata, mozzarella fior di latte, \nitalská dušená šunka, kukuřice', 1, '2025-07-05 11:19:13', '2025-07-20 10:43:43', 'pizza', 2, 0.00),
+(7, 'salame', 'Salame', 250.00, 'italská bio rajčata, salám Milano, mozzarella fior di latte, \nbazalka, červená cibule', 0, '2025-07-05 11:19:28', '2025-07-16 14:48:01', 'pizza', 2, 0.00),
+(8, 'capocollo', 'Capocollo', 270.00, 'mozzarela fior di latte, cherry rajčata, \nitalská sušená krkovice, Grana Padano', 0, '2025-07-05 11:19:42', '2025-07-16 14:47:35', 'pizza', 2, 0.00),
 (9, 'foccacia', 'Focaccia e olio', 75.00, 'domácí rozmarýnová focaccia, olivový olej extra vergine', 1, '2025-07-05 11:19:58', '2025-07-14 11:40:41', 'predkrm', 1, 0.00),
-(10, 'salamtalir', 'Tagliere di salumi', 220.00, 'Italské uzeniny, domácí rozmarýnová foccacia, olivový olej \nextra vergine', 1, '2025-07-05 11:20:13', '2025-07-07 14:04:25', 'predkrm', 1, 0.00),
+(10, 'salamtalir', 'Tagliere di salumi', 220.00, 'Italské uzeniny, domácí rozmarýnová foccacia, olivový olej \nextra vergine', 1, '2025-07-05 11:20:13', '2025-07-19 14:56:44', 'predkrm', 1, 0.00),
 (11, 'pomodorspag', 'Spaghetti pomodoro', 170.00, 'omáčka z rajčat, bazalky a oregána, Grana Padano', 0, '2025-07-05 11:20:28', '2025-07-11 12:09:52', 'pasta', 3, 0.00),
 (12, 'gnocchiquatro', 'Gnocchi quattro formaggi', 170.00, 'omáčka ze čtyř italských sýrů', 0, '2025-07-05 11:20:43', '2025-07-11 12:09:54', 'pasta', 3, 0.00),
-(15, 'baba', 'Baba a rum', 90.00, 'rum', 0, '2025-07-07 14:15:11', '2025-07-11 11:58:02', 'dezert', 4, 30.00),
-(16, 'tiramisu', 'Tiramisu', 95.00, '', 1, '2025-07-11 11:58:20', '2025-07-11 11:58:20', 'dezert', NULL, 0.00),
-(17, 'bolognese', 'Ragú alla Bolognese', 210.00, 'Tagliatelle, hovezi ragu, zelenina, rajcata, garana padano', 1, '2025-07-11 11:59:16', '2025-07-11 11:59:16', 'pasta', NULL, 0.00),
-(18, 'foccolivy', 'Foccacia, olio e olive', 125.00, 'domaci rozmarynova foccacia, olivy, olivovy olej extra vergine', 1, '2025-07-11 12:00:08', '2025-07-11 12:00:08', 'predkrm', NULL, 0.00),
-(19, 'bruschettapomodoro', 'Bruschetta pomodoro', 145.00, 'domaci opeceny chleb, cherry racjata, bazalka, olivovy extra vergine olej', 1, '2025-07-11 12:00:45', '2025-07-11 12:00:45', 'predkrm', NULL, 0.00),
-(20, 'burrataecrudo', 'Burrate e crudo predkrm', 220.00, 'Italska susesna sunka, burrata, domaci rozamrynova foccacia, olivovy extra olej vergine', 0, '2025-07-11 12:01:28', '2025-07-13 14:49:52', 'predkrm', NULL, 0.00),
+(15, 'baba', 'Baba a rum', 90.00, 'rum', 0, '2025-07-07 14:15:11', '2025-07-23 15:51:29', 'dezert', 4, 15.00),
+(16, 'tiramisu', 'Tiramisu', 95.00, '', 1, '2025-07-11 11:58:20', '2025-07-19 13:25:47', 'dezert', NULL, 0.00),
+(17, 'bolognese', 'Ragú alla Bolognese', 210.00, 'Tagliatelle, hovezi ragu, zelenina, rajcata, garana padano', 0, '2025-07-11 11:59:16', '2025-07-16 14:47:23', 'pasta', NULL, 0.00),
+(18, 'foccolivy', 'Foccacia, olio e olive', 115.00, 'domaci rozmarynova foccacia, olivy, olivovy olej extra vergine', 1, '2025-07-11 12:00:08', '2025-07-18 14:48:30', 'predkrm', NULL, 0.00),
+(19, 'bruschettapomodoro', 'Bruschetta pomodoro', 125.00, 'domaci opeceny chleb, cherry racjata, bazalka, olivovy extra vergine olej', 1, '2025-07-11 12:00:45', '2025-07-18 14:47:05', 'predkrm', NULL, 0.00),
+(20, 'burrataecrudo', 'Burrata e crudo predkrm', 220.00, 'Italska susesna sunka, burrata, domaci rozamrynova foccacia, olivovy extra olej vergine', 1, '2025-07-11 12:01:28', '2025-07-22 12:39:58', 'predkrm', NULL, 0.00),
 (21, 'crudopizza', 'Prosicutto crudo', 270.00, 'italska bio rajcata, mozzarella fior di latte, rukola, italska susena sunka, grana padano', 0, '2025-07-11 12:02:20', '2025-07-13 16:18:05', 'pizza', NULL, 0.00),
-(22, 'diavolabianca', 'Daviola bianca', 250.00, 'mozzarella fior di latte, pikantni italsky salam ventricina, bazalka', 1, '2025-07-11 12:03:11', '2025-07-11 12:03:11', 'pizza', NULL, 0.00),
-(23, 'burrataecrudopizza', 'Burrata e crudo', 350.00, 'italska bio rajcata, mozzarella fior di latte, cherry rajcata, italska susena sunka, syr burrata, bazalkove pesto', 0, '2025-07-11 12:04:06', '2025-07-13 14:49:44', 'pizza', NULL, 0.00),
-(24, 'mozzpomodoro', 'Mozzarella e pomodorini', 145.00, 'cherry rajcata, mozzarella, bazalka, olivo olej extra vergine, domaci opeceny chleb', 1, '2025-07-11 12:09:15', '2025-07-11 12:09:15', 'predkrm', NULL, 0.00);
+(22, 'diavolabianca', 'Daviola bianca', 250.00, 'mozzarella fior di latte, pikantni italsky salam ventricina, bazalka', 0, '2025-07-11 12:03:11', '2025-07-16 14:47:38', 'pizza', NULL, 0.00),
+(23, 'burrataecrudopizza', 'Burrata e crudo', 350.00, 'italska bio rajcata, mozzarella fior di latte, cherry rajcata, italska susena sunka, syr burrata, bazalkove pesto', 1, '2025-07-11 12:04:06', '2025-07-22 12:42:52', 'pizza', NULL, 0.00),
+(24, 'mozzpomodoro', 'Mozzarella e pomodorini', 145.00, 'cherry rajcata, mozzarella, bazalka, olivo olej extra vergine, domaci opeceny chleb', 1, '2025-07-11 12:09:15', '2025-07-11 12:09:15', 'predkrm', NULL, 0.00),
+(25, 'canollo', 'Canollo', 95.00, '', 1, '2025-07-16 14:44:23', '2025-07-23 15:51:25', 'dezert', NULL, 0.00),
+(26, 'ricotta', 'Ricotta ale arancia', 85.00, '', 0, '2025-07-18 14:45:57', '2025-07-19 13:25:46', 'dezert', NULL, 0.00),
+(27, 'pancetta', 'Pancetta e pattate', 250.00, '', 0, '2025-07-18 14:47:49', '2025-07-19 13:25:58', 'pizza', NULL, 0.00),
+(28, 'pasta_pesto', 'Pasta spaghetti con pesto e stracciarella', 210.00, '', 0, '2025-07-18 14:50:24', '2025-07-23 15:51:40', 'pasta', NULL, 0.00),
+(29, 'foccsals', 'Focaccia con salsiccia', 220.00, '', 0, '2025-07-19 13:34:28', '2025-07-20 10:43:36', 'pizza', NULL, 0.00),
+(30, 'foccmort', 'Focaccia con mortadella', 220.00, '', 0, '2025-07-19 13:34:54', '2025-07-20 10:43:35', 'pizza', NULL, 0.00),
+(31, 'foccporch', 'Focaccia con porchetta', 230.00, '', 0, '2025-07-19 13:35:27', '2025-07-20 10:43:35', 'pizza', NULL, 0.00),
+(32, 'salsiciepizza', 'Salsiccia e pattatine', 270.00, 'mozzarella fior di latte, salsiccia, dijonská majonéza, chips', 1, '2025-07-20 10:44:27', '2025-07-20 10:44:27', 'pizza', NULL, 0.00),
+(33, 'pizzaporchetta', 'Porchetta', 270.00, 'italská bio rajcata, mozzarella fior di latte, porchetta, grilovaná zelenina', 1, '2025-07-20 10:44:57', '2025-07-20 10:44:57', 'pizza', NULL, 0.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reservations`
+--
+
+CREATE TABLE `reservations` (
+  `id` int(11) NOT NULL,
+  `customer_name` varchar(100) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `party_size` int(11) NOT NULL,
+  `reservation_date` date NOT NULL,
+  `reservation_time` time NOT NULL,
+  `table_number` int(11) DEFAULT NULL,
+  `status` enum('pending','confirmed','cancelled') DEFAULT 'pending',
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -2712,34 +4653,40 @@ CREATE TABLE `restaurant_tables` (
 --
 
 INSERT INTO `restaurant_tables` (`id`, `table_number`, `status`, `session_start`, `last_order_at`, `total_amount`, `notes`, `updated_at`, `category_id`, `location_id`, `table_code`) VALUES
-(1, 1, 'free', NULL, NULL, 0.00, NULL, '2025-07-14 21:59:58', 1, 1, 'P11'),
-(2, 2, 'free', NULL, NULL, 0.00, NULL, '2025-07-14 22:00:13', 1, 1, 'P12'),
-(3, 3, 'free', NULL, NULL, 0.00, NULL, '2025-07-14 22:00:00', 1, 1, 'P13'),
-(4, 4, 'free', NULL, NULL, 0.00, NULL, '2025-07-14 22:00:06', 1, 1, 'P14'),
-(5, 5, 'free', NULL, NULL, 0.00, NULL, '2025-07-14 22:00:03', 2, 2, 'P21'),
-(6, 6, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 14:56:52', 2, 2, 'P22'),
+(1, 1, 'free', NULL, NULL, 0.00, NULL, '2025-07-23 16:23:10', 1, 1, 'P11'),
+(2, 2, 'free', NULL, NULL, 0.00, NULL, '2025-07-23 16:59:38', 1, 1, 'P12'),
+(3, 3, 'free', NULL, NULL, 0.00, NULL, '2025-07-19 14:48:22', 1, 1, 'P13'),
+(4, 4, 'free', NULL, NULL, 0.00, NULL, '2025-07-23 18:49:26', 1, 1, 'P14'),
+(5, 5, 'free', NULL, NULL, 0.00, NULL, '2025-07-20 17:38:33', 2, 2, 'P21'),
+(6, 6, 'free', NULL, NULL, 0.00, NULL, '2025-07-23 19:11:53', 2, 2, 'P22'),
 (7, 7, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 18:47:09', 2, 2, 'P23'),
-(8, 8, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 18:05:07', 2, 2, 'P24'),
-(9, 9, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 16:59:19', 2, 2, 'P25'),
-(10, 10, 'free', NULL, NULL, 0.00, NULL, '2025-07-14 22:00:15', 3, 3, 'P31'),
-(11, 11, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 17:38:23', 3, 3, 'P32'),
-(12, 12, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 15:07:42', 3, 3, 'P33'),
-(13, 13, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 17:17:02', 3, 3, 'P34'),
-(14, 14, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 17:26:07', 3, 3, 'P35'),
-(15, 15, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 17:14:26', 4, 4, 'P41'),
-(16, 16, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 13:20:04', 5, 5, 'O1'),
-(17, 17, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 18:30:43', 5, 5, 'O2'),
-(18, 18, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 19:49:41', 5, 5, 'O3'),
-(19, 19, 'free', '2025-07-13 16:58:28', NULL, 0.00, NULL, '2025-07-13 18:40:15', 5, 5, 'O4'),
-(20, 20, 'free', '2025-07-13 15:21:17', NULL, 0.00, NULL, '2025-07-13 18:39:32', 5, 5, 'O5'),
-(5881, 21, 'free', '2025-07-12 03:41:11', NULL, 0.00, NULL, '2025-07-12 07:24:35', 5, 5, 'O6'),
-(5882, 22, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 18:31:29', 5, 5, 'O7'),
-(5883, 23, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 17:34:19', 5, 5, 'O8'),
-(5887, 31, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 16:25:13', 4, 4, 'P42'),
-(5888, 32, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 17:13:41', 4, 4, 'P43'),
-(5889, 100, 'free', NULL, NULL, 0.00, NULL, '2025-07-12 11:40:50', 6, NULL, 'A1'),
-(5890, 101, 'free', NULL, NULL, 0.00, NULL, '2025-07-13 17:23:43', 6, NULL, 'A2'),
-(5893, 999, 'free', NULL, NULL, 0.00, NULL, '2025-07-14 22:00:09', 8, 6, 'XX');
+(8, 8, 'free', NULL, NULL, 0.00, NULL, '2025-07-23 17:57:53', 2, 2, 'P24'),
+(9, 9, 'free', NULL, NULL, 0.00, NULL, '2025-07-20 17:00:48', 2, 2, 'P25'),
+(10, 10, 'free', NULL, NULL, 0.00, NULL, '2025-07-20 18:31:22', 3, 3, 'P31'),
+(11, 11, 'free', NULL, NULL, 0.00, NULL, '2025-07-23 18:31:40', 3, 3, 'P32'),
+(12, 12, 'free', NULL, NULL, 0.00, NULL, '2025-07-20 18:13:35', 3, 3, 'P33'),
+(13, 13, 'free', NULL, NULL, 0.00, NULL, '2025-07-23 20:22:03', 3, 3, 'P34'),
+(14, 14, 'free', NULL, NULL, 0.00, NULL, '2025-07-23 17:25:14', 3, 3, 'P35'),
+(15, 15, 'free', NULL, NULL, 0.00, NULL, '2025-07-23 16:19:48', 4, 4, 'P41'),
+(16, 16, 'free', NULL, NULL, 0.00, NULL, '2025-07-20 18:10:49', 5, 5, 'O1'),
+(17, 17, 'free', NULL, NULL, 0.00, NULL, '2025-07-20 17:53:20', 5, 5, 'O2'),
+(18, 18, 'free', NULL, NULL, 0.00, NULL, '2025-07-23 20:09:34', 5, 5, 'O3'),
+(19, 19, 'free', NULL, NULL, 0.00, NULL, '2025-07-20 16:27:49', 5, 5, 'O4'),
+(20, 20, 'free', NULL, NULL, 0.00, NULL, '2025-07-20 16:54:43', 5, 5, 'O5'),
+(5881, 21, 'free', NULL, NULL, 0.00, NULL, '2025-07-20 18:14:40', 5, 5, 'O6'),
+(5882, 22, 'free', NULL, NULL, 0.00, NULL, '2025-07-20 17:00:24', 5, 5, 'O7'),
+(5883, 23, 'free', NULL, NULL, 0.00, NULL, '2025-07-20 18:19:55', 5, 5, 'O8'),
+(5887, 31, 'free', NULL, NULL, 0.00, NULL, '2025-07-23 19:17:02', 4, 4, 'P42'),
+(5888, 32, 'free', NULL, NULL, 0.00, NULL, '2025-07-20 19:23:26', 4, 4, 'P43'),
+(5889, 100, 'free', NULL, NULL, 0.00, NULL, '2025-07-22 14:29:58', 6, NULL, 'A1'),
+(5890, 101, 'free', NULL, NULL, 0.00, NULL, '2025-07-20 18:12:05', 6, NULL, 'A2'),
+(5893, 999, 'free', NULL, NULL, 0.00, NULL, '2025-07-22 14:33:53', 8, 6, 'XX'),
+(5895, 1000, 'free', NULL, NULL, 0.00, NULL, '2025-07-23 16:22:11', NULL, 8, 'S1'),
+(5896, 1001, 'free', NULL, NULL, 0.00, NULL, '2025-07-22 08:21:02', NULL, 8, 'S2'),
+(5897, 1002, 'free', NULL, NULL, 0.00, NULL, '2025-07-22 08:22:42', NULL, 8, 'S3'),
+(5898, 1003, 'free', NULL, NULL, 0.00, NULL, '2025-07-22 08:21:02', NULL, 8, 'S4'),
+(5899, 1004, 'free', NULL, NULL, 0.00, NULL, '2025-07-22 08:21:02', NULL, 8, 'S5'),
+(5900, 1005, 'free', NULL, NULL, 0.00, NULL, '2025-07-22 08:21:02', NULL, 8, 'S6');
 
 -- --------------------------------------------------------
 
@@ -2767,6 +4714,88 @@ INSERT INTO `serving_history` (`id`, `table_number`, `item_name`, `item_type`, `
 (26, 1, 'Spaghetti Carbonara', 'pizza', 180.00, '2025-06-30 14:09:31', 'served', NULL, NULL),
 (27, 19, 'Margherita', 'pizza', 1000.00, '2025-07-03 07:31:07', 'served', NULL, NULL),
 (28, 21, 'Cola', 'drink', 100.00, '2025-07-03 07:31:08', 'served', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shifts`
+--
+
+CREATE TABLE `shifts` (
+  `id` int(11) NOT NULL,
+  `shift_type_id` int(11) NOT NULL,
+  `shift_date` date NOT NULL,
+  `status` enum('open','full','cancelled') DEFAULT 'open',
+  `notes` text DEFAULT NULL,
+  `created_by` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `shifts`
+--
+
+INSERT INTO `shifts` (`id`, `shift_type_id`, `shift_date`, `status`, `notes`, `created_by`, `created_at`, `updated_at`) VALUES
+(1, 1, '2025-07-24', 'open', NULL, 1, '2025-07-23 07:25:31', '2025-07-23 07:25:31'),
+(2, 2, '2025-07-24', 'open', NULL, 1, '2025-07-23 07:25:31', '2025-07-23 07:25:31'),
+(3, 3, '2025-07-24', 'open', NULL, 1, '2025-07-23 07:25:31', '2025-07-23 07:25:31'),
+(4, 1, '2025-07-25', 'open', NULL, 1, '2025-07-23 07:25:31', '2025-07-23 07:25:31'),
+(5, 2, '2025-07-25', 'open', NULL, 1, '2025-07-23 07:25:31', '2025-07-23 07:25:31'),
+(6, 4, '2025-07-26', 'open', NULL, 1, '2025-07-23 07:25:31', '2025-07-23 07:25:31'),
+(7, 4, '2025-07-27', 'open', NULL, 1, '2025-07-23 07:25:31', '2025-07-23 07:25:31'),
+(8, 1, '2025-07-28', 'open', NULL, 1, '2025-07-23 07:25:31', '2025-07-23 07:25:31'),
+(9, 2, '2025-07-28', 'open', NULL, 1, '2025-07-23 07:25:31', '2025-07-23 07:25:31'),
+(10, 5, '2025-07-28', 'open', NULL, 1, '2025-07-23 07:25:31', '2025-07-23 07:25:31');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shift_requests`
+--
+
+CREATE TABLE `shift_requests` (
+  `id` int(11) NOT NULL,
+  `shift_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `status` enum('pending','approved','rejected','cancelled') DEFAULT 'pending',
+  `request_note` text DEFAULT NULL,
+  `admin_note` text DEFAULT NULL,
+  `priority` enum('normal','preferred','urgent') DEFAULT 'normal',
+  `requested_at` timestamp NULL DEFAULT current_timestamp(),
+  `reviewed_at` timestamp NULL DEFAULT NULL,
+  `reviewed_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shift_types`
+--
+
+CREATE TABLE `shift_types` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `icon` varchar(10) DEFAULT '⏰',
+  `color` varchar(7) DEFAULT '#667eea',
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `duration_hours` decimal(3,1) NOT NULL,
+  `max_employees` int(11) DEFAULT 5,
+  `hourly_rate` decimal(8,2) DEFAULT 150.00,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `shift_types`
+--
+
+INSERT INTO `shift_types` (`id`, `name`, `icon`, `color`, `start_time`, `end_time`, `duration_hours`, `max_employees`, `hourly_rate`, `created_at`) VALUES
+(1, 'Ranní směna', '🌅', '#28a745', '06:00:00', '14:00:00', 8.0, 3, 150.00, '2025-07-23 07:25:31'),
+(2, 'Odpolední směna', '☀️', '#ffc107', '14:00:00', '22:00:00', 8.0, 4, 160.00, '2025-07-23 07:25:31'),
+(3, 'Noční směna', '🌙', '#6f42c1', '22:00:00', '06:00:00', 8.0, 2, 200.00, '2025-07-23 07:25:31'),
+(4, 'Víkendová směna', '🎉', '#dc3545', '10:00:00', '20:00:00', 10.0, 5, 180.00, '2025-07-23 07:25:31'),
+(5, 'Úklid', '🧹', '#17a2b8', '23:00:00', '01:00:00', 2.0, 1, 120.00, '2025-07-23 07:25:31');
 
 -- --------------------------------------------------------
 
@@ -2838,7 +4867,8 @@ INSERT INTO `table_locations` (`id`, `name`, `display_order`) VALUES
 (4, 'Pergola 4', 4),
 (5, 'Olivy', 5),
 (6, 'PIAGGIO', 999),
-(7, 'PIAGGIO', 999);
+(7, 'PIAGGIO', 999),
+(8, 'Sebou', 7);
 
 -- --------------------------------------------------------
 
@@ -3091,7 +5121,167 @@ INSERT INTO `table_sessions` (`id`, `table_number`, `start_time`, `end_time`, `i
 (670, 2, '2025-07-14 21:46:13', '2025-07-14 22:00:13', 0),
 (671, 3, '2025-07-14 21:54:30', '2025-07-14 22:00:00', 0),
 (672, 5, '2025-07-14 21:54:54', '2025-07-14 22:00:03', 0),
-(673, 10, '2025-07-14 21:57:07', '2025-07-14 22:00:15', 0);
+(673, 10, '2025-07-14 21:57:07', '2025-07-14 22:00:15', 0),
+(674, 999, '2025-07-16 15:10:50', '2025-07-16 15:13:27', 0),
+(675, 101, '2025-07-16 15:13:27', '2025-07-16 15:16:56', 0),
+(676, 999, '2025-07-16 15:17:46', '2025-07-16 15:18:56', 0),
+(677, 1, '2025-07-16 15:36:28', '2025-07-16 17:10:41', 0),
+(678, 32, '2025-07-16 16:05:36', '2025-07-16 17:29:07', 0),
+(679, 31, '2025-07-16 16:28:40', '2025-07-16 17:30:10', 0),
+(680, 9, '2025-07-16 16:47:55', '2025-07-16 17:52:50', 0),
+(681, 15, '2025-07-16 16:57:29', '2025-07-16 17:35:58', 0),
+(682, 2, '2025-07-16 17:39:32', '2025-07-16 18:01:48', 0),
+(683, 6, '2025-07-16 17:48:21', '2025-07-16 18:37:14', 0),
+(684, 13, '2025-07-16 17:51:27', '2025-07-16 20:14:15', 0),
+(685, 100, '2025-07-18 14:55:09', '2025-07-18 15:32:06', 0),
+(686, 13, '2025-07-18 14:57:47', '2025-07-18 16:37:03', 0),
+(687, 999, '2025-07-18 15:04:20', '2025-07-19 13:35:58', 0),
+(688, 15, '2025-07-18 15:04:47', '2025-07-18 17:01:56', 0),
+(689, 8, '2025-07-18 15:07:42', '2025-07-18 18:31:41', 0),
+(690, 101, '2025-07-18 15:23:18', '2025-07-18 15:23:51', 0),
+(691, 16, '2025-07-18 15:23:51', '2025-07-18 15:45:35', 0),
+(692, 20, '2025-07-18 15:25:54', '2025-07-18 16:01:31', 0),
+(693, 14, '2025-07-18 15:42:34', '2025-07-18 16:21:32', 0),
+(694, 4, '2025-07-18 15:45:35', '2025-07-18 16:44:00', 0),
+(695, 32, '2025-07-18 15:49:38', '2025-07-18 18:06:50', 0),
+(696, 101, '2025-07-18 15:56:40', '2025-07-18 16:19:12', 0),
+(697, 2, '2025-07-18 16:05:06', '2025-07-18 19:44:08', 0),
+(698, 19, '2025-07-18 16:09:43', '2025-07-18 20:18:11', 0),
+(699, 22, '2025-07-18 16:11:53', '2025-07-18 17:09:38', 0),
+(700, 17, '2025-07-18 16:13:38', '2025-07-18 17:30:04', 0),
+(701, 10, '2025-07-18 16:15:20', '2025-07-18 17:47:32', 0),
+(702, 18, '2025-07-18 16:15:59', '2025-07-18 17:41:41', 0),
+(703, 9, '2025-07-18 16:16:42', '2025-07-18 18:40:20', 0),
+(704, 100, '2025-07-18 16:17:35', '2025-07-18 17:01:28', 0),
+(705, 101, '2025-07-18 16:19:39', '2025-07-18 16:39:04', 0),
+(706, 6, '2025-07-18 16:20:59', '2025-07-18 21:27:48', 0),
+(707, 16, '2025-07-18 16:22:23', '2025-07-18 16:51:59', 0),
+(708, 1, '2025-07-18 16:25:15', '2025-07-18 18:25:29', 0),
+(709, 14, '2025-07-18 16:29:23', '2025-07-18 17:46:46', 0),
+(710, 12, '2025-07-18 16:32:27', '2025-07-18 18:05:39', 0),
+(711, 23, '2025-07-18 16:34:33', '2025-07-18 17:58:15', 0),
+(712, 101, '2025-07-18 16:39:29', '2025-07-18 17:53:17', 0),
+(713, 4, '2025-07-18 16:52:19', '2025-07-18 21:07:18', 0),
+(714, 16, '2025-07-18 16:54:07', '2025-07-18 19:05:37', 0),
+(715, 31, '2025-07-18 16:55:05', '2025-07-18 20:53:28', 0),
+(716, 13, '2025-07-18 16:58:41', '2025-07-18 19:07:55', 0),
+(717, 11, '2025-07-18 16:59:41', '2025-07-18 18:19:09', 0),
+(718, 100, '2025-07-18 17:04:34', '2025-07-18 17:13:52', 0),
+(719, 15, '2025-07-18 17:10:02', '2025-07-18 20:53:15', 0),
+(720, 22, '2025-07-18 17:13:52', '2025-07-18 18:41:44', 0),
+(721, 100, '2025-07-18 17:16:43', '2025-07-18 20:22:02', 0),
+(722, 20, '2025-07-18 17:27:04', '2025-07-18 18:43:52', 0),
+(723, 101, '2025-07-18 17:54:37', '2025-07-18 18:20:31', 0),
+(724, 14, '2025-07-18 17:57:10', '2025-07-18 20:12:13', 0),
+(725, 17, '2025-07-18 18:17:17', '2025-07-18 19:09:30', 0),
+(726, 32, '2025-07-18 18:20:31', '2025-07-18 20:50:32', 0),
+(727, 31, '2025-07-19 14:07:43', '2025-07-19 15:28:54', 0),
+(728, 3, '2025-07-19 14:23:06', '2025-07-19 14:48:22', 0),
+(729, 2, '2025-07-19 14:24:08', '2025-07-19 15:00:36', 0),
+(730, 19, '2025-07-19 14:49:23', '2025-07-19 15:23:33', 0),
+(731, 22, '2025-07-19 14:53:35', '2025-07-19 17:48:10', 0),
+(732, 9, '2025-07-19 14:54:32', '2025-07-19 15:33:17', 0),
+(733, 13, '2025-07-19 15:08:18', '2025-07-19 16:32:31', 0),
+(734, 15, '2025-07-19 15:32:25', '2025-07-19 17:23:12', 0),
+(735, 10, '2025-07-19 15:36:45', '2025-07-19 17:45:43', 0),
+(736, 999, '2025-07-19 16:05:46', '2025-07-19 16:10:56', 0),
+(737, 32, '2025-07-19 16:07:58', '2025-07-19 16:42:30', 0),
+(738, 8, '2025-07-19 16:16:02', '2025-07-19 18:24:14', 0),
+(739, 9, '2025-07-19 16:17:37', '2025-07-19 18:18:34', 0),
+(740, 20, '2025-07-19 16:43:34', '2025-07-19 17:52:37', 0),
+(741, 6, '2025-07-19 16:44:06', '2025-07-19 18:48:20', 0),
+(742, 18, '2025-07-19 16:44:19', '2025-07-19 18:23:27', 0),
+(743, 2, '2025-07-19 17:02:32', '2025-07-19 19:18:07', 0),
+(744, 32, '2025-07-19 17:16:57', '2025-07-19 18:48:39', 0),
+(745, 13, '2025-07-19 17:19:48', '2025-07-19 18:13:14', 0),
+(746, 14, '2025-07-19 17:30:31', '2025-07-19 18:49:23', 0),
+(747, 15, '2025-07-19 17:35:43', '2025-07-19 18:14:16', 0),
+(748, 22, '2025-07-19 17:49:06', '2025-07-19 18:30:54', 0),
+(749, 31, '2025-07-19 17:59:25', '2025-07-19 18:23:47', 0),
+(750, 999, '2025-07-19 18:47:22', '2025-07-19 21:28:50', 0),
+(751, 31, '2025-07-19 18:49:49', '2025-07-19 19:20:32', 0),
+(752, 11, '2025-07-19 18:55:54', '2025-07-19 20:15:21', 0),
+(753, 8, '2025-07-19 19:12:49', '2025-07-19 20:12:12', 0),
+(754, 13, '2025-07-19 20:09:50', '2025-07-19 21:57:09', 0),
+(755, 4, '2025-07-19 20:19:21', '2025-07-19 21:37:29', 0),
+(756, 8, '2025-07-19 20:37:22', '2025-07-19 21:49:57', 0),
+(757, 2, '2025-07-19 21:03:37', '2025-07-19 21:37:07', 0),
+(758, 999, '2025-07-19 21:30:02', '2025-07-19 21:30:41', 0),
+(759, 999, '2025-07-20 11:00:31', '2025-07-20 11:18:33', 0),
+(760, 999, '2025-07-20 14:04:18', '2025-07-21 17:04:03', 0),
+(761, 6, '2025-07-20 14:04:31', '2025-07-20 15:33:18', 0),
+(762, 100, '2025-07-20 14:06:30', '2025-07-20 14:48:57', 0),
+(763, 1, '2025-07-20 14:18:24', '2025-07-20 15:31:46', 0),
+(764, 22, '2025-07-20 14:23:29', '2025-07-20 17:00:24', 0),
+(765, 18, '2025-07-20 14:24:21', '2025-07-20 14:49:02', 0),
+(766, 14, '2025-07-20 14:31:36', '2025-07-20 14:57:06', 0),
+(767, 8, '2025-07-20 14:32:36', '2025-07-20 15:09:29', 0),
+(768, 11, '2025-07-20 14:33:22', '2025-07-20 15:17:03', 0),
+(769, 5, '2025-07-20 14:43:15', '2025-07-20 15:16:04', 0),
+(770, 100, '2025-07-20 14:49:25', '2025-07-20 15:26:56', 0),
+(771, 32, '2025-07-20 15:00:36', '2025-07-20 16:08:04', 0),
+(772, 9, '2025-07-20 15:12:17', '2025-07-20 17:00:48', 0),
+(773, 13, '2025-07-20 15:16:04', '2025-07-20 16:26:29', 0),
+(774, 15, '2025-07-20 15:23:40', '2025-07-20 16:25:36', 0),
+(775, 10, '2025-07-20 15:27:54', '2025-07-20 15:37:20', 0),
+(776, 100, '2025-07-20 15:28:14', '2025-07-20 15:50:11', 0),
+(777, 11, '2025-07-20 15:37:20', '2025-07-20 17:07:26', 0),
+(778, 19, '2025-07-20 15:39:41', '2025-07-20 16:27:49', 0),
+(779, 8, '2025-07-20 15:43:07', '2025-07-20 18:40:08', 0),
+(780, 17, '2025-07-20 15:53:00', '2025-07-20 16:29:19', 0),
+(781, 14, '2025-07-20 15:55:07', '2025-07-20 16:22:06', 0),
+(782, 5, '2025-07-20 15:58:26', '2025-07-20 16:32:32', 0),
+(783, 20, '2025-07-20 16:06:25', '2025-07-20 16:54:43', 0),
+(784, 101, '2025-07-20 16:06:47', '2025-07-20 16:38:53', 0),
+(785, 16, '2025-07-20 16:08:14', '2025-07-20 16:58:20', 0),
+(786, 32, '2025-07-20 16:13:29', '2025-07-20 17:19:19', 0),
+(787, 2, '2025-07-20 16:20:28', '2025-07-20 17:35:48', 0),
+(788, 23, '2025-07-20 16:24:51', '2025-07-20 17:02:09', 0),
+(789, 4, '2025-07-20 16:29:19', '2025-07-20 19:22:10', 0),
+(790, 13, '2025-07-20 16:31:27', '2025-07-20 17:24:58', 0),
+(791, 31, '2025-07-20 16:31:53', '2025-07-20 18:18:54', 0),
+(792, 14, '2025-07-20 16:37:11', '2025-07-20 19:05:29', 0),
+(793, 5, '2025-07-20 16:38:58', '2025-07-20 17:38:33', 0),
+(794, 15, '2025-07-20 16:45:10', '2025-07-20 17:30:43', 0),
+(795, 17, '2025-07-20 16:47:41', '2025-07-20 17:53:20', 0),
+(796, 21, '2025-07-20 16:49:39', '2025-07-20 18:14:40', 0),
+(797, 100, '2025-07-20 16:59:18', '2025-07-20 18:00:25', 0),
+(798, 12, '2025-07-20 17:10:10', '2025-07-20 18:13:35', 0),
+(799, 16, '2025-07-20 17:17:03', '2025-07-20 17:39:35', 0),
+(800, 101, '2025-07-20 17:17:10', '2025-07-20 18:12:05', 0),
+(801, 23, '2025-07-20 17:21:42', '2025-07-20 18:19:55', 0),
+(802, 13, '2025-07-20 17:26:40', '2025-07-20 19:05:54', 0),
+(803, 11, '2025-07-20 17:41:36', '2025-07-20 18:40:39', 0),
+(804, 10, '2025-07-20 17:42:33', '2025-07-20 18:31:22', 0),
+(805, 16, '2025-07-20 17:55:55', '2025-07-20 18:10:49', 0),
+(806, 100, '2025-07-20 18:34:33', '2025-07-20 19:08:44', 0),
+(807, 32, '2025-07-20 18:41:53', '2025-07-20 19:23:26', 0),
+(808, 999, '2025-07-21 17:46:33', '2025-07-21 17:46:48', 0),
+(809, 999, '2025-07-21 18:15:55', '2025-07-21 18:53:17', 0),
+(810, 1002, '2025-07-22 08:22:29', '2025-07-22 08:22:42', 0),
+(811, 999, '2025-07-22 09:46:27', '2025-07-22 09:46:47', 0),
+(812, 999, '2025-07-22 09:47:31', '2025-07-22 09:47:51', 0),
+(813, 999, '2025-07-22 10:08:58', '2025-07-22 10:57:58', 0),
+(814, 999, '2025-07-22 10:58:14', '2025-07-22 12:44:20', 0),
+(815, 999, '2025-07-22 13:04:32', '2025-07-22 14:15:16', 0),
+(816, 999, '2025-07-22 14:16:00', '2025-07-22 14:16:32', 0),
+(817, 100, '2025-07-22 14:28:53', '2025-07-22 14:29:58', 0),
+(818, 999, '2025-07-22 14:33:41', '2025-07-22 14:33:53', 0),
+(819, 11, '2025-07-23 15:09:00', '2025-07-23 16:39:51', 0),
+(820, 15, '2025-07-23 15:43:02', '2025-07-23 16:19:48', 0),
+(821, 1000, '2025-07-23 15:55:30', '2025-07-23 16:22:11', 0),
+(822, 1, '2025-07-23 15:59:19', '2025-07-23 16:23:10', 0),
+(823, 2, '2025-07-23 16:13:37', '2025-07-23 16:59:38', 0),
+(824, 8, '2025-07-23 16:25:06', '2025-07-23 17:57:53', 0),
+(825, 14, '2025-07-23 16:30:36', '2025-07-23 17:25:14', 0),
+(826, 31, '2025-07-23 16:37:05', '2025-07-23 19:17:02', 0),
+(827, 13, '2025-07-23 16:48:45', '2025-07-23 18:07:16', 0),
+(828, 4, '2025-07-23 16:49:41', '2025-07-23 18:49:26', 0),
+(829, 18, '2025-07-23 17:06:40', '2025-07-23 17:58:10', 0),
+(830, 11, '2025-07-23 17:22:16', '2025-07-23 18:31:40', 0),
+(831, 6, '2025-07-23 18:13:59', '2025-07-23 19:11:53', 0),
+(832, 18, '2025-07-23 19:04:30', '2025-07-23 20:09:34', 0),
+(833, 13, '2025-07-23 19:26:42', '2025-07-23 20:22:03', 0);
 
 -- --------------------------------------------------------
 
@@ -3105,6 +5295,70 @@ CREATE TABLE `total_statistics` (
   `total_drinks_ever` int(11) DEFAULT 0,
   `last_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transactions`
+--
+
+CREATE TABLE `transactions` (
+  `id` int(11) NOT NULL,
+  `type` enum('income','expense') NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `description` text NOT NULL,
+  `category` varchar(255) NOT NULL,
+  `date` date NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`id`, `type`, `amount`, `description`, `category`, `date`, `created_at`) VALUES
+(1, 'expense', 436.00, 'Perlinka + lepidlo', 'Rekonstrukce', '2025-07-28', '2025-07-28 13:43:00'),
+(2, 'expense', 107.00, 'smirgle+stetky', 'Nástroje', '2025-07-28', '2025-07-28 13:50:03'),
+(3, 'expense', 20000.00, 'nájem', 'Provoz', '2025-07-28', '2025-07-28 13:50:03'),
+(4, 'expense', 502.00, 'Filip bomby', 'Osobní', '2025-07-28', '2025-07-28 13:50:03'),
+(5, 'expense', 5000.00, 'Horst na talerky', 'Vybavení', '2025-07-28', '2025-07-28 13:50:03'),
+(6, 'expense', 344.00, 'šroubky', 'Materiál', '2025-07-28', '2025-07-28 13:50:03'),
+(7, 'expense', 15526.00, 'Cortelazzi', 'Nákup', '2025-07-28', '2025-07-28 13:50:03'),
+(8, 'expense', 1875.00, 'bomby', 'Osobní', '2025-07-28', '2025-07-28 13:50:03'),
+(9, 'expense', 649.00, 'papíry/ubrousky', 'Vybavení', '2025-07-28', '2025-07-28 13:50:03'),
+(10, 'expense', 398.00, 'folie vakuo', 'Materiál', '2025-07-28', '2025-07-28 13:50:03'),
+(11, 'expense', 5758.00, 'Garage22', 'Provoz', '2025-07-28', '2025-07-28 13:50:03'),
+(12, 'expense', 10757.00, 'Svk mouky', 'Nákup', '2025-07-28', '2025-07-28 13:50:03'),
+(13, 'expense', 20559.00, 'Cortelazzi', 'Nákup', '2025-07-28', '2025-07-28 13:50:03'),
+(14, 'expense', 3617.00, 'SVK mouky', 'Nákup', '2025-07-28', '2025-07-28 13:50:03'),
+(15, 'expense', 299.00, 'sdkarta do rpi3', 'IT', '2025-07-28', '2025-07-28 13:50:03'),
+(16, 'expense', 1878.00, 'tiskárna na účtenky', 'IT', '2025-07-28', '2025-07-28 13:50:03'),
+(17, 'expense', 3479.00, 'rpi', 'IT', '2025-07-28', '2025-07-28 13:50:03'),
+(18, 'expense', 349.00, 'kabel', 'IT', '2025-07-28', '2025-07-28 13:50:03'),
+(19, 'expense', 1399.00, 'router', 'IT', '2025-07-28', '2025-07-28 13:50:03'),
+(20, 'expense', 830.00, 'github', 'IT', '2025-07-28', '2025-07-28 13:50:03'),
+(21, 'expense', 1250.00, 'bomby', 'Osobní', '2025-07-28', '2025-07-28 13:50:03'),
+(22, 'expense', 331.00, 'plátky', 'Vybavení', '2025-07-28', '2025-07-28 13:50:03'),
+(23, 'expense', 11417.00, 'garage22', 'Provoz', '2025-07-28', '2025-07-28 13:50:03'),
+(24, 'expense', 460.00, 'kvart folie', 'Materiál', '2025-07-28', '2025-07-28 13:50:03'),
+(25, 'expense', 82.00, 'vrtáky a texy', 'Nástroje', '2025-07-28', '2025-07-28 13:50:03'),
+(26, 'expense', 40000.00, 'na účet QUATTRO RAGAZZI', 'Transfer', '2025-07-28', '2025-07-28 13:50:03'),
+(27, 'expense', 1250.00, 'bomby', 'Osobní', '2025-07-28', '2025-07-28 13:50:03'),
+(28, 'expense', 4300.00, 'JBL 1x', 'Vybavení', '2025-07-28', '2025-07-28 13:50:03'),
+(29, 'expense', 1028.00, 'pasta brčka', 'Vybavení', '2025-07-28', '2025-07-28 13:50:03'),
+(30, 'expense', 12725.00, 'JBL 3x', 'Vybavení', '2025-07-28', '2025-07-28 13:50:03'),
+(31, 'expense', 287.00, 'očka pergoly', 'Materiál', '2025-07-28', '2025-07-28 13:50:03'),
+(32, 'expense', 6084.00, 'plzeň a limo', 'Nákup', '2025-07-28', '2025-07-28 13:50:03'),
+(33, 'income', 10000.00, 'Jirka svatba', 'Událost', '2025-07-28', '2025-07-28 13:50:03'),
+(34, 'income', 21570.00, 'karty', 'Tržby', '2025-07-28', '2025-07-28 13:50:03'),
+(35, 'income', 16491.00, 'karty', 'Tržby', '2025-07-28', '2025-07-28 13:50:03'),
+(36, 'income', 3421.00, 'karty', 'Tržby', '2025-07-28', '2025-07-28 13:50:03'),
+(37, 'income', 56817.00, 'SumUp', 'Tržby', '2025-07-28', '2025-07-28 13:50:03'),
+(38, 'income', 40239.00, 'karety', 'Tržby', '2025-07-28', '2025-07-28 13:50:03'),
+(39, 'income', 24700.00, 'karty', 'Tržby', '2025-07-28', '2025-07-28 13:50:03'),
+(40, 'income', 6093.00, 'karty', 'Tržby', '2025-07-28', '2025-07-28 13:50:03'),
+(41, 'income', 37550.00, 'karty', 'Tržby', '2025-07-28', '2025-07-28 13:50:03'),
+(42, 'income', 23130.00, 'karty', 'Tržby', '2025-07-28', '2025-07-28 13:50:03');
 
 --
 -- Indexes for dumped tables
@@ -3138,6 +5392,13 @@ ALTER TABLE `bar_order_items`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `burned_items_log`
+--
+ALTER TABLE `burned_items_log`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_item_id` (`order_item_id`);
+
+--
 -- Indexes for table `burnt_pizzas_log`
 --
 ALTER TABLE `burnt_pizzas_log`
@@ -3159,6 +5420,14 @@ ALTER TABLE `daily_stats`
   ADD UNIQUE KEY `date` (`date`);
 
 --
+-- Indexes for table `daily_supplies`
+--
+ALTER TABLE `daily_supplies`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `date` (`date`),
+  ADD KEY `date_2` (`date`);
+
+--
 -- Indexes for table `drink_types`
 --
 ALTER TABLE `drink_types`
@@ -3170,6 +5439,19 @@ ALTER TABLE `drink_types`
 -- Indexes for table `employees`
 --
 ALTER TABLE `employees`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `finance_categories`
+--
+ALTER TABLE `finance_categories`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `finance_transactions`
+--
+ALTER TABLE `finance_transactions`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -3200,6 +5482,12 @@ ALTER TABLE `orders`
   ADD KEY `idx_created_at` (`created_at`);
 
 --
+-- Indexes for table `order_categories`
+--
+ALTER TABLE `order_categories`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `order_items`
 --
 ALTER TABLE `order_items`
@@ -3210,6 +5498,15 @@ ALTER TABLE `order_items`
   ADD KEY `idx_item_type_status` (`item_type`,`status`);
 
 --
+-- Indexes for table `order_requests`
+--
+ALTER TABLE `order_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `category_id` (`category_id`),
+  ADD KEY `ordered_by` (`ordered_by`);
+
+--
 -- Indexes for table `order_tables`
 --
 ALTER TABLE `order_tables`
@@ -3217,11 +5514,33 @@ ALTER TABLE `order_tables`
   ADD KEY `order_id` (`order_id`);
 
 --
+-- Indexes for table `order_users`
+--
+ALTER TABLE `order_users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
 -- Indexes for table `payments`
 --
 ALTER TABLE `payments`
   ADD PRIMARY KEY (`id`),
   ADD KEY `table_session_id` (`table_session_id`);
+
+--
+-- Indexes for table `payroll_entries`
+--
+ALTER TABLE `payroll_entries`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `period_id` (`period_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `payroll_periods`
+--
+ALTER TABLE `payroll_periods`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `created_by` (`created_by`);
 
 --
 -- Indexes for table `pickup_items`
@@ -3236,6 +5555,13 @@ ALTER TABLE `pizza_types`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `type` (`type`),
   ADD KEY `idx_cost_price` (`cost_price`);
+
+--
+-- Indexes for table `reservations`
+--
+ALTER TABLE `reservations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `table_number` (`table_number`);
 
 --
 -- Indexes for table `restaurant_tables`
@@ -3254,6 +5580,30 @@ ALTER TABLE `serving_history`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_served_date` (`served_at`),
   ADD KEY `idx_table_served` (`table_number`,`served_at`);
+
+--
+-- Indexes for table `shifts`
+--
+ALTER TABLE `shifts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_shift` (`shift_type_id`,`shift_date`),
+  ADD KEY `created_by` (`created_by`),
+  ADD KEY `idx_shift_date` (`shift_date`);
+
+--
+-- Indexes for table `shift_requests`
+--
+ALTER TABLE `shift_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_request` (`shift_id`,`user_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `reviewed_by` (`reviewed_by`);
+
+--
+-- Indexes for table `shift_types`
+--
+ALTER TABLE `shift_types`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `table_bills`
@@ -3291,6 +5641,12 @@ ALTER TABLE `total_statistics`
   ADD UNIQUE KEY `unique_stats` (`id`);
 
 --
+-- Indexes for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -3319,10 +5675,16 @@ ALTER TABLE `bar_order_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `burned_items_log`
+--
+ALTER TABLE `burned_items_log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `burnt_pizzas_log`
 --
 ALTER TABLE `burnt_pizzas_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `completed_payments`
@@ -3334,18 +5696,36 @@ ALTER TABLE `completed_payments`
 -- AUTO_INCREMENT for table `daily_stats`
 --
 ALTER TABLE `daily_stats`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+
+--
+-- AUTO_INCREMENT for table `daily_supplies`
+--
+ALTER TABLE `daily_supplies`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT for table `drink_types`
 --
 ALTER TABLE `drink_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=351;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=355;
 
 --
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `finance_categories`
+--
+ALTER TABLE `finance_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `finance_transactions`
+--
+ALTER TABLE `finance_transactions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -3364,13 +5744,25 @@ ALTER TABLE `kitchen_order_items`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1116;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1594;
+
+--
+-- AUTO_INCREMENT for table `order_categories`
+--
+ALTER TABLE `order_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2645;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3981;
+
+--
+-- AUTO_INCREMENT for table `order_requests`
+--
+ALTER TABLE `order_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `order_tables`
@@ -3379,10 +5771,28 @@ ALTER TABLE `order_tables`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `order_users`
+--
+ALTER TABLE `order_users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=242;
+
+--
+-- AUTO_INCREMENT for table `payroll_entries`
+--
+ALTER TABLE `payroll_entries`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `payroll_periods`
+--
+ALTER TABLE `payroll_periods`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pickup_items`
@@ -3394,19 +5804,43 @@ ALTER TABLE `pickup_items`
 -- AUTO_INCREMENT for table `pizza_types`
 --
 ALTER TABLE `pizza_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+
+--
+-- AUTO_INCREMENT for table `reservations`
+--
+ALTER TABLE `reservations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `restaurant_tables`
 --
 ALTER TABLE `restaurant_tables`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5895;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5901;
 
 --
 -- AUTO_INCREMENT for table `serving_history`
 --
 ALTER TABLE `serving_history`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
+--
+-- AUTO_INCREMENT for table `shifts`
+--
+ALTER TABLE `shifts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `shift_requests`
+--
+ALTER TABLE `shift_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `shift_types`
+--
+ALTER TABLE `shift_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `table_bills`
@@ -3424,13 +5858,13 @@ ALTER TABLE `table_categories`
 -- AUTO_INCREMENT for table `table_locations`
 --
 ALTER TABLE `table_locations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `table_sessions`
 --
 ALTER TABLE `table_sessions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=674;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=834;
 
 --
 -- AUTO_INCREMENT for table `total_statistics`
@@ -3439,8 +5873,20 @@ ALTER TABLE `total_statistics`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `burned_items_log`
+--
+ALTER TABLE `burned_items_log`
+  ADD CONSTRAINT `burned_items_log_ibfk_1` FOREIGN KEY (`order_item_id`) REFERENCES `order_items` (`id`);
 
 --
 -- Constraints for table `kitchen_orders`
@@ -3467,6 +5913,14 @@ ALTER TABLE `order_items`
   ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `order_requests`
+--
+ALTER TABLE `order_requests`
+  ADD CONSTRAINT `order_requests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `order_users` (`id`),
+  ADD CONSTRAINT `order_requests_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `order_categories` (`id`),
+  ADD CONSTRAINT `order_requests_ibfk_3` FOREIGN KEY (`ordered_by`) REFERENCES `order_users` (`id`);
+
+--
 -- Constraints for table `order_tables`
 --
 ALTER TABLE `order_tables`
@@ -3479,11 +5933,45 @@ ALTER TABLE `payments`
   ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`table_session_id`) REFERENCES `table_sessions` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `payroll_entries`
+--
+ALTER TABLE `payroll_entries`
+  ADD CONSTRAINT `payroll_entries_ibfk_1` FOREIGN KEY (`period_id`) REFERENCES `payroll_periods` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `payroll_entries_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `order_users` (`id`);
+
+--
+-- Constraints for table `payroll_periods`
+--
+ALTER TABLE `payroll_periods`
+  ADD CONSTRAINT `payroll_periods_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `order_users` (`id`);
+
+--
+-- Constraints for table `reservations`
+--
+ALTER TABLE `reservations`
+  ADD CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`table_number`) REFERENCES `restaurant_tables` (`table_number`);
+
+--
 -- Constraints for table `restaurant_tables`
 --
 ALTER TABLE `restaurant_tables`
   ADD CONSTRAINT `restaurant_tables_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `table_categories` (`id`),
   ADD CONSTRAINT `restaurant_tables_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `table_locations` (`id`);
+
+--
+-- Constraints for table `shifts`
+--
+ALTER TABLE `shifts`
+  ADD CONSTRAINT `shifts_ibfk_1` FOREIGN KEY (`shift_type_id`) REFERENCES `shift_types` (`id`),
+  ADD CONSTRAINT `shifts_ibfk_2` FOREIGN KEY (`created_by`) REFERENCES `order_users` (`id`);
+
+--
+-- Constraints for table `shift_requests`
+--
+ALTER TABLE `shift_requests`
+  ADD CONSTRAINT `shift_requests_ibfk_1` FOREIGN KEY (`shift_id`) REFERENCES `shifts` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `shift_requests_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `order_users` (`id`),
+  ADD CONSTRAINT `shift_requests_ibfk_3` FOREIGN KEY (`reviewed_by`) REFERENCES `order_users` (`id`);
 
 --
 -- Constraints for table `table_sessions`
